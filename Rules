@@ -88,7 +88,10 @@ compile '*' do
       page_layout = item[:page_layout] || item[:kind]
       page_layout = nil if item[:page_layout] == false
       layout page_layout if page_layout
-      layout item[:layout] || 'default'
+
+      unless item[:layout] == false
+        layout item[:layout] || 'default'
+      end
     end
   end
 end
@@ -104,7 +107,11 @@ route '*' do
   extensions = item[:split_extensions]
 
   if extensions.first == 'html'
-    item.identifier + 'index.html'
+    if item[:pretty_path] == false
+      [item.identifier.chop, item[:extension]].join('.')
+    else
+      item.identifier + 'index.html'
+    end
   else
     target = [item.identifier.chop, item[:extension]].join('.')
     if item.identifier =~ %r{^/\d{4}/\d{2}/(.*)}
