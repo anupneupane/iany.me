@@ -16,8 +16,10 @@ preprocess do
 
   site.blog.items.each do |item|
     item[:sidebar] = true if item[:sidebar].nil?
-    item[:comment] = true if item[:comment].nil?
-    item[:page_layout] = 'blog' if item[:kind] == 'article'
+    if item[:kind] == 'article'
+      item[:page_layout] = 'blog'
+      item[:comment] = true if item[:comment].nil?
+    end
   end
 
   ::Nanoc::Preprocessors::Pagination.configure do |config|

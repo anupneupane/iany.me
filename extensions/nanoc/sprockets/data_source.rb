@@ -1,4 +1,3 @@
-require 'nanoc'
 require 'sprockets'
 require 'sprockets-sass'
 require 'sass'

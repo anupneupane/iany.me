@@ -1,6 +1,5 @@
 ---
-created_at: <2012-03-31>
-updated_at: <2012-12-09 16:50:31>
+updated_at: <2012-12-11 18:37:48>
 title: Fix TAB Binding For yasnippet And auto-complete
 tags: [emacs]
 ---

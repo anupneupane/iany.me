@@ -41,6 +41,9 @@ module Nanoc
           attributes[:page_items] = articles
           attributes[:tag] = tag
           attributes[:kind] = 'archives'
+          if attributes[:title]
+            attributes[:title].gsub!(/:tag/, tag.to_s)
+          end
 
           @tags[tag] = ::Nanoc::Item.new(content,
                                          attributes,
@@ -62,6 +65,9 @@ module Nanoc
           attributes[:page_type] = 'year'
           attributes[:year] = year
           attributes[:kind] = 'archives'
+          if attributes[:title]
+            attributes[:title].gsub!(/:year/, year.to_s)
+          end
 
           @calendar[year] = ::Nanoc::Item.new(content,
                                               attributes,

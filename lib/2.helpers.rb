@@ -6,7 +6,7 @@ include Nanoc::Blog::Helpers
 
 module SiteHelpers
   def title_tag
-    title = item_title(item)
+    title = item[:title]
     if title
       "<title>~ian/#{item[:site]}$ #{html_escape(title)}</title>"
     else
@@ -27,10 +27,6 @@ module SiteHelpers
     classes.push active_menu.to_s
 
     classes.compact.uniq.join(' ')
-  end
-
-  def item_title(item)
-    content_for(item, :title) || item[:title]
   end
 
   def active_menu

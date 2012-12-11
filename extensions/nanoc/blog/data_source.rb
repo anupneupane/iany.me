@@ -1,4 +1,3 @@
-require 'nanoc'
 require 'nanoc/blog/blog_data'
 require 'nanoc/blog/item'
 
