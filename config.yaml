@@ -22,6 +22,16 @@ data_sources:
           - 'vendor/assets/javascripts'
           - 'vendor/assets/stylesheets'
           - 'vendor/assets/images'
+  -
+    type: blog
+    items_root: /
+    layouts_root: /
+    directory: 'content/posts'
+  -
+    type: ignoreable_filesystem_unified
+    items_root: /
+    layouts_root: /
+    ignore: '^content/posts/'
 
 watcher:
   dirs_to_watch: [ 'content', 'layouts', 'lib', 'assets' ]

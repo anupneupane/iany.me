@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <%= title_tag %>
+    <meta name="description" content="<%= item[:description] %>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <%= stylesheet_link_tag 'style' %>
+    <%#= javascript_include_tag 'vendor/modernizr-2.6.1.min' %>
+
+    <link rel="alternate" type="application/rss+xml" href="http://feeds.iany.me/ianyblog">
+  </head>
+  <body class="<%= body_class %>">
+    <!--[if lt IE 7]>
+    <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+    <![endif]-->
+
+    <header id="header">
+      <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+          <div class="container">
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+            <a class="brand" href="#">~iany/<strong><%= item[:site] %></strong></a>
+
+            <div class="nav-collapse collapse">
+              <% if item[:sidebar] || item[:comment] %>
+              <ul id="nav-skiplist" class="visible-phone nav">
+                <li><%= link_to 'Content', '#content' %></li>
+                <% if item[:comment] %><li><%= link_to 'Comments', '#comments' %></li><% end %>
+                <% if item[:sidebar] %><li><%= link_to 'Sidebar', '#sidebar' %></li><% end %>
+              </ul>
+              <% end %>
+              <ul class="nav">
+                <li<%= ' class="active"' if active_menu == :blog %>><%= link_to 'Blog', '/' %></li>
+                <li<%= ' class="active"' if active_menu == :archives %>><%= link_to 'Archives', '/archives' %></li>
+                <li<%= ' class="active"' if active_menu == :wiki %>><%= link_to 'Wiki', '/wiki' %></li>
+                <li<%= ' class="active"' if active_menu == :about %>><%= link_to 'About', '/about' %></li>
+              </ul>
+              <ul class="nav pull-right">
+                <li>
+                  <%= link_to content_tag(:i, 'RSS', :class => 'icon-rss'), 'http://feeds.iany.me/ianyblog' %>
+                </li>
+              </ul>
+              <form class="navbar-search pull-right">
+                <input type="text" class="search-query" placeholder="Search">                
+              </form>
+            </div>
+          </div> <!-- container -->
+        </div>
+      </div>
+    </header>
+
+    <div id="body">
+      <div class="container">
+        <div class="row">
+          <div id="main-container" class="span8">
+            <div id="main" role="main">
+              <%= yield %>
+            </div>
+            <% if item[:comment] %>
+              <aside id="comments">
+                <div id="disqus_thread">
+                  <noscript>
+                    <p class="dsq-brlink">
+                      Please enable JavaScript to view the
+                      <a href="http://disqus.com/?ref_noscript">
+                        comments powered by <span class="logo-disqus">Disqus</span>.
+                      </a>
+                    </p>
+                  </noscript>
+                </div>
+              </aside>
+            <% end %>
+          </div>
+
+          <aside id="sidebar" class="offset1 span3">
+            <div id="sidebar-toggle"></div>
+            <section class="box sidebar-widget">
+              <h3 class="box-title">Recent Articles</h3>
+              <ol>
+                <% site.blog.articles[0...10].each do |article| %>
+                  <li>
+                    <a href="<%= article.path %>"><%= item_title(article) %></a>
+                    <small><%= article[:created_at].strftime('%b %e') %></span></small>
+                  </li>
+                <% end %>
+              </ol>
+            </section>
+
+            <section class="box sidebar-widget">
+              <h3 class="box-title">Archives</h3>
+              <ol>
+                <% site.blog.calendar.each do |year, page| %>
+                  <li><a href="<%= page.path %>"><%= year %> (<%= page[:page_items].size %>)</a></li>
+                <% end %>
+              </ol>
+            </section>
+
+            <section class="box sidebar-widget">
+              <h3 class="box-title">Tags</h3>
+              <ol>
+                <% site.blog.tags.sort_by { |k,v| -v[:page_items].count }.first(10).each do |tag, page| %>
+                  <li><a href="<%= page.path %>"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</a></li>
+                <% end %>
+              </ol>
+
+              <footer>
+                <a href="/tags">See all tags &raquo;</a>
+              </footer>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <footer id="footer">
+      <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+
+        <p>Articles licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+      </div>
+    </footer>
+
+    <%= javascript_include_tag 'vendor' %>
+    <%#= javascript_include_tag 'main' %>
+
+    <script>
+      // Google Analytics
+      var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+
+      <% if item[:comment] %>
+        var disqus_shortname = 'ianyblog';
+        var disqus_identifier = '<%= item.path %>';
+        var disqus_url = '<%= config[:base_url] %><%= item.path %>';
+    
+        if (!location.host.match(/iany\.me$/i)) {
+          var disqus_developer = 1;
+        }
+        $(function() {
+          $('#comments').append('<p class="dsq-brlink"><a href="http://disqus.com">blog comments powered by <span class="logo-disqus">Disqus</span></a></p>');
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        });
+      <% end %>
+    </script>
+  </body>
+</html>

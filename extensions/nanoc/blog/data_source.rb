@@ -14,7 +14,7 @@ module Nanoc
       end
     end
 
-    class DataSource < Nanoc::DataSource
+    class DataSource < Nanoc::DataSources::FilesystemUnified
       DEFAULT_CONFIG = {
         :name => 'blog',
         :directory => 'posts',
@@ -26,7 +26,7 @@ module Nanoc
         :year_permlink => '/:year/'
       }
 
-      def initialize
+      def initialize(*args)
         super
         @config = DEFAULT_CONFIG.merge(@config || {})
         @config[:permlink_regexp] = regexp_from_patten(@config[:permlink])
@@ -99,7 +99,7 @@ module Nanoc
         pattern.gsub(/:year/, params[:year])
           .gsub(/:month/, params[:month])
           .gsub(/:day/, params[:day])
-          .gusb(/:title/, params[:title])
+          .gsub(/:title/, params[:title])
       end
     end
   end

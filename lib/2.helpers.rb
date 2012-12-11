@@ -2,6 +2,7 @@ include Nanoc::Helpers::HTMLEscape
 include Nanoc::Helpers::Capturing
 include Nanoc::Helpers::LinkTo
 include Nanoc::Helpers::Rendering
+include Nanoc::Blog::Helpers
 
 module SiteHelpers
   def title_tag
@@ -32,24 +33,9 @@ module SiteHelpers
     content_for(item, :title) || item[:title]
   end
 
-  UPCASE_TAGS = %w(css html rvm) unless defined?(SiteHelpers::UPCASE_TAGS)
-  DOWNCASE_TAGS = %w(tmux) unless defined?(SiteHelpers::DOWNCASE_TAGS)
-
-  SPECIAL_TAGS = {
-  } unless defined?(SiteHelpers::SPECIAL_TAGS)
-
-  def render_tag(tag)
-    tag = tag.downcase
-    return tag if DOWNCASE_TAGS.include?(tag)
-    return tag.upcase if UPCASE_TAGS.include?(tag)
-    SPECIAL_TAGS[tag] || tag.capitalize
-  end
-
   def active_menu
-    if item.identifier == '/about/'
-      :about
-    elsif item.identifier == '/archives/'
-      :archives
+    if item[:kind] == 'page'
+      :blog
     else
       (item[:kind] || :blog).to_sym
     end

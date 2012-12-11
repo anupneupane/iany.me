@@ -1,0 +1,24 @@
+<article>
+  <header>
+    <hr/>
+    <div class="article-meta">
+      <i class="icon-calendar"></i>
+      <span><%= item[:created_at].strftime('%b %e, %Y') %></span>
+
+      <% unless item[:tags].empty? %>
+        <span class="muted">·</span>
+        <i class="icon-tags"></i>
+        <% item[:tags].each do |tag| %>
+          <%= link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label' %>
+        <% end %>
+      <% end %>
+    </div>
+    <h1><%= item_title item %></h1>
+  </header>
+
+  <div class="article-content">
+    <%= yield %>
+  </div>
+
+  <footer></footer>
+</article>

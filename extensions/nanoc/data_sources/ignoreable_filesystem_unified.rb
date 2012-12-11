@@ -1,9 +1,13 @@
 module Nanoc::DataSources
   class IgnoreableFilesystemUnified < FilesystemUnified
-    def all_split_files_in(dir_name, kind, klass)
-      grouped_filenames = super
-      if regexp = @config["ignore_#{kind}".to_sym]
-        grouped_filenames.delete_if { |k, v| k =~ regexp }
+    def up
+      @ignore_regexp = @config[:ignore] && Regexp.new(@config[:ignore])
+    end
+
+    def all_split_files_in(dir_name)
+      grouped_filenames = super(dir_name)
+      if @ignore_regexp
+        grouped_filenames.delete_if { |k, v| k =~ @ignore_regexp }
       end
 
       grouped_filenames

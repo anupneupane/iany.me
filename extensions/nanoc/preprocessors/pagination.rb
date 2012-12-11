@@ -5,16 +5,13 @@ module Nanoc
         yield new
       end
 
-      def paginate(items, per_page, pattern, template)
-        template = @items.find { |item| item.identifier == template }
-        @items.delete template
-
+      def paginate(items, per_page, template, pattern)
         if items.size == 0
           attributes = template.attributes.dup
           attributes[:page_items] = items
           attributes[:page_num] = 1
           attributes[:page_totals] = 1
-          @items << ::Nanoc::Item.new(template.raw_content || template.raw_filename,
+          items << ::Nanoc::Item.new(template.raw_content || template.raw_filename,
                                       attributes,
                                       pattern.gsub(/:num/, '1'),
                                       :binary => template.binary?,
@@ -46,7 +43,7 @@ module Nanoc
           item[:next_page] = pages[i + 1] if i < pages.size - 1
         end
 
-        @items.concat pages
+        pages
       end
     end
   end

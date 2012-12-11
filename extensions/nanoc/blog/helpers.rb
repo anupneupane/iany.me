@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 module Nanoc
   module Blog
     module Helpers
@@ -48,6 +50,19 @@ module Nanoc
         end
 
         [summary, !!more]
+      end
+
+      UPCASE_TAGS = %w(css html rvm) unless defined?(::Nanoc::Blog::Helpers::UPCASE_TAGS)
+      DOWNCASE_TAGS = %w(tmux) unless defined?(::Nanoc::Blog::Helpers::DOWNCASE_TAGS)
+
+      SPECIAL_TAGS = {
+      } unless defined?(::Nanoc::Blog::Helpers::SPECIAL_TAGS)
+
+      def render_tag(tag)
+        tag = tag.downcase
+        return tag if DOWNCASE_TAGS.include?(tag)
+        return tag.upcase if UPCASE_TAGS.include?(tag)
+        SPECIAL_TAGS[tag] || tag.capitalize
       end
     end
   end

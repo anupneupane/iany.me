@@ -7,6 +7,10 @@ module Nanoc
 
         @tag_template = @items.find { |item| item.identifier == @config[:tag_template] }
         @calendar_template = @items.find { |item| item.identifier == @config[:calendar_template] }
+
+        raise "Tag template cannot be found" unless @tag_template
+        raise "Calendar template cannot be found" unless @tag_template
+
         @items.delete @tag_template
         @items.delete @calendar_template
 
@@ -23,7 +27,7 @@ module Nanoc
 
       def create_tag_items
         grouped = {}
-        grouped.each do |article|
+        @articles.each do |article|
           article.tags.each do |tag|
             grouped[tag] ||= []
             grouped[tag] << article
@@ -36,10 +40,11 @@ module Nanoc
           attributes = @tag_template.attributes.dup
           attributes[:page_items] = articles
           attributes[:tag] = tag
+          attributes[:kind] = 'archives'
 
           @tags[tag] = ::Nanoc::Item.new(content,
                                          attributes,
-                                         @config[:tag_permlink].gsub(/:year/, year),
+                                         @config[:tag_permlink].gsub(/:tag/, tag.to_s),
                                          :binary => @tag_template.binary?,
                                          :mtime => @tag_template.mtime)
         }
@@ -49,17 +54,18 @@ module Nanoc
       def create_calendar_items
         grouped = @articles.group_by { |article| article.date.year }
 
-        @calnedar = {}
+        @calendar = {}
         grouped.each { |year, articles|
           content = @calendar_template.raw_content
           attributes = @calendar_template.attributes.dup
           attributes[:page_items] = articles
           attributes[:page_type] = 'year'
           attributes[:year] = year
+          attributes[:kind] = 'archives'
 
           @calendar[year] = ::Nanoc::Item.new(content,
                                               attributes,
-                                              @config[:year_permlink].gsub(/:year/, year),
+                                              @config[:year_permlink].gsub(/:year/, year.to_s),
                                               :binary => @calendar_template.binary?,
                                               :mtime => @calendar_template.mtime)
         }

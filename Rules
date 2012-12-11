@@ -1,18 +1,80 @@
 #!/usr/bin/env ruby
 
 preprocess do
+  items.each do |item|
+    item[:site] = 'blog'
+    item[:kind] ||= 'page'
+
+    html_extensions = %w(erb md markdown)
+
+    extensions = item[:extension].split('.')
+    if html_extensions.include?(extensions.first)
+      extensions.unshift 'html'
+    end
+    item[:split_extensions] = extensions
+  end
+
+  site.blog.items.each do |item|
+    item[:sidebar] = true if item[:sidebar].nil?
+    item[:comment] = true if item[:comment].nil?
+    item[:page_layout] = 'blog' if item[:kind] == 'article'
+  end
+
+  ::Nanoc::Preprocessors::Pagination.configure do |config|
+    template = items.find { |item| item.identifier == '/' }
+    items.delete template
+    site.blog.items.delete template
+
+    # blog index pagination
+    pages = config.paginate site.blog.articles, 10, template, '/p:num'
+    site.blog.items.concat pages
+    items.concat pages
+  end
 end
 
 compile 'assets/*' do
 end
-route 'assets/*' do
-  [item.identifier, item[:extension]].join('.')
-end
 
 compile '*' do
+  extensions = item[:split_extensions]
+
+  extensions.reverse_each do |ext|
+    case ext
+    when 'handlebars'
+      filter :configurable_handlebars
+    when 'md'
+      filter :redcarpet, {
+        :options => {
+          :no_intra_emphasis => true,
+          :tables => true,
+          :fenced_code_blocks => true,
+          :autolink => true
+        }
+      }
+    when 'erb'
+      filter :erubis
+    when 'html'
+      layout item[:page_layout] if item[:page_layout]
+      layout item[:layout] || 'default'
+    end
+  end
+end
+
+route '/p1' do
+  '/index.html'
+end
+route %r(^/p\d+/) do
+  item.identifier + 'index.html'
 end
 
 route '*' do
+  extensions = item[:split_extensions]
+
+  if extensions.first == 'html'
+    item.identifier + 'index.html'
+  else
+    [item.identifier.chop, item[:extension]].join('.')
+  end
 end
 
 layout '*', :erubis

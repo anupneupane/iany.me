@@ -1,7 +1,7 @@
 module Nanoc
   module Blog
     class Item < Nanoc::Item
-      def initialize
+      def initialize(*args)
         super
 
         normalize!
@@ -26,6 +26,10 @@ module Nanoc
         end
 
         self[:tags] = self[:tags].compact.collect(&:strip).reject(&:empty?).collect(&:downcase).uniq
+
+        if self[:created_at].is_a?(String)
+          self[:created_at] = Time.parse(self[:created_at])
+        end
       end
     end
   end
