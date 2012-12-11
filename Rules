@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+preprocess do
+end
+
+compile 'assets/*' do
+end
+route 'assets/*' do
+  [item.identifier, item[:extension]].join('.')
+end
+
+compile '*' do
+end
+
+route '*' do
+end
+
+layout '*', :erubis

@@ -1,0 +1,33 @@
+figure
+  margin: ($baseLineHeight/2) auto
+
+  &.pull-left
+    margin-right: $baseFontSize
+  &.pull-right
+    margin-left: $baseFontSize
+
+figure, .thumbnail
+  > figcaption
+    text-align: center
+    padding: 9px
+    color: $gray
+
+.code-caption
+  font-family: $monoFontFamily
+  font-size: 0.875 * $baseFontSize
+  color: #666
+  background-color: #EAEAEA
+  padding: 0.5em
+  +border-bottom-radius($baseBorderRadius)
+  // fallback for IE7-8
+  border: 1px solid #ccc
+  border: 1px solid rgba(0,0,0,.15)
+  margin-bottom: $baseLineHeight / 2
+  > .code-filename
+    @extend .pull-right
+    color: #666
+
+pre, .highlight
+  + .code-caption
+    margin-top: - $baseLineHeight / 2 - $baseBorderRadius
+

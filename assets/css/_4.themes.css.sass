@@ -1,0 +1,40 @@
+// Themes
+// ==================================================
+
+#nav-skiplist
+  border-top: 1px solid lighten($navbarBorder, 30%)
+  border-bottom: 1px solid lighten($navbarBorder, 30%)
+  > li
+    &:first-child
+      border-top: 1px solid $navbarBorder
+    &:last-child
+      border-bottom: 1px solid $navbarBorder
+
+#footer
+  background-color: $navbarBackground
+  border-top: 1px solid $navbarBorder
+  @include box-shadow(0 -1px 4px rgba(0,0,0,.065))
+  @extend small
+
+  &:after
+    background: $navbarBackground
+    content: ""
+    position: fixed
+    width: 100%
+    height: 100%
+
+.icon-rss
+  background-image: image-url('rss.png')
+  background-position: 0 0
+  width: 22px
+  height: 22px
+  line-height: 22px
+  display: block
+  +hide-text
+  &:hover
+    +translucent-background($navbarBackground, 0.7)
+
+h1
+  color: #5A5A5A
+  > a
+    color: #5A5A5A

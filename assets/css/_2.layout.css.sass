@@ -1,0 +1,38 @@
+// Layout
+// ==================================================
+
+#body
+  padding: 40px 0
+
+#comments
+  padding: 20px
+
+#sidebar
+  padding-top: 20px
+
+#footer
+  padding: 2 * $baseLineHeight 0
+
+.navbar-fixed-top
+  margin-bottom: 0
+
+.pager
+  padding: 0 20px
+
+@media (max-width: 979px)
+  #sidebar
+    margin-left: 0
+    width: 4 * $gridColumnWidth768 + 3 * $gridGutterWidth768
+
+@media (max-width: 767px)
+  #body, #footer
+    margin-left: -20px
+    margin-right: -20px
+  #body
+    padding: 20px 0
+  #footer
+    padding-left: 20px
+    padding-right: 20px
+  #sidebar
+    width: auto
+    padding: 0 20px
