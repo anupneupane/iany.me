@@ -1,4 +1,6 @@
-<%= item[:year] %>
+---
+title: Archives for :year
+---
 
-<%= item[:page_items].size %>
+<%= render 'partials/archives', :blog => site.blog, :archives => item[:page_items] %>
 

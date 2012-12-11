@@ -1,11 +1,43 @@
 #!/usr/bin/env ruby
 
-preprocess do
-  items.each do |item|
-    item[:site] = 'blog'
-    item[:kind] ||= 'page'
+require 'mini_magick'
 
-    html_extensions = %w(erb md markdown)
+class ::Nanoc::Site
+  def item_of
+    @item_of ||= {}
+  end
+end
+
+preprocess do
+  ::Nanoc::Preprocessors::Pagination.configure do |config|
+    template = items.find { |item| item.identifier == '/' }
+    items.delete template
+    site.blog.items.delete template
+
+    # blog index pagination
+    pages = config.paginate site.blog.articles, 10, template, '/p:num'
+    site.blog.items.concat pages
+    items.concat pages
+  end
+
+  items.each do |item|
+    site.item_of[item.identifier] = item
+    if %w(jpg png).include?(item[:extension])
+      image = MiniMagick::Image.open(item.raw_filename)
+      item[:width] = image[:width]
+      item[:height] = image[:height]
+    end
+
+    item[:site] ||= 'blog'
+    item[:kind] ||= 'page'
+    item[:tags] ||= []
+    if item[:title].nil?
+      item[:title] = File.basename(item.identifier.chop).gsub(/[-_ ]+/, ' ').capitalize
+    elsif item[:title] == false
+      item[:title] = nil
+    end
+
+    html_extensions = %w(erb md markdown hb hbs handlebars)
 
     extensions = item[:extension].split('.')
     if html_extensions.include?(extensions.first)
@@ -22,15 +54,10 @@ preprocess do
     end
   end
 
-  ::Nanoc::Preprocessors::Pagination.configure do |config|
-    template = items.find { |item| item.identifier == '/' }
-    items.delete template
-    site.blog.items.delete template
-
-    # blog index pagination
-    pages = config.paginate site.blog.articles, 10, template, '/p:num'
-    site.blog.items.concat pages
-    items.concat pages
+  HandlebarsHelpers.site = site
+  HandlebarsHelpers.methods(false).each do |method|
+    proc = HandlebarsHelpers.method(method).to_proc
+    site.handlebars.register_helper(method, &proc)
   end
 end
 
@@ -42,9 +69,9 @@ compile '*' do
 
   extensions.reverse_each do |ext|
     case ext
-    when 'handlebars'
+    when 'handlebars', 'hbs', 'hb'
       filter :configurable_handlebars
-    when 'md'
+    when 'md', 'markdown'
       filter :redcarpet, {
         :options => {
           :no_intra_emphasis => true,
@@ -56,7 +83,9 @@ compile '*' do
     when 'erb'
       filter :erubis
     when 'html'
-      layout item[:page_layout] if item[:page_layout]
+      page_layout = item[:page_layout] || item[:kind]
+      page_layout = nil if item[:page_layout] == false
+      layout page_layout if page_layout
       layout item[:layout] || 'default'
     end
   end
@@ -75,7 +104,12 @@ route '*' do
   if extensions.first == 'html'
     item.identifier + 'index.html'
   else
-    [item.identifier.chop, item[:extension]].join('.')
+    target = [item.identifier.chop, item[:extension]].join('.')
+    if item.identifier =~ %r{^/\d{4}/\d{2}/(.*)}
+      '/gallery' + target
+    else
+      target
+    end
   end
 end
 

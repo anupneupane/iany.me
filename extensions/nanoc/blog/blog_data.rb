@@ -1,6 +1,10 @@
+require 'nanoc/blog/helpers'
+
 module Nanoc
   module Blog
     class BlogData
+      include ::Nanoc::Blog::Helpers
+
       def initialize(items, config)
         @items = items
         @config = config
@@ -42,7 +46,7 @@ module Nanoc
           attributes[:tag] = tag
           attributes[:kind] = 'archives'
           if attributes[:title]
-            attributes[:title].gsub!(/:tag/, tag.to_s)
+            attributes[:title].gsub!(/:tag/, render_tag(tag.to_s))
           end
 
           @tags[tag] = ::Nanoc::Item.new(content,

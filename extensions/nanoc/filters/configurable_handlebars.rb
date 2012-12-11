@@ -5,9 +5,12 @@ require 'handlebars'
 module Nanoc::Filters
   class ConfigurableHandlebars < ::Nanoc::Filter
     class ::Nanoc::Site
-      def handlerbars
-        @handlerbars ||= ::Handlerbars::Context.new
+      def handlebars
+        @handlebars ||= ::Handlebars::Context.new
       end
+    end
+    class ::Handlebars::Context
+      attr_accessor :item
     end
 
     def run(content, params={})
@@ -17,8 +20,12 @@ module Nanoc::Filters
       context[:config] = assigns[:config]
       context[:yield]  = assigns[:content]
 
-      template = site.handlerbars.compile(content)
-      template.call(context)
+      template = site.handlebars.compile(content)
+      remember = site.handlebars.item
+      site.handlebars.item = item
+      result = template.call(context)
+      site.handlebars.item = remember
+      result
     end
   end
 end

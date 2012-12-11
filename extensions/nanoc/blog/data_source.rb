@@ -42,16 +42,26 @@ module Nanoc
       end
 
       def load_items
-        items = load_objects(@config[:directory], 'item', Nanoc::Blog::Item)
+        items = load_objects(@config[:directory], 'item', ::Nanoc::Item).collect do |item|
+          ::Nanoc::Blog::Item.create_from(item)
+        end
 
         items.each do |item|
           item[:blog_name] = @config[:name]
-          if !item.binary? && item.identifier =~ @config[:permlink_regexp]
+          if !item.binary? && item[:filename] =~ @config[:source_regexp]
             item[:kind] ||= 'article'
 
             matches = $~
-            item[:created_at] ||= Time.new(matches[:year], matches[:month], matches[:day])
-            item[:title] ||= matches[:title].split(/[-_]/).collect(&:capitalize).join(' ')
+            names = matches.names
+            now = Time.now
+            year = names.include?('year') ? matches[:year] : now.year
+            month = names.include?('month') ? matches[:month] : now.month
+            day = names.include?('day') ? matches[:day] : 1
+
+            item[:created_at] ||= Time.new(year, month, day)
+            if names.include?('title')
+              item[:title] ||= matches[:title].split(/[-_]/).collect(&:capitalize).join(' ')
+            end
           end
         end
 
@@ -95,10 +105,10 @@ module Nanoc
       end
 
       def format_pattern(pattern, params)
-        pattern.gsub(/:year/, params[:year])
-          .gsub(/:month/, params[:month])
-          .gsub(/:day/, params[:day])
-          .gsub(/:title/, params[:title])
+        params.names.each do |name|
+          pattern = pattern.gsub(Regexp.new(":#{name}"), params[name])
+        end
+        pattern
       end
     end
   end

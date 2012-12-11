@@ -1,0 +1,19 @@
+---
+kind: archives
+---
+<h2>By year</h2>
+
+<ul>
+  <% site.blog.calendar.each do |year, page| %>
+    <li><a href="<%= page.path %>"><%= year %> (<%= page[:page_items].size %>)</a></li>
+  <% end %>
+</ul>
+
+<h2>By tag</h2>
+
+<ul>
+  <% site.blog.tags.sort_by(&:first).each do |tag, page| %>
+    <li><a href="<%= page.path %>"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</a></li>
+  <% end %>
+</ul>
+

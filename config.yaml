@@ -27,6 +27,7 @@ data_sources:
     items_root: /
     layouts_root: /
     directory: 'content/posts'
+    permlink: ':year/:month/:title'
   -
     type: ignoreable_filesystem_unified
     items_root: /

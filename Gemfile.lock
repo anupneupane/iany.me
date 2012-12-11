@@ -21,6 +21,8 @@ GEM
     hike (1.2.1)
     libv8 (3.3.10.4)
     mime-types (1.19)
+    mini_magick (3.4)
+      subexec (~> 0.2.1)
     multi_json (1.4.0)
     nanoc (3.4.3)
       cri (~> 2.2)
@@ -39,6 +41,7 @@ GEM
     sprockets-sass (0.9.1)
       sprockets (~> 2.0)
       tilt (~> 1.1)
+    subexec (0.2.2)
     therubyracer (0.10.2)
       libv8 (~> 3.3.10)
     tilt (1.3.3)
@@ -54,6 +57,7 @@ DEPENDENCIES
   fssm
   handlebars
   mime-types
+  mini_magick
   nanoc (~> 3.4.3)
   nokogiri
   pygments.rb

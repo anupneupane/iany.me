@@ -1,6 +1,14 @@
 module Nanoc
   module Blog
     class Item < Nanoc::Item
+      def self.create_from(item)
+        new(item.raw_filename || item.raw_content,
+            item.attributes,
+            item.identifier,
+            :binary => item.binary?,
+            :mtime => item[:mtime])
+      end
+
       def initialize(*args)
         super
 

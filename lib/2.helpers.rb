@@ -21,7 +21,10 @@ module SiteHelpers
     classes.push 'with-comments' if item[:comment]
     classes.push 'with-mathjax' if item[:mathjax]
 
-    classes += item[:class] if item[:class]
+    if item[:class]
+      classes += item[:class] if item[:class].is_a?(Array)
+      classes.push item[:class] if item[:class].is_a?(String)
+    end
 
     classes.push item[:kind] if item[:kind]
     classes.push active_menu.to_s
@@ -30,30 +33,40 @@ module SiteHelpers
   end
 
   def active_menu
-    if item[:kind] == 'page'
+    return item[:menu].to_sym if item[:menu]
+
+    case item[:kind]
+    when 'page', 'article'
       :blog
     else
       (item[:kind] || :blog).to_sym
     end
   end
 
-  def tag(name, attributes = nil)
+  def tag(name, attributes = {})
     attributes = attributes.collect do |key, value|
-      %Q(#{key}="#{html_escape(value)}")
+      %Q(#{key}="#{html_escape(value.to_s)}")
     end.join(' ')
 
     "<#{name} #{attributes} />"
   end
 
-  def content_tag(name, content = nil, attributes = nil, &block)
+  def content_tag(name, content = nil, attributes = {}, &block)
     if content.is_a?(Hash)
       attributes = content
       content = nil
     end
 
-    content = capture(&block) if block
+    if block
+      begin
+        content = capture(&block)
+      rescue NameError
+        content = block.call
+      end
+    end
+
     attributes = attributes.collect do |key, value|
-      %Q(#{key}="#{html_escape(value)}")
+      %Q(#{key}="#{html_escape(value.to_s)}")
     end.join(' ')
 
     "<#{name} #{attributes}>#{content}</#{name}>"
