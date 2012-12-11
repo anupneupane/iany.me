@@ -1,6 +1,6 @@
 ---
 created_at: <2012-02-04>
-updated_at: <2012-12-11 02:31:26>
+updated_at: <2012-12-11 23:48:02>
 title: CSS Line Wrap Indicator
 tags: [css, html]
 comment: true
@@ -10,10 +10,10 @@ sidebar: []
 Many editor can wrap a line that reaches the window width and show an
 indicator in the margin, for example, Emacs.
 
-<figure class="pull-right thumbnail">
-  <%= gallery_image_tag current_page, 'emacs.png' %>
+{{#figure "pull-right"}}
+  {{image "emacs"}}
   <figcaption>Emacs line wrap with bent arrow in fringe</figcaption>
-</figure>
+{{/figure}}
 
 I want to add such line wrap indicators to the code block in HTML. It is easy
 to add indicators as background image in CSS. But the indicators should
@@ -27,6 +27,8 @@ You can check the result in this jsfiddle: http://jsfiddle.net/fbDKQ/6/
 . Resize the result panel to see the line wrap indicators. Following is a
 detailed explanation.
 
+{{!more}}
+
 ## Add Line Markup ##
 
 First, the code block in pre must be split by lines and add markup so that CSS
@@ -39,7 +41,7 @@ can be applied.
 </code></pre>
 ```
 
-<%= code_caption nil, 'Before' %>
+{{caption "code" desc="Before"}}
 
 is converted to
 
@@ -50,7 +52,7 @@ is converted to
 </span></code></pre>
 ```
 
-<%= code_caption nil, 'After' %>
+{{caption "code" desc="After"}}
 
 It is easy to do such conversion by replace new line character `\n` to
 `\n</span><span class="line">` and then wrap with first open tag and the last
@@ -69,7 +71,7 @@ pre code, span.line {
 }
 ```
 
-<%= code_caption nil, 'Line Markup' %>
+{{caption "code" desc="Line Markup"}}
 
 Pay attention to the new line position. It is included in the added
 `span.line` elements. Otherwise extra empty line is added between lines.
@@ -85,8 +87,8 @@ the same height with `line-height`.
 I use following two icons. The height is 28px. So also set `span.line`
 `line-height` to 28px.
 
-- Left: <%= gallery_image_tag current_page, 'line-left.png', alt: 'left line wrap indicator' %>
-- Right: <%= gallery_image_tag current_page, 'line-right.png', alt: 'right line wrap indicator' %>
+- Left: {{image "line-left" alt="left line wrap indicator"}}
+- Right: {{image "line-right" alt="right line wrap indicator"}}
 
 ```css
 span.line {
@@ -94,7 +96,7 @@ span.line {
 }
 ```
 
-<%= code_caption nil, 'Line height = picuture height' %>
+{{caption "code" desc="Line height = picuture height"}}
 
 Then just add `:before` and `:after` and apply vertically repeat background on
 them. `position` of `span.line` is set to `relative` so `:before` and `:after`
@@ -128,7 +130,7 @@ span.line:after {
 }
 ```
 
-<% code_caption nil, 'Indicators in :before and :after' %>
+{{caption "code" desc="Indicators in :before and :after"}}
 
 Now the indicators are shown in left and right padding on all lines. Use `top`
 to shift down left indicators and `bottom` to shift up right indicators, so
@@ -149,7 +151,7 @@ span.line:after {
 }
 ```
 
-<%= code_caption nil, 'No left indicator on first line and no right indicator on last line' %>
+{{caption "code"  desc="No left indicator on first line and no right indicator on last line"}}
 
 ## Add Color to Padding
 
@@ -169,4 +171,4 @@ span.line {
 }
 ```
 
-<%= code_caption nil, 'Add Color' %>
+{{caption "code" desc="Add Color"}}

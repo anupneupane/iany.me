@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-12-11 02:24:28>
+updated_at: <2012-12-11 23:16:09>
 title: Study on Alias Method
 tags: [algorithm, probability]
 latex: true
@@ -229,9 +229,9 @@ any `$j$` that `$P\{Y=j\} < 1/n$`. However, unused range is not allowed to be sp
 See the figure below, which demonstrates how to generate `$Y$` with probability mass
 function `$n = 5$`
 
-<figure class="thumbnail">
-  <%= gallery_image_tag current_page, 'alias_method.png' %>
-</figure>
+{{#figure}}
+  {{image "alias_method"}}
+{{/figure}}
 
 - `$P\{Y=0\} = 0.16$`
 - `$P\{Y=1\} = 0.1$`

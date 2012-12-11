@@ -14,10 +14,8 @@ module HandlebarsHelpers
       html_class = ''
     end
 
-    html = content_tag :figure, :class => 'thumbnail ' + html_class do
-      callback.call
-    end
-
+    html = content_tag :figure, callback.call, :class => 'thumbnail ' + html_class
+    html = content_tag :div, html
     Handlebars::SafeString.new(html)
   end
 
@@ -27,11 +25,8 @@ module HandlebarsHelpers
       html_class = ''
     end
 
-    html = content_tag :figure, :class => html_class do
-      content_tag :ul, :class => 'thumbnails' do
-        callback.call
-      end
-    end
+    ul = content_tag :ul, callback.call, :class => 'thumbnails'
+    html = content_tag :figure, ul, :class => html_class
 
     Handlebars::SafeString.new(html)
   end
@@ -43,11 +38,8 @@ module HandlebarsHelpers
       html_class = ''
     end
 
-    html = content_tag :li, :class => html_class do
-      content_tag :div, :class => 'thumbnail' do
-        callback.call.to_s
-      end
-    end
+    div = content_tag :div, callback.call, :class => 'thumbnail'
+    html = content_tag :li, div, :class => html_class
 
     Handlebars::SafeString.new(html)
   end
@@ -67,7 +59,7 @@ module HandlebarsHelpers
   end
 
   def image(this, name, object = {})
-    attributes = v8_object_to_hash(object)
+    attributes = v8_object_to_hash(object['hash'] || {})
 
     if name.start_with?('http')
       attributes[:src] = name
@@ -85,6 +77,26 @@ module HandlebarsHelpers
     end
 
     Handlebars::SafeString.new tag(:img, attributes)
+  end
+
+  def caption(this, kind, object = {})
+    attributes = v8_object_to_hash(object['hash'] || {})
+    file = attributes['file'] || ''
+    description = attributes['desc'] || ''
+
+    html = <<-HTML
+<div class="code-caption">
+  <span class="code-filename">#{file}</span>
+  <span class="code-meta">#{description}</span>
+</div>
+    HTML
+
+    Handlebars::SafeString.new html
+  end
+
+  def more
+    html = tag :hr, :id => 'read-on'
+    Handlebars::SafeString.new html
   end
 
   def site

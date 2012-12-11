@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-12-11 02:24:28>
+updated_at: <2012-12-11 23:10:49>
 title: Switch Window Using Fuzz Matching
 tags: [desktop, linux, productivity, script]
 comment: true
@@ -32,10 +32,10 @@ For example, use gpicker to select a number between 1 and 10:
 $ seq -w 1 10 | gpicker -n "\n" -
 ```
 
-<figure class="thumbnail">
-  <%= gallery_image_tag current_page, 'picker_1_to_10.png', :alt => "Gpicker picks 1 to 10" %>
+{{#figure "center"}}
+  {{image "picker_1_to_10" alt="Gpicker picks 1 to 10"}}
   <figcaption>Gpicker picks 1 to 10</figcaption>
-</figure>
+{{/figure}}
 
 The last dash tells gpicker to read list from standard input, and option "-n"
 sets the list separator. Gpicker uses "\0" as item separator by default.
@@ -109,15 +109,15 @@ are some examples:
 | xpdf/ruby      | A document opened using xpdf and the title contains ruby    |
 | sys/usrshare   | The terminal I opened visit /usr/share in workspace "1.sys" |
 
-<figure class="thumbnail">
-  <%= gallery_image_tag current_page, 'picker-windows-list.png' %>
+{{#figure}}
+  {{image "picker-windows-list"}}
   <figcaption>Windows list</figcaption>
-</figure>
+{{/figure}}
 
-<figure class="thumbnail">
-  <%= gallery_image_tag current_page, 'picker-xpdf-ruby.png' %>
+{{#figure}}
+  {{image "picker-xpdf-ruby"}}
   <figcaption>Select Ruby document opened in Xpdf</figcaption>
-</figure>
+{{/figure}}
 
 Sure, we have to remove "/" from workspace name and window title.
 

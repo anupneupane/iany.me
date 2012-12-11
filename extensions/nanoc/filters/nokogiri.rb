@@ -4,7 +4,7 @@ module Nanoc::Filters
   module Nokogiri
     class Build < ::Nanoc::Filter
       def run(content, params = {})
-        ::Nokogiri::HTML(content, nil, 'UTF-8')
+        ::Nokogiri::HTML.fragment(content)
       end
     end
 

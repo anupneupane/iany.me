@@ -76,10 +76,12 @@ compile '*' do
         :options => {
           :no_intra_emphasis => true,
           :tables => true,
-          :fenced_code_blocks => true,
-          :autolink => true
+          :fenced_code_blocks => true
         }
       }
+      filter :nokogiri_build
+      filter :pygments
+      filter :nokogiri_write
     when 'erb'
       filter :erubis
     when 'html'

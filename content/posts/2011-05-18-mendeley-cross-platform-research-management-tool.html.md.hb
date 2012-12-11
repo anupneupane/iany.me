@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-12-11 02:24:28>
+updated_at: <2012-12-11 23:03:02>
 title: "Mendeley: Cross Platform Research Management Tool"
 tags: [utility, productivity, app]
 comment: true
@@ -33,9 +33,9 @@ You need to register an account in [Mendeley][]. Then
 [download](http://www.mendeley.com/download-mendeley-desktop/) a client for your
 platform. Following is the snapshot of Mendeley under Linux.
 
-<figure class="thumbnail">
-  <%= gallery_image_tag current_page, 'snapshot.png' %>
-</figure>
+{{#figure}}
+  {{image "snapshot"}}
+{{/figure}}
 
 Add Documents
 -------------
@@ -78,9 +78,9 @@ Open options dialog through menu Tools -> Options and switch to "File Organizer"
 - Enable "Sort files into sub-folders" to avoid file name conflicts. I prefer the
   Folder path `Year`/`Author`.
 
-<figure class="thumbnail">
-  <%= gallery_image_tag current_page, 'file_organizer.png' %>
-</figure>
+{{#figure}}
+  {{image "file_organizer"}}
+{{/figure}}
 
 ### Manual Synchronization
 

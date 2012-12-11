@@ -19,17 +19,17 @@ end
 
 
 module Nanoc::Filters
-  class Pygments < Extension
+  class Pygments < ::Nanoc::Filter
     def run(content, params = {})
       if content.is_a?(String)
-        doc = Nokogiri::HTML(content, nil,'UTF-8')
+        doc = Nokogiri::HTML.fragment(content)
       else
         doc = content
       end
 
       doc.search("pre>code").each do |node|
         lang = node.attr('class')
-        if lang && !lang.strip.empty?
+        if lang && !lang.strip.empty? && lang != 'mathjax'
           s = node.inner_html || "[++where is the code?++]"
           begin
             node.parent.swap(pygment(s, lang.strip, params))
@@ -42,7 +42,7 @@ module Nanoc::Filters
       if content.is_a?(String)
         doc.to_html :encoding => 'UTF-8'
       else
-        content
+        doc
       end
     end
 
