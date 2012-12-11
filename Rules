@@ -1,64 +1,6 @@
 #!/usr/bin/env ruby
-
-require 'mini_magick'
-
-class ::Nanoc::Site
-  def item_of
-    @item_of ||= {}
-  end
-end
-
 preprocess do
-  ::Nanoc::Preprocessors::Pagination.configure do |config|
-    template = items.find { |item| item.identifier == '/' }
-    items.delete template
-    site.blog.items.delete template
-
-    # blog index pagination
-    pages = config.paginate site.blog.articles, 10, template, '/p:num'
-    site.blog.items.concat pages
-    items.concat pages
-  end
-
-  items.each do |item|
-    site.item_of[item.identifier] = item
-    if %w(jpg png).include?(item[:extension])
-      image = MiniMagick::Image.open(item.raw_filename)
-      item[:width] = image[:width]
-      item[:height] = image[:height]
-    end
-
-    item[:site] ||= 'blog'
-    item[:kind] ||= 'page'
-    item[:tags] ||= []
-    if item[:title].nil?
-      item[:title] = File.basename(item.identifier.chop).gsub(/[-_ ]+/, ' ').capitalize
-    elsif item[:title] == false
-      item[:title] = nil
-    end
-
-    html_extensions = %w(erb md markdown hb hbs handlebars)
-
-    extensions = item[:extension].split('.')
-    if html_extensions.include?(extensions.first)
-      extensions.unshift 'html'
-    end
-    item[:split_extensions] = extensions
-  end
-
-  site.blog.items.each do |item|
-    item[:sidebar] = true if item[:sidebar].nil?
-    if item[:kind] == 'article'
-      item[:page_layout] = 'blog'
-      item[:comment] = true if item[:comment].nil?
-    end
-  end
-
-  HandlebarsHelpers.site = site
-  HandlebarsHelpers.methods(false).each do |method|
-    proc = HandlebarsHelpers.method(method).to_proc
-    site.handlebars.register_helper(method, &proc)
-  end
+  Preprocessor.configure(site)
 end
 
 compile 'assets/*' do
@@ -117,7 +59,7 @@ route '*' do
     if item.identifier =~ %r{^/\d{4}/\d{2}/(.*)}
       '/gallery' + target
     else
-      target
+      target.sub(/\.(?:erb|hb|hbs)$/, '')
     end
   end
 end

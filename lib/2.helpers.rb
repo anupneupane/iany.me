@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 include Nanoc::Helpers::HTMLEscape
 include Nanoc::Helpers::Capturing
 include Nanoc::Helpers::LinkTo
@@ -85,6 +87,23 @@ module SiteHelpers
       :src => "/assets/#{name}.js",
       :type => 'text/javascript'
     }
+  end
+
+  def feed_content(item)
+    doc = Nokogiri::HTML.fragment(item.compiled_content(snapshot: :pre))
+
+    doc.search('img') do |img|
+      if img[:src] =~ /^\//
+        img[:src] = config[:base_url] + img[:src]
+      end
+    end
+    doc.search('a') do |a|
+      if a[:href] =~ /^\//
+        a[:href] = config[:base_url] + a[:href]
+      end
+    end
+
+    doc.to_html :encoding => 'UTF-8'
   end
 end
 

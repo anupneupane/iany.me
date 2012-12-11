@@ -20,11 +20,11 @@
         <%= article.date.strftime('%b %e') %>
       </td>
       <td class="article-title">
-        <%= link_to article.title, article %>
+        <%== link_to article.title, article %>
       </td>
       <td class="article-tags">
         <% article.tags.each do |tag| %>
-          <%= link_to render_tag(tag), blog.tags[tag].path, :class => 'label' %>
+          <%== link_to render_tag(tag), blog.tags[tag].path, :class => 'label' %>
         <% end %>
       </td>
     </tr>

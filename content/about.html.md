@@ -3,7 +3,7 @@ title: About Me
 menu: about
 comment: true
 changefreq: monthly
-priority: 0.8
+priority: 0.7
 class: no-chapsec
 ---
 

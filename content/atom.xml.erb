@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:base="http://iany.me">
+  <title>~iany/blog</title>
+  <link href="http://iany.me" />
+  <link type="application/atom+xml" rel="self" href="<%= config[:base_url] %><%= item.path %>" />
+  <% unless site.blog.articles.empty? %>
+  <updated><%= site.blog.articles.first[:created_at].to_iso8601_time %></updated>
+  <% end %>
+  <id><%= config[:base_url] %></id>
+  <author>
+    <name>Ian Yang</name>
+    <email>me (at) iany.me</email>
+    <uri>http://iany.me/</uri>
+  </author>
+  <rights>CC BY 3.0</rights>
+  <link rel="license" type="application/rdf+xml" href="http://creativecommons.org/licenses/by/3.0/us/rdf" />
+
+  <% site.blog.articles.first(config[:atom_limit]).each do |item| %>
+  <entry>
+    <id><%= config[:base_url] %><%= item.path %></id>
+    <link type="text/html" rel="alternate" href="<%= config[:base_url] %><%= item.path %>" />
+    <title><%= item[:title] %></title>
+    <published><%= item[:created_at].to_iso8601_time %></published>
+    <updated><%= (item[:updated_at] || item.mtime).to_iso8601_time %></updated>
+    <author>
+      <name>Ian Yang</name>
+      <email>me (at) iany.me</email>
+      <uri>http://iany.me/</uri>
+    </author>
+    <% item.tags.each do |tag| %>
+    <category term="<%= tag %>" label="<%= render_tag(tag) %>" />
+    <% end %>
+    <content><![CDATA[<%= feed_content(item) %>]]></content>
+  </entry>
+  <% end %>
+</feed>

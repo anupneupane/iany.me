@@ -4,10 +4,10 @@ page_layout: false
 ---
 <ul class="pager">
   <li class="previous<%= item[:prev_page] ? '' : ' disabled' %>">
-    <%= link_to "&larr; Newer", item[:prev_page] || '#' %>
+    <%== link_to "&larr; Newer", item[:prev_page] || '#' %>
   </li>
   <li class="next<%= item[:next_page] ? '' : ' disabled' %>">
-    <%= link_to "Older &rarr;", item[:next_page] || '#' %>
+    <%== link_to "Older &rarr;", item[:next_page] || '#' %>
   </li>
 </ul>
 
@@ -23,22 +23,22 @@ page_layout: false
           <span class="muted">·</span>
           <i class="icon-tags"></i>
           <% article.tags.each do |tag| %>
-            <%= link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label' %>
+            <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label' %>
           <% end %>
         <% end %>
       </div>
-      <h1><%= link_to article.title, article %></h1>
+      <h1><%== link_to article.title, article %></h1>
     </header>
 
     <div class="article-content">
-      <p><%= item_summary(article) %></p>
+      <p><%== item_summary(article) %></p>
     </div>
 
     <footer>
       <% if item_more?(article) %>
-        <%= link_to 'Read on &rarr;', article.path + '#read-on', :rel => 'full-article', :class => 'read-on pull-right' %>
+        <%== link_to 'Read on &rarr;', article.path + '#read-on', :rel => 'full-article', :class => 'read-on pull-right' %>
       <% else %>
-        <%= link_to 'Comment &rarr;', article.path + '#comments', :rel => 'comments', :class => 'read-on pull-right' %>
+        <%== link_to 'Comment &rarr;', article.path + '#comments', :rel => 'comments', :class => 'read-on pull-right' %>
       <% end %>
     </footer>
   </article>
@@ -46,9 +46,9 @@ page_layout: false
 
 <ul class="pager">
   <li class="previous<%= item[:prev_page] ? '' : ' disabled' %>">
-    <%= link_to "&larr; Newer", item[:prev_page] || '#' %>
+    <%== link_to "&larr; Newer", item[:prev_page] || '#' %>
   </li>
   <li class="next<%= item[:next_page] ? '' : ' disabled' %>">
-    <%= link_to "Older &rarr;", item[:next_page] || '#' %>
+    <%== link_to "Older &rarr;", item[:next_page] || '#' %>
   </li>
 </ul>

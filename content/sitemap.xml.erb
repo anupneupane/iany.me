@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+  <% items.find_all { |item| item[:changefreq] || item[:priority] }.each do |item| %>
+  <url>
+    <loc><%= config[:base_url] %><%= item.path %></loc>
+    <lastmod><%= (item[:updated_at] || item[:created_at] || item.mtime).strftime("%Y-%m-%d") %></lastmod>
+    <changefreq><%= item[:changefreq] || config[:sitemap][:default][:changefreq] %></changefreq>
+    <priority><%= item[:priority] || config[:sitemap][:default][:priority] %></priority>
+  </url>
+  <% end %>
+</urlset>

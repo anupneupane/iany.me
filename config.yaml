@@ -3,6 +3,21 @@ output_dir: output
 index_filenames: [ 'index.html' ]
 enable_output_diff: false
 base_url: 'http://iany.me'
+sitemap:
+  default:
+    changefreq: monthly
+    priority: 0.6
+  index:
+    changefreq: daily
+    priority: 0.6
+  calendar:
+    changefreq: daily
+    priority: 0.8
+  tag:
+    changefreq: daily
+    priority: 0.9
+
+atom_limit: 10
 
 prune:
   auto_prune: false

@@ -1,0 +1,5 @@
+User-agent: *
+sitemap: http://iany.me/sitemap.xml
+Disallow: /404.html
+Disallow: /50x.html
+Disallow: /drafts/
