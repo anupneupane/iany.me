@@ -1,0 +1,19 @@
+---
+title: false
+page_layout: false
+---
+<% content_for :body_bottom do %>
+<script>
+  (function() {
+    var cx = '006252023667590608831:yopsgewhz5y';
+    var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<% end %>
+
+<div id="search">
+  <gcse:search></gcse:search>
+</div>

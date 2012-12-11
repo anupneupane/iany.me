@@ -52,8 +52,11 @@
                   <%== link_to content_tag(:i, 'RSS', :class => 'icon-rss'), 'http://feeds.iany.me/ianyblog' %>
                 </li>
               </ul>
-              <form class="navbar-search pull-right">
-                <input name="q" type="text" class="search-query" placeholder="Search">                
+              <form method="get" class="navbar-search pull-right" action="http://www.google.com/cse">
+                <input type="hidden" name="cx" value="006252023667590608831:yopsgewhz5y" />
+                <input type="hidden" name="siteurl" value="www.google.com/cse/home?cx=006252023667590608831:yopsgewhz5y" />
+                <input type="hidden" name="ie" value="UTF-8" />
+                <input name="q" type="text" class="search-query" placeholder="Search">
               </form>
             </div>
           </div> <!-- container -->
@@ -133,7 +136,7 @@
     </footer>
 
     <%== javascript_include_tag 'vendor' %>
-    <%#= javascript_include_tag 'main' %>
+    <%== javascript_include_tag 'main' %>
 
     <script>
       // Google Analytics
@@ -158,5 +161,7 @@
         });
       <% end %>
     </script>
+
+    <%== content_for(item, :body_bottom) %>
   </body>
 </html>

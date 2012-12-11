@@ -3,14 +3,15 @@
     <hr/>
     <% unless item[:tags].empty? %>
       <div class="article-meta">
-        <span class="muted">·</span>
         <i class="icon-tags"></i>
         <% item[:tags].each do |tag| %>
           <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label' %>
         <% end %>
       </div>
     <% end %>
-    <h1><%== item[:title] %></h1>
+    <% unless item[:title].nil? || item[:title].empty? %>
+      <h1><%== item[:title] %></h1>
+    <% end %>
   </header>
 
   <div class="article-content">

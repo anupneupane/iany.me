@@ -77,6 +77,11 @@ class Preprocessor
       item[:site] ||= 'blog'
       item[:kind] ||= 'page'
       item[:tags] ||= []
+      if item[:tags].is_a?(String)
+        item[:tags] = item[:tags].split(',')
+      end
+      item[:tags] = item[:tags].compact.collect(&:strip).reject(&:empty?).collect(&:downcase).uniq
+
       item[:created_at] = parse_time(item[:created_at])
       item[:updated_at] = parse_time(item[:updated_at])
       if item[:title].nil?
