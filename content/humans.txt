@@ -1,0 +1,16 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Ian Yang -- @doitian
+
+# TECHNOLOGY COLOPHON
+
+    Nanoc, Sprockets, Bootstrap
+    HTML5, CSS3
+    jQuery, Modernizr
+
+# Source
+
+    https://github.com/doitian/iany.me
