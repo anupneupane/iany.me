@@ -7,6 +7,11 @@ module Nanoc
     class DataSource < Nanoc::DataSource
       attr_reader :environment
 
+      def self.configure(environment = nil, &block)
+        @block = block if block
+        @block.call(environment) if environment
+      end
+
       def items
         assets.collect do |asset|
           ext = File.extname(asset.logical_path)[1..-1]
@@ -32,6 +37,7 @@ module Nanoc
 
       def up
         @environment = build_environment
+        self.class.configure(@environment)
       end
 
       private

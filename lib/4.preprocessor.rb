@@ -1,4 +1,5 @@
 require 'mini_magick'
+require 'uglifier'
 
 class ::Nanoc::Site
   def item_of
@@ -40,7 +41,6 @@ class Preprocessor
     setup_layout
     register_handlebars_helpers
     setup_sitemap
-    setup_compressor
   end
 
   def link_mathjax
@@ -181,17 +181,6 @@ class Preprocessor
       config[:env] = :server
     else
       config[:env] = :local
-    end
-  end
-
-  def setup_compressor
-    if config[:env] == :server
-      site.data_sources.each do |ds|
-        if ds.config[:type] == 'sprockets'
-          ds.environment.js_compressor = Uglifier.new
-          ds.environment.css_compressor = CssCompressor.new
-        end
-      end
     end
   end
 
