@@ -8,6 +8,8 @@ module Nanoc::Filters
   autoload 'Footnote', 'nanoc/filters/footnote'
   autoload 'FootnoteFooter', 'nanoc/filters/footnote'
   autoload 'Wikilink', 'nanoc/filters/wikilink'
+  autoload 'TOC', 'nanoc/filters/toc'
+  autoload 'ExternalLink', 'nanoc/filters/external_link'
 
   Nanoc::Filter.register '::Nanoc::Filters::ConfigurableHandlebars', :configurable_handlebars
   Nanoc::Filter.register '::Nanoc::Filters::Nokogiri::Build', :nokogiri_build
@@ -17,6 +19,8 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::Footnote', :footnote
   Nanoc::Filter.register '::Nanoc::Filters::FootnoteFooter', :footnote_footer
   Nanoc::Filter.register '::Nanoc::Filters::Wikilink', :wikilink
+  Nanoc::Filter.register '::Nanoc::Filters::TOC', :toc
+  Nanoc::Filter.register '::Nanoc::Filters::ExternalLink', :external_link
 end
 
 module Nanoc::DataSources

@@ -67,6 +67,14 @@
     <div id="body">
       <div class="container">
         <div class="row">
+          <% if item[:sidebar] && item[:toc] %>
+            <aside id="toc" class="span3 pull-right">
+              <section class="box sidebar-widget">
+                <h3 class="box-title">TOC</h3>
+              </section>
+            </aside>
+          <% end %>
+
           <div id="main-container" <%== 'class="span8"' if item[:sidebar] %>>
             <%== render 'partials/breadcrumbs' %>
 

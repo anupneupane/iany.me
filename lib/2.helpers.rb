@@ -18,7 +18,7 @@ module SiteHelpers
   end
 
   def body_class
-    classes = ['without-js']
+    classes = []
 
     classes.push 'with-sidebar' if item[:sidebar]
     classes.push 'with-comments' if item[:comment]
@@ -72,7 +72,10 @@ module SiteHelpers
       %Q(#{key}="#{html_escape(value.to_s)}")
     end.join(' ')
 
-    "<#{name} #{attributes}>#{content}</#{name}>"
+    <<-HTML
+<#{name} #{attributes}>#{content}</#{name}>
+
+    HTML
   end
 
   def stylesheet_link_tag(name)
@@ -91,7 +94,7 @@ module SiteHelpers
   end
 
   def feed_content(item)
-    doc = Nokogiri::HTML.fragment(item.compiled_content(snapshot: :pre))
+    doc = Nokogiri::HTML.fragment(item.compiled_content(:snapshot => :pre))
 
     doc.search('img') do |img|
       if img[:src] =~ /^\//

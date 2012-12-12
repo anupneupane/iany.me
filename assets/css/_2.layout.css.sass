@@ -15,6 +15,9 @@
 #comments
   padding: 20px
 
+#toc
+  padding-top: 20px
+
 #sidebar
   padding-top: 20px
 
@@ -28,9 +31,11 @@
   padding: 0 20px
 
 @media (max-width: 979px)
-  #sidebar
+  #sidebar, #toc
     margin-left: 0
     width: 4 * $gridColumnWidth768 + 3 * $gridGutterWidth768
+  #toc
+    margin-right: 20px
 
 @media (max-width: 767px)
   #body, #footer
@@ -41,6 +46,9 @@
   #footer
     padding-left: 20px
     padding-right: 20px
-  #sidebar
+  #sidebar, #toc
+    float: none
     width: auto
     padding: 0 20px
+  #toc
+    margin-right: 0

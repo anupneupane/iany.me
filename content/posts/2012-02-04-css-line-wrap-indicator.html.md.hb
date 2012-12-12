@@ -1,10 +1,9 @@
 ---
 created_at: <2012-02-04>
-updated_at: <2012-12-11 23:48:02>
+updated_at: <2012-12-12 21:31:11>
 title: CSS Line Wrap Indicator
 tags: [css, html]
 comment: true
-sidebar: []
 ---
 
 Many editor can wrap a line that reaches the window width and show an
@@ -27,7 +26,7 @@ You can check the result in this jsfiddle: http://jsfiddle.net/fbDKQ/6/
 . Resize the result panel to see the line wrap indicators. Following is a
 detailed explanation.
 
-{{!more}}
+{{more}}
 
 ## Add Line Markup ##
 

@@ -1,5 +1,6 @@
 $ ->
-  body = $('body').removeClass('without-js').addClass('with-js')
+  $('html').removeClass('no-js').addClass('has-js')
+  body = $('body')
 
   # if js is enabled, show search results in site
   $('.navbar-search').attr('action', '/search/')

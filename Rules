@@ -22,7 +22,11 @@ compile '*' do
         :options => {
           :no_intra_emphasis => true,
           :tables => true,
-          :fenced_code_blocks => true
+          :fenced_code_blocks => true,
+          :autolink => true
+        },
+        :renderer_options => {
+          :with_toc_data => item[:toc]
         }
       }
       filter :footnote
@@ -40,6 +44,9 @@ compile '*' do
       unless item[:layout] == false
         layout item[:layout] || 'default'
       end
+
+      filter :toc if item[:toc]
+      filter :external_link
     end
   end
 end
