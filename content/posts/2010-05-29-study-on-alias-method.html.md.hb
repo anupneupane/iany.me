@@ -1,9 +1,8 @@
 ---
-updated_at: <2012-12-11 23:16:09>
+updated_at: <2012-12-12 14:35:39>
 title: Study on Alias Method
 tags: [algorithm, probability]
-latex: true
-comment: true
+mathjax: true
 ---
 
 [@miloyip](http://twitter.com/miloyip) has published a

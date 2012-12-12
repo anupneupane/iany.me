@@ -32,7 +32,7 @@ data_sources:
     items_root: /assets
     layouts_root: /
     load_paths: ['assets/js', 'assets/img', 'assets/css']
-    precompile: ['vendor.js', 'main.js', 'style.css']
+    precompile: ['vendor.js', 'main.js', 'style.css', 'MathJax/config/ianyme.js' ]
     image_path_prefix: ['/assets/']
     gems:
       - name: 'bootstrap-sass'

@@ -27,6 +27,7 @@ compile '*' do
       }
       filter :nokogiri_build
       filter :pygments
+      filter :latex_escape if item[:mathjax]
       filter :nokogiri_write
     when 'html'
       page_layout = item[:page_layout] || item[:kind]

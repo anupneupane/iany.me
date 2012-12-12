@@ -17,7 +17,7 @@ module SiteHelpers
   end
 
   def body_class
-    classes = []
+    classes = ['without-js']
 
     classes.push 'with-sidebar' if item[:sidebar]
     classes.push 'with-comments' if item[:comment]

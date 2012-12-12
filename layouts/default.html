@@ -134,5 +134,10 @@
     </script>
 
     <%== content_for(item, :body_bottom) %>
+
+    <% if item[:mathjax] %>
+      <script src="/assets/MathJax/MathJax.js?config=ianyme&delayStartupUntil=configured" defer="defer">
+      </script>
+    <% end %>
   </body>
 </html>
