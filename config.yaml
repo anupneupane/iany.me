@@ -56,6 +56,8 @@ data_sources:
     year_permlink: '/year/:year/'
     permlink: ':title'
     sort: 'updated_at DESC'
+    calendar_template: '/_templates/calendar/'
+    tag_template: '/_templates/tag/'
   -
     type: ignoreable_filesystem_unified
     items_root: /

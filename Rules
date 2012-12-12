@@ -26,6 +26,7 @@ compile '*' do
         }
       }
       filter :footnote
+      filter :wikilink if item[:blog_name] == 'wiki'
       filter :nokogiri_build
       filter :pygments
       filter :latex_escape if item[:mathjax]

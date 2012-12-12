@@ -2,7 +2,7 @@
 title: Articles tagged ':tag'
 ---
 
-<%== render 'partials/archives', :blog => site.blog(:wiki), :archives => item[:page_items] %>
+<%== render 'partials/archives', :date_attr => :updated_at, :blog => site.blog(:wiki), :archives => item[:page_items] %>
 
 <p>
   <small class="pull-right"><a href="/wiki/tags/">See other tags &raquo;</a></small>

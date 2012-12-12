@@ -1,3 +1,6 @@
+<% last_seen_year = nil %>
+<% attr = defined?(date_attr) ? date_attr.to_sym : :created_at %>
+
 <table class="table table-hover article-table-archives">
   <thead>
     <tr>
@@ -7,17 +10,16 @@
     </tr>
   </thead>
   <tbody>
-    <% last_seen_year = nil %>
     <% archives.each do |article| %>
     <tr>
-      <% if last_seen_year == article.date.year %>
+      <% if last_seen_year == article[attr].year %>
         <td class="article-year hide-text"><%= last_seen_year %></td>
       <% else %>
-        <% last_seen_year = article.date.year %>
+        <% last_seen_year = article[attr].year %>
         <td class="article-year"><%= last_seen_year %></td>
       <% end %>
       <td class="article-date">
-        <%= article.date.strftime('%b %e') %>
+        <%= article[attr].strftime('%b %e') %>
       </td>
       <td class="article-title">
         <%== link_to article.title, article %>

@@ -6,7 +6,7 @@
       <% site.blog(:wiki).articles[0...10].each do |article| %>
         <li>
           <a href="<%= article.path %>"><%= article[:title] %></a>
-          <small><%= article[:created_at].strftime('%b %e') %></span></small>
+          <small><%= article[:updated_at].strftime('%b %e, %Y') %></span></small>
         </li>
       <% end %>
     </ol>

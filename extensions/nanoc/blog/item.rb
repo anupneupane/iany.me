@@ -35,8 +35,18 @@ module Nanoc
 
         self[:tags] = self[:tags].compact.collect(&:strip).reject(&:empty?).collect(&:downcase).uniq
 
-        if self[:created_at].is_a?(String)
-          self[:created_at] = Time.parse(self[:created_at])
+        self[:created_at] = parse_time(self[:created_at])
+        self[:updated_at] = parse_time(self[:updated_at] || self.mtime)
+      end
+
+      private
+      def parse_time(time)
+        if time.is_a?(Date)
+          Time.new(time.year, time.month, time.day)
+        elsif time.is_a?(String)
+          Time.parse(time)
+        else
+          time
         end
       end
     end

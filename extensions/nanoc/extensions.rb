@@ -7,6 +7,7 @@ module Nanoc::Filters
   autoload 'LatexEscape', 'nanoc/filters/latex_escape'
   autoload 'Footnote', 'nanoc/filters/footnote'
   autoload 'FootnoteFooter', 'nanoc/filters/footnote'
+  autoload 'Wikilink', 'nanoc/filters/wikilink'
 
   Nanoc::Filter.register '::Nanoc::Filters::ConfigurableHandlebars', :configurable_handlebars
   Nanoc::Filter.register '::Nanoc::Filters::Nokogiri::Build', :nokogiri_build
@@ -15,6 +16,7 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::LatexEscape', :latex_escape
   Nanoc::Filter.register '::Nanoc::Filters::Footnote', :footnote
   Nanoc::Filter.register '::Nanoc::Filters::FootnoteFooter', :footnote_footer
+  Nanoc::Filter.register '::Nanoc::Filters::Wikilink', :wikilink
 end
 
 module Nanoc::DataSources

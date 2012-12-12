@@ -20,7 +20,7 @@ module Nanoc
 
         attr, dir = @config[:sort].split(/ +/, 2)
         @articles = @items.find_all { |item| item[:kind] == 'article' }
-          .sort_by {|item| item[attr.to_sym]}
+          .sort_by { |item| item[attr.to_sym] }
         if dir && dir.downcase == 'desc'
           @articles = @articles.reverse
         end
