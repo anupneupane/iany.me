@@ -4,6 +4,7 @@ include Nanoc::Helpers::HTMLEscape
 include Nanoc::Helpers::Capturing
 include Nanoc::Helpers::LinkTo
 include Nanoc::Helpers::Rendering
+include Nanoc::Helpers::Breadcrumbs
 include Nanoc::Blog::Helpers
 
 module SiteHelpers

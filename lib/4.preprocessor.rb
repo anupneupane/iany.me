@@ -42,6 +42,7 @@ class Preprocessor
     register_handlebars_helpers
     setup_sitemap
     generate_item_uuid
+    setup_breadcrumbs
   end
 
   def link_mathjax
@@ -203,6 +204,43 @@ class Preprocessor
         else
           item[:uuid] = prefix_words.collect { |w| w[0, 2] }.join
         end
+      end
+    end
+  end
+
+  def setup_breadcrumbs
+    site.blog.tags.each do |tag, page|
+      page[:breadcrumbs] ||= ['/archives/', '/tags/']
+    end
+    site.item_of['/tags/'][:breadcrumbs] = ['/archives/']
+    site.blog.calendar.each do |year, page|
+      page[:breadcrumbs] = ['/archives/']
+    end
+
+    site.blog(:wiki).tags.each do |tag, page|
+      page[:breadcrumbs] ||= ['/wiki/', '/wiki-tags/']
+    end
+    site.blog(:wiki).articles.each do |page|
+      page[:breadcrumbs] ||= breadcrumbs_for_identifier(page.identifier)[1...-1].compact
+    end
+    site.item_of['/wiki-tags/'][:breadcrumbs] = ['/wiki/']
+
+    items.each do |item|
+      if item[:breadcrumbs]
+        item[:breadcrumbs] = item[:breadcrumbs].collect { |crumb|
+          if crumb.is_a?(String)
+            title, identifier = crumb.split('|', 2)
+            if identifier.nil?
+              identifier = title
+              title = nil
+            end
+            item = site.item_of[identifier]
+            raise "Cannot find #{identifier}" unless item
+            [title || item[:title], item]
+          else
+            [crumb[:title], crumb]
+          end
+        }
       end
     end
   end
