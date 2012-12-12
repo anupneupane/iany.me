@@ -9,6 +9,7 @@ ssh_options[:forward_agent] = true
 
 set :application, "iany.me"
 set :repository,  "git@github.com:doitian/iany.me.git"
+set :deploy_to, '/mnt/iany.me'
 
 set :scm, :git
 set :branch, 'master'
