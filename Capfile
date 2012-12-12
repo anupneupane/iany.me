@@ -21,6 +21,8 @@ set :use_sudo, true
 
 server "iany.me", :app
 
+# after "deploy:restart", "deploy:cleanup"
+
 namespace :deploy do
   task :symlink_mathjax do
     run "rm -rf #{current_release}/MathJax && ln -nfs #{shared_path}/MathJax #{latest_release}/MathJax"
