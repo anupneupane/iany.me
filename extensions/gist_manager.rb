@@ -31,14 +31,13 @@ class GistManager
   end
 
   def gist(gist, file, options = {})
-    script_url = script_url_for gist, file
     version    = options[:version]
     code       = get_cached_gist(gist, file, version) || get_gist_from_web(gist, file, version)
     code_caption = code_caption(gist, file)
-    html_output_for script_url, code, code_caption, options
+    html_output_for gist, file, code, code_caption, options
   end
 
-  def html_output_for(script_url, code, code_caption, options)
+  def html_output_for(gist, file, code, code_caption, options)
     code = CGI.escapeHTML code
     code_attr = ''
     if options[:lang]
@@ -48,18 +47,11 @@ class GistManager
       code_attr = %Q( data-version="#{options[:version]}")
     end
     <<-HTML
-<div>
-<script src='#{script_url}'></script>
-<noscript>
+<div class="gist" data-gist-id="#{gist}" data-gist-file="#{file}">
   <pre><code#{code_attr}>#{code}</code></pre>
   #{code_caption}
-</noscript>
 </div>
     HTML
-  end
-
-  def script_url_for(gist_id, filename)
-    "https://gist.github.com/#{gist_id}.js?file=#{filename}"
   end
 
   def get_gist_url_for(gist, file)

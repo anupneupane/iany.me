@@ -4,8 +4,9 @@ require 'gist_manager'
 module HandlebarsHelpers
   module_function
 
-  def gist(this, gist, file, options = {}, &block)
-    Handlebars::SafeString.new(GistManager.gist(gist, file, options))
+  def gist(this, gist, file, object = {}, &block)
+    attributes = v8_object_to_hash(object['hash'] || {})
+    Handlebars::SafeString.new(GistManager.gist(gist, file, attributes))
   end
 
   def figure(this, html_class = '', callback = nil)
@@ -81,8 +82,8 @@ module HandlebarsHelpers
 
   def caption(this, kind, object = {})
     attributes = v8_object_to_hash(object['hash'] || {})
-    file = attributes['file'] || ''
-    description = attributes['desc'] || ''
+    file = attributes[:file] || ''
+    description = attributes[:desc] || ''
 
     html = <<-HTML
 <div class="code-caption">
@@ -107,7 +108,7 @@ module HandlebarsHelpers
     hash = {}
     object.each do |k, v|
       unless k == 'hash'
-        hash[k] = v.is_a?(V8::Object) ? v8_object_to_hash(v) : v
+        hash[k.to_sym] = v.is_a?(V8::Object) ? v8_object_to_hash(v) : v
       end
     end
     hash
