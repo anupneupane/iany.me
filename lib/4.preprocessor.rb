@@ -44,8 +44,10 @@ class Preprocessor
   end
 
   def link_mathjax
-    FileUtils.mkdir_p 'output/assets'
-    system "ln -sfn '../../MathJax' output/assets/MathJax"
+    unless File.exist?('output/assets/MathJax')
+      FileUtils.mkdir_p 'output/assets'
+      system "ln -sfn '../../MathJax' output/assets/MathJax"
+    end
   end
 
   def paginate
