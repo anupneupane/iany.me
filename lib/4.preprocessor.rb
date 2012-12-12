@@ -41,6 +41,7 @@ class Preprocessor
     setup_layout
     register_handlebars_helpers
     setup_sitemap
+    generate_item_uuid
   end
 
   def link_mathjax
@@ -183,6 +184,26 @@ class Preprocessor
       config[:env] = :server
     else
       config[:env] = :local
+    end
+  end
+
+  def generate_item_uuid
+    items.each do |item|
+      unless item.binary?
+        words = item.identifier.split(/[^a-zA-Z0-9]+/).compact
+        words = words.collect(&:strip).collect(&:downcase).reject { |word|
+          word.size <= 1 || %w{the an is are was were be}.include?(word)
+        }
+
+        prefix_words = words[0, 3]
+        prefix_words << words[-1] if words.size > 3
+        if prefix_words.empty? ||
+            prefix_words.collect { |w| w.size }.inject(&:+) <= 8
+          item[:uuid] = prefix_words.join
+        else
+          item[:uuid] = prefix_words.collect { |w| w[0, 2] }.join
+        end
+      end
     end
   end
 

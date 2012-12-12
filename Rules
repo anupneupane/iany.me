@@ -25,9 +25,11 @@ compile '*' do
           :fenced_code_blocks => true
         }
       }
+      filter :footnote
       filter :nokogiri_build
       filter :pygments
       filter :latex_escape if item[:mathjax]
+      filter :footnote_footer
       filter :nokogiri_write
     when 'html'
       page_layout = item[:page_layout] || item[:kind]
