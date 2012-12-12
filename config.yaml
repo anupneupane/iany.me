@@ -10,6 +10,9 @@ sitemap:
   index:
     changefreq: daily
     priority: 0.6
+  wiki_index:
+    changefreq: daily
+    priority: 1
   calendar:
     changefreq: daily
     priority: 0.8
@@ -44,10 +47,20 @@ data_sources:
     directory: 'content/posts'
     permlink: ':year/:month/:title'
   -
+    type: blog
+    name: wiki
+    items_root: /wiki
+    layouts_root: /
+    directory: 'content/wiki'
+    source: ':title'
+    year_permlink: '/year/:year/'
+    permlink: ':title'
+    sort: 'updated_at DESC'
+  -
     type: ignoreable_filesystem_unified
     items_root: /
     layouts_root: /
-    ignore: '^content/posts/'
+    ignore: '^content/(posts|wiki)/'
 
 watcher:
   dirs_to_watch: [ 'content', 'layouts', 'lib', 'assets' ]

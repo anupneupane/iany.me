@@ -3,7 +3,9 @@ preprocess do
   Preprocessor.configure(site)
 end
 
-compile 'assets/*' do
+compile '/assets/*' do
+end
+compile '/wiki/year/*' do
 end
 
 compile '*' do
@@ -13,6 +15,8 @@ compile '*' do
     case ext
     when 'handlebars', 'hbs', 'hb'
       filter :configurable_handlebars
+    when 'erb'
+      filter :erubis
     when 'md', 'markdown'
       filter :redcarpet, {
         :options => {
@@ -24,8 +28,6 @@ compile '*' do
       filter :nokogiri_build
       filter :pygments
       filter :nokogiri_write
-    when 'erb'
-      filter :erubis
     when 'html'
       page_layout = item[:page_layout] || item[:kind]
       page_layout = nil if item[:page_layout] == false
@@ -43,6 +45,12 @@ route '/p1' do
 end
 route %r(^/p\d+/) do
   item.identifier + 'index.html'
+end
+route '/wiki/yaear/*' do
+end
+
+route '/wiki-tags/' do
+  '/wiki/tags/index.html'
 end
 
 route '*' do

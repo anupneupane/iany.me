@@ -22,7 +22,8 @@ module Nanoc
         :tag_template => '/tag/',
         :tag_permlink => '/tags/:tag/',
         :calendar_template => '/calendar/',
-        :year_permlink => '/:year/'
+        :year_permlink => '/:year/',
+        :sort => 'created_at DESC'
       }
 
       def initialize(*args)
@@ -59,6 +60,7 @@ module Nanoc
             day = names.include?('day') ? matches[:day] : 1
 
             item[:created_at] ||= Time.new(year, month, day)
+            item[:updated_at] ||= item.mtime
             if names.include?('title')
               item[:title] ||= matches[:title].split(/[-_]/).collect(&:capitalize).join(' ')
             end

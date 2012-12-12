@@ -1,0 +1,21 @@
+<article>
+  <header>
+    <hr/>
+    <% unless item[:tags].empty? %>
+      <div class="article-meta">
+        <i class="icon-tags"></i>
+        <% item[:tags].each do |tag| %>
+          <%== link_to render_tag(tag), site.blog(:wiki).tags[tag].path, :class => 'label' %>
+        <% end %>
+      </div>
+    <% end %>
+    <h1><%== item[:title] %></h1>
+  </header>
+
+  <div class="article-content">
+    <%== yield %>
+  </div>
+
+  <footer></footer>
+</article>
+

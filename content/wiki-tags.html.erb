@@ -6,7 +6,7 @@ priority: 0.9
 ---
 
 <ul>
-  <% site.blog.tags.sort_by(&:first).each do |tag, page| %>
+  <% site.blog(:wiki).tags.sort_by(&:first).each do |tag, page| %>
     <li><a href="<%= page.path %>"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</a></li>
   <% end %>
 </ul>

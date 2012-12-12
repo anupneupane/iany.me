@@ -67,7 +67,7 @@
     <div id="body">
       <div class="container">
         <div class="row">
-          <div id="main-container" class="span8">
+          <div id="main-container" <%== 'class="span8"' if item[:sidebar] %>>
             <div id="main" role="main">
               <%== yield %>
             </div>
@@ -87,42 +87,13 @@
             <% end %>
           </div>
 
-          <aside id="sidebar" class="offset1 span3">
-            <div id="sidebar-toggle"></div>
-            <section class="box sidebar-widget">
-              <h3 class="box-title">Recent Articles</h3>
-              <ol>
-                <% site.blog.articles[0...10].each do |article| %>
-                  <li>
-                    <a href="<%= article.path %>"><%= article[:title] %></a>
-                    <small><%= article[:created_at].strftime('%b %e') %></span></small>
-                  </li>
-                <% end %>
-              </ol>
-            </section>
-
-            <section class="box sidebar-widget">
-              <h3 class="box-title">Archives</h3>
-              <ol>
-                <% site.blog.calendar.each do |year, page| %>
-                  <li><a href="<%= page.path %>"><%= year %> (<%= page[:page_items].size %>)</a></li>
-                <% end %>
-              </ol>
-            </section>
-
-            <section class="box sidebar-widget">
-              <h3 class="box-title">Tags</h3>
-              <ol>
-                <% site.blog.tags.sort_by { |k,v| -v[:page_items].count }.first(10).each do |tag, page| %>
-                  <li><a href="<%= page.path %>"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</a></li>
-                <% end %>
-              </ol>
-
-              <footer>
-                <a href="/tags">See all tags &raquo;</a>
-              </footer>
-            </section>
-          </aside>
+          <% if item[:sidebar] %>
+            <% if item[:site] == 'wiki' %>
+              <%== render 'partials/wiki_sidebar' %>
+            <% else %>
+              <%== render 'partials/blog_sidebar' %>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>

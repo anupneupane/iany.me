@@ -31,6 +31,7 @@ class Preprocessor
 
   def run_all
     setup_env
+    link_mathjax
     paginate
     index_items
     fill_image_dimensions
@@ -39,6 +40,11 @@ class Preprocessor
     setup_layout
     register_handlebars_helpers
     setup_sitemap
+  end
+
+  def link_mathjax
+    FileUtils.mkdir_p 'output/assets'
+    system "ln -sfn MathJax output/assets/MathJax"
   end
 
   def paginate
@@ -74,6 +80,13 @@ class Preprocessor
 
   def nomalize_attributes
     items.each do |item|
+      item[:sidebar] = true if item[:sidebar].nil?
+
+      if item.identifier.start_with?('/wiki/')
+        item[:site] = 'wiki'
+        item[:menu] = 'wiki'
+      end
+
       item[:site] ||= 'blog'
       item[:kind] ||= 'page'
       item[:tags] ||= []
@@ -106,9 +119,14 @@ class Preprocessor
 
   def setup_layout
     site.blog.items.each do |item|
-      item[:sidebar] = true if item[:sidebar].nil?
       if item[:kind] == 'article'
         item[:page_layout] = 'blog'
+        item[:comment] = true if item[:comment].nil?
+      end
+    end
+    site.blog(:wiki).items.each do |item|
+      if item[:kind] == 'article'
+        item[:page_layout] = 'wiki'
         item[:comment] = true if item[:comment].nil?
       end
     end
@@ -124,16 +142,29 @@ class Preprocessor
 
   def setup_sitemap
     index_items
-    site.blog.articles.each do |item|
-      item[:changefreq] ||= config[:sitemap][:default][:changefreq]
-      item[:priority] ||= config[:sitemap][:default][:priority]
-    end
 
     home = site.item_of['/p1/']
     home[:changefreq] ||= config[:sitemap][:index][:changefreq]
     home[:priority] ||= config[:sitemap][:index][:priority]
 
+    wiki = site.item_of['/wiki/']
+    wiki[:changefreq] ||= config[:sitemap][:wiki_index][:changefreq]
+    home[:priority] ||= config[:sitemap][:wiki_index][:priority]
+
+    site.blog.articles.each do |item|
+      item[:changefreq] ||= config[:sitemap][:default][:changefreq]
+      item[:priority] ||= config[:sitemap][:default][:priority]
+    end
+    site.blog(:wiki).articles.each do |item|
+      item[:changefreq] ||= config[:sitemap][:default][:changefreq]
+      item[:priority] ||= config[:sitemap][:default][:priority]
+    end
+
     site.blog.tags.each do |tag, page|
+      page[:changefreq] ||= config[:sitemap][:tag][:changefreq]
+      page[:priority] ||= config[:sitemap][:tag][:priority]
+    end
+    site.blog(:wiki).tags.each do |tag, page|
       page[:changefreq] ||= config[:sitemap][:tag][:changefreq]
       page[:priority] ||= config[:sitemap][:tag][:priority]
     end

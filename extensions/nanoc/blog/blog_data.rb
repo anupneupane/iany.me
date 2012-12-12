@@ -18,8 +18,12 @@ module Nanoc
         @items.delete @tag_template
         @items.delete @calendar_template
 
+        attr, dir = @config[:sort].split(/ +/, 2)
         @articles = @items.find_all { |item| item[:kind] == 'article' }
-          .sort_by(&:date).reverse
+          .sort_by {|item| item[attr.to_sym]}
+        if dir && dir.downcase == 'desc'
+          @articles = @articles.reverse
+        end
 
         @items.concat create_tag_items
         @items.concat create_calendar_items
