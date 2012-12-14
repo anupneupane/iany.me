@@ -31,6 +31,9 @@ namespace :deploy do
   task :compile do
     run "cd #{current_release} && NANOC_ENV=server bundle exec nanoc compile"
   end
+  task :gzip do
+    run "cd #{current_release} && NANOC_ENV=server bundle exec nanoc gzip"
+  end
 end
 
 after 'deploy:update_code', 'deploy:symlink_mathjax'
