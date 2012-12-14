@@ -96,12 +96,12 @@ module SiteHelpers
   def feed_content(item)
     doc = Nokogiri::HTML.fragment(item.compiled_content(:snapshot => :pre))
 
-    doc.search('img') do |img|
+    doc.search('img').each do |img|
       if img[:src] =~ /^\//
         img[:src] = config[:base_url] + img[:src]
       end
     end
-    doc.search('a') do |a|
+    doc.search('a').each do |a|
       if a[:href] =~ /^\//
         a[:href] = config[:base_url] + a[:href]
       end
