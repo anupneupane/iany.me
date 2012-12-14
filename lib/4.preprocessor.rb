@@ -191,7 +191,7 @@ class Preprocessor
   def generate_item_uuid
     items.each do |item|
       unless item.binary?
-        words = item.identifier.split(/[^a-zA-Z0-9]+/).compact
+        words = File.basename(item.identifier.chomp('/')).split(/[^a-zA-Z0-9]+/).compact
         words = words.collect(&:strip).collect(&:downcase).reject { |word|
           word.size <= 1 || %w{the an is are was were be}.include?(word)
         }
