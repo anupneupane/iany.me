@@ -30,7 +30,7 @@
     <% item.tags.each do |tag| %>
     <category term="<%= tag %>" label="<%= render_tag(tag) %>" />
     <% end %>
-    <content><%= feed_content(item) %></content>
+    <content><![CDATA[<%== feed_content(item) %>]]></content>
   </entry>
   <% end %>
 </feed>
