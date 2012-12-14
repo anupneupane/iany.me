@@ -38,3 +38,4 @@ end
 
 after 'deploy:update_code', 'deploy:symlink_mathjax'
 after 'deploy:update_code', 'deploy:compile'
+after 'deploy:update_code', 'deploy:gzip'
