@@ -4,6 +4,7 @@ updated_at: <2012-12-12 21:31:11>
 title: CSS Line Wrap Indicator
 tags: [css, html]
 comment: true
+tmpl: hb
 ---
 
 Many editor can wrap a line that reaches the window width and show an

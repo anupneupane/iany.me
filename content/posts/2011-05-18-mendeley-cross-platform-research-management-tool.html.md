@@ -3,6 +3,7 @@ updated_at: <2012-12-11 23:03:02>
 title: "Mendeley: Cross Platform Research Management Tool"
 tags: [utility, productivity, app]
 comment: true
+tmpl: hb
 ---
 
 [Mendeley][] is a research management tool for desktop & web. It has clients for

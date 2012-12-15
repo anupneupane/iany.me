@@ -5,6 +5,7 @@ title: Zero Configuration Nginx With Passenger
 tags: [rails, ruby, rack, nginx, passenger, pow]
 comment: true
 sidebar: []
+tmpl: hb
 ---
 
 [Pow][] is a zero-config Rack server for Mac OS X. Here I steal its idea to

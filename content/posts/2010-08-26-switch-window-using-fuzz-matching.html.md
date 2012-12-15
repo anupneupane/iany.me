@@ -3,6 +3,7 @@ updated_at: <2012-12-11 23:10:49>
 title: Switch Window Using Fuzz Matching
 tags: [desktop, linux, productivity, script]
 comment: true
+tmpl: hb
 ---
 
 This article demonstrates how to quickly switch to a window using **gpicker**

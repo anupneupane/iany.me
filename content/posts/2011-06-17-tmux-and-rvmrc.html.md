@@ -3,6 +3,7 @@ updated_at: <2012-12-11 02:24:28>
 title: Tmux And Rvmrc
 tags: tmux, rvm, ruby, console
 comment: true
+tmpl: hb
 ---
 
 [Tmux][] is a terminal multiplexer. I switched to Tmux from [GNU Screen][screen]

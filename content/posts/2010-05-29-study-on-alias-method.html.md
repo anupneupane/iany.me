@@ -4,6 +4,7 @@ title: Study on Alias Method
 tags: [algorithm, probability]
 mathjax: true
 toc: true
+tmpl: hb
 ---
 
 [@miloyip](http://twitter.com/miloyip) has published a

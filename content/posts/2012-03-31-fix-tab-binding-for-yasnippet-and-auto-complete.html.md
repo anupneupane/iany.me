@@ -2,6 +2,7 @@
 updated_at: <2012-12-11 18:37:48>
 title: Fix TAB Binding For yasnippet And auto-complete
 tags: [emacs]
+tmpl: hb
 ---
 
 There are two TAB's in Emacs, `(kbd "TAB")` (`\t`, `[9]`) and `(kbd "<tab>")`

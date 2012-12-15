@@ -3,6 +3,7 @@ created_at: <2012-03-30>
 updated_at: <2012-12-12 22:12:51>
 title: Use Popup isearch For Yasnippet Prompt
 tags: [emacs]
+tmpl: hb
 ---
 
 [Yasnippet][] tries functions in `yas/prompt-functions` when it needs user to

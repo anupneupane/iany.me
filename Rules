@@ -10,6 +10,9 @@ end
 
 compile '*' do
   extensions = item[:split_extensions]
+  if item[:tmpl]
+    extensions = extensions + [item[:tmpl]]
+  end
 
   extensions.reverse_each do |ext|
     case ext
