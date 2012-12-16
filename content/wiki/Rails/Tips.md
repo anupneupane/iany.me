@@ -1,5 +1,5 @@
 ---
-updated_at: <2011-12-08 06:21:43>
+updated_at: <2012-12-16 21:02:14>
 created_at: <2011-12-03 03:40:47>
 title: Rails Tips
 tags: web, rails, ruby
@@ -17,7 +17,7 @@ attributes an attribute writer is defined on the model.
 
 See [NestedAttributes ClassMethods](http://api.rubyonrails.org/classes/ActiveRecord/NestedAttributes/ClassMethods.html)
 
-Enable mass assignment (though `fields_for`). Add `attr_accessible:#{child_class}_attributes`
+Enable mass assignment (though `fields_for`). Add `attr_accessible :#{child_class}_attributes`
 
 ### HashWithIndifferentAccess ###
 
