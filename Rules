@@ -3,6 +3,11 @@ preprocess do
   Preprocessor.configure(site)
 end
 
+compile /\#|flymake\.rb/ do
+end
+route /\#|flymake\.rb/ do
+end
+
 compile '/assets/*' do
 end
 compile '/wiki/year/*' do
