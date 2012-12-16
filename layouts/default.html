@@ -44,7 +44,18 @@
               <ul class="nav">
                 <li<%== ' class="active"' if active_menu == :blog %>><%== link_to 'Blog', '/' %></li>
                 <li<%== ' class="active"' if active_menu == :archives %>><%== link_to 'Archives', '/archives' %></li>
-                <li<%== ' class="active"' if active_menu == :wiki %>><%== link_to 'Wiki', '/wiki' %></li>
+                <% if active_menu == :wiki %>
+                  <li class="active dropdown">
+                    <a href="/wiki/" class="dropdown-toggle" data-toggle="dropdown">Wiki <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/wiki/">Home</a></li>
+                      <li><a href="/wiki/tags/">Tags</a></li>
+                      <li><a href="/wiki/sitemap/">Sitemap</a></li>
+                    </ul>
+                  </li>
+                <% else %>
+                  <li><%== link_to 'Wiki', '/wiki' %></li>
+                <% end %>
                 <li<%== ' class="active"' if active_menu == :about %>><%== link_to 'About', '/about' %></li>
               </ul>
               <ul class="nav pull-right">

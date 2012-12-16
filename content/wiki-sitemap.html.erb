@@ -1,0 +1,14 @@
+---
+title: Sitemap
+kind: archives
+menu: wiki
+changefreq: daily
+priority: 0.5
+breadcrumbs: ["/wiki/"]
+---
+
+<ul>
+  <% site.blog(:wiki).articles.sort_by(&:identifier).each do |page| %>
+    <li class="level-<%= page.identifier.split('/').size - 2 %>"><a href="<%= page.path %>"><%= page[:title] %></a></li>
+  <% end %>
+</ul>

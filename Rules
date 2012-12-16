@@ -63,8 +63,8 @@ end
 route '/wiki/yaear/*' do
 end
 
-route '/wiki-tags/' do
-  '/wiki/tags/index.html'
+route '/wiki-*/' do
+  item.identifier.sub(/wiki-/, 'wiki/').chomp('.') + 'index.html'
 end
 
 route '*' do
