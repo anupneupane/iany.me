@@ -1,34 +1,32 @@
 ---
-updated_at: <2011-12-08 06:30:56>
+updated_at: <2012-12-19 01:33:52>
 created_at: <2011-12-03 03:40:47>
 title: RSpec
-tags: ruby, test
+tags: [ruby, test]
 ---
 
-Mock Helper
------------
+Rails
+-----
 
-Include `ActionView::Helpers` and mock on `self`. See
-[how to mocking out your rails helpers in helper specs](http://openmonkey.com/2008/03/19/mocking-out-your-rails-helpers-in-helper-specs)
+### Helper ###
 
-Rails with Capypara
--------------------
+Include `ActionView::Helpers` and mock on `self` [^1].
 
-```ruby
-group :test, :development do
-  gem 'rspec-rails'
-end
-group :test do
-  gem 'factory_girl_rails'
-  gem 'capybara'
-end
-```
+### Acceptance with Capybara ###
 
-```ruby
-# spec/spec_helper.rb
-require 'capybara/rspec'
-````
 
-Capypara handles its own session, use `page.driver` to send requests:
+-   spec_helper.rb
 
-    page.driver.post session_path, :session => credentials
+        require 'capybara/rspec'
+
+-   put specs in spec/features, or tag example `:type => :feature`
+-   enable js by `:js => true`
+-   capybara cannot access request nor session object.
+
+Matchers
+--------
+
+-   [shoulda-matchers](https://github.com/thoughtbot/shoulda-matchers)
+-   [rspec-html-matchers](https://github.com/kucaahbe/rspec-html-matchers)
+
+[^1]: [how to mocking out your rails helpers in helper specs](http://openmonkey.com/2008/03/19/mocking-out-your-rails-helpers-in-helper-specs)

@@ -1,5 +1,5 @@
 ---
-updated_at: <2011-12-08 06:29:35>
+updated_at: <2012-12-18 21:24:58>
 created_at: <2011-12-03 03:40:47>
 title: Rails Config
 tags: web, rails, ruby
@@ -34,14 +34,6 @@ Auto load paths:
 Plugin load sequence
 
     config.plugins = [:first_plugin, :all]
-
-### generators
-
-    config.generators do |g|
-      g.stylesheet_engine :sass
-      g.template_engine :haml
-      g.test_framework :rspec, :fixture => false
-    end
 
 initializers
 ------------

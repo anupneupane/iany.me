@@ -1,14 +1,9 @@
 ---
-updated_at: <2012-12-16 21:02:14>
+updated_at: <2012-12-19 01:54:04>
 created_at: <2011-12-03 03:40:47>
-title: Rails Tips
-tags: web, rails, ruby
+title: Nested Model Form
+tags: [rails, ruby, web, form]
 ---
-
-Core
-----
-
-### Nested Attributes ###
 
 Nested attributes allow you to save attributes on associated records through the
 parent. By default nested attribute updating is turned off, you can enable it
@@ -19,8 +14,13 @@ See [NestedAttributes ClassMethods](http://api.rubyonrails.org/classes/ActiveRec
 
 Enable mass assignment (though `fields_for`). Add `attr_accessible :#{child_class}_attributes`
 
-### HashWithIndifferentAccess ###
+Remove nested model: Enable `:destroy => true`, and add field `_destory` in
+form.
 
-String key and symbol key get same value.
+[Helper and js handler](http://bitly.com/bundles/iany/5) for add/remove links.
 
-See [HashWithIndifferentAccess](http://as.rubyonrails.org/classes/HashWithIndifferentAccess.html)
+If `id` field is not inserted, form builder will insert it after block in
+`fields_for`. So `id` field must be specified explicitly when list fields in
+list or table.
+
+
