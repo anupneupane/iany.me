@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-12-18 20:48:01>
+updated_at: <2012-12-25 11:45:05>
 created_at: <2011-12-03 03:40:47>
 title: Rails
 tags: web, rails, ruby
@@ -10,8 +10,9 @@ tags: web, rails, ruby
 
 ### Obsoleted Notes ##
 
+- [[ActiveRecord|Rails/ActiveRecord]]
+- [[ActionView|Rails/ActionView]]
 - [[ActionMailer|Rails/ActionMailer]]
 - [[Config|Rails/Config]]
 - [[Log|Rails/Log]]
 - [[Routing|Rails/Routing]]
-- [[Tips|Rails/Tips]]
