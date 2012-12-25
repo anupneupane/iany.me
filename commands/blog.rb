@@ -34,7 +34,9 @@ run do |opts, args, cmd|
   File.open(path, 'w') do |f|
     f.write(result)
   end
-  system "emacs-dwim -n #{path}"
+  unless ENV['EMACS']
+    system "emacs-dwim -n #{path}"
+  end
 end
 
 BLOG_TEMPLATE = <<HB
