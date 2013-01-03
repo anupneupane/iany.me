@@ -40,7 +40,7 @@ compile '*' do
       filter :footnote
       filter :wikilink if item[:blog_name] == 'wiki'
       filter :nokogiri_build
-      filter :pygments
+      filter :pygments, :linenos => 'table'
       filter :latex_escape if item[:mathjax]
       filter :footnote_footer
       filter :nokogiri_write

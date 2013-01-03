@@ -32,7 +32,11 @@ module Nanoc::Filters
         if lang && !lang.strip.empty? && lang != 'mathjax'
           s = node.inner_html || "[++where is the code?++]"
           begin
-            node.parent.swap(pygment(s, lang.strip, params))
+            highlighted = pygment(s, lang.strip, params)
+            if params[:linenos] == 'table'
+              highlighted = '<div class="highlighttable-container">' + highlighted + '</div>'
+            end
+            node.parent.swap(highlighted)
           rescue MentosError
             # ignore
           end
