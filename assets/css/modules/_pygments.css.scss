@@ -63,14 +63,6 @@
 }
 
 article {
-  .highlighttable-container {
-    overflow-x: auto;
-    margin-bottom: $baseLineHeight;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0,0,0,.15);
-    background: #F8F8FF;
-  }
-
   table.highlighttable {
     border-bottom-width: 0;
     margin-bottom: 0;
@@ -78,7 +70,6 @@ article {
     tbody tr:hover td {
       background: inherit;
     }
-
     pre {
       padding: 0.5em;
       margin-bottom: 0;
@@ -91,17 +82,26 @@ article {
     td {
       padding: 0;
     }
-    td.linenos {
-      border-right: 1px solid #ccc;
-      pre {
-        color: #AAA;
-      }
-    }
-    .linenodiv {
-      background: #EAEAEA;
-    }
-    td.code {
-      width: 100%;
-    }
   }
+}
+
+.highlighttable-container {
+  overflow-x: auto;
+  margin-bottom: $baseLineHeight;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.15);
+  background: #F8F8FF;
+}
+
+td.linenos {
+  border-right: 1px solid #ccc;
+  pre {
+    color: #AAA;
+  }
+}
+.linenodiv {
+  background: #EAEAEA;
+}
+td.code {
+  width: 100%;
 }
