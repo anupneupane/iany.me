@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-12-19 01:38:28>
+updated_at: <2013-01-05 13:34:45>
 created_at: <2011-12-03 03:40:47>
 title: Rails Plugins
 tags: web, rails, ruby, plugin
@@ -67,4 +67,6 @@ Test
 - [webmock](https://github.com/bblimke/webmock)
 - [jasmine](https://github.com/pivotal/jasmine-gem)
 - [in memory sqlite](http://chrisroos.co.uk/blog/2006-02-08-in-memory-sqlite-database-for-rails-testing)
+- capybara
+- capybara-mail
 
