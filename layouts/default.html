@@ -149,7 +149,7 @@
           $('#disqus_thread').append('<p class="dsq-brlink"><a href="http://disqus.com">blog comments powered by <span class="logo-disqus">Disqus</span></a></p>');
           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
           dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          $('body').append(dsq);
         });
       <% end %>
     </script>
@@ -157,7 +157,7 @@
     <%== content_for(item, :body_bottom) %>
 
     <% if item[:mathjax] %>
-      <script src="/assets/MathJax/MathJax.js?config=ianyme&delayStartupUntil=configured" defer="defer">
+      <script src="/assets/MathJax/MathJax.js?config=ianyme&delayStartupUntil=configured" async defer>
       </script>
     <% end %>
   </body>
