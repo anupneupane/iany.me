@@ -74,8 +74,10 @@ underlying sqlite database.
 Open options dialog through menu Tools -> Options and switch to "File Organizer" tab.
 
 - Enable "Organize my files" and select a directory such as "/Mendeley". It must
-  be the same in different machines. So the manual solution cannot synchronize
-  between Windows and Mac, Linux.
+  be the same in different machines. Otherwise the manual solution cannot synchronize
+  between Windows and Mac, Linux. Since in Windows, the path name contains the
+  driver name, so the database also cannot be shared between Windows and other
+  systems having root path.
 - Enable "Sort files into sub-folders" to avoid file name conflicts. I prefer the
   Folder path `Year`/`Author`.
 
