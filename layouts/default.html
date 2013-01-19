@@ -11,6 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <%== stylesheet_link_tag 'style' %>
+    <!--[if IE 7]>
+      <%== stylesheet_link_tag 'ie7' %>
+    <![endif]-->
     <%#= javascript_include_tag 'vendor/modernizr-2.6.1.min' %>
 
     <link rel="alternate" type="application/rss+xml" href="http://feeds.iany.me/ianyblog">
@@ -60,7 +63,7 @@
               </ul>
               <ul class="nav pull-right">
                 <li>
-                  <%== link_to content_tag(:i, 'RSS', :class => 'icon-rss'), 'http://feeds.iany.me/ianyblog' %>
+                  <%== link_to content_tag(:span, 'RSS'), 'http://feeds.iany.me/ianyblog', :class => 'icon-rss' %>
                 </li>
               </ul>
               <form method="get" class="navbar-search pull-right" action="http://www.google.com/cse">

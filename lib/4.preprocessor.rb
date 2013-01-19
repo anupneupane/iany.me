@@ -33,6 +33,7 @@ class Preprocessor
   def run_all
     setup_env
     link_mathjax
+    link_font_awesome
     paginate
     index_items
     fill_image_dimensions
@@ -50,6 +51,11 @@ class Preprocessor
       FileUtils.mkdir_p 'output/assets'
       system "ln -sfn '../../MathJax' output/assets/MathJax"
     end
+  end
+
+  def link_font_awesome
+    FileUtils.mkdir_p 'output/assets'
+    system "ln -sfn '../../Font-Awesome/font' output/assets/font"
   end
 
   def paginate

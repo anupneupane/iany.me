@@ -14,6 +14,7 @@ module Nanoc::Filters
           domain = $1
           unless domain.end_with?(site.config[:base_url].split('://', 2).last)
             a['class'] = "#{a['class']} external"
+            a << '<i class="icon-external-link"></i>'
           end
         end
       end
