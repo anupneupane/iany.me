@@ -11,8 +11,7 @@ class App
     $('.navbar-search').attr('action', '/search/')
 
   setupMathJax: ->
-    mathjax = $('code.mathjax').fadeOut()
-    mathjax.each ->
+    $('code.mathjax').each ->
       $this = $(this)
       if $this.parent().is('pre')
         div = $('<div class="mathjax-wrapper"></div>').html($this.text())
@@ -20,7 +19,6 @@ class App
       else
         $this.attr('class', 'mathjax-wrapper').html('\\(' + $this.text() + '\\)')
 
-    # MathJax.Hub.Register.StartupHook "End Typeset", ->
     MathJax.Hub.Configured()
 
   gistsStylesheets = {}
