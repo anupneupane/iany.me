@@ -23,6 +23,8 @@ and time picker can be used. This post introduces two methods I found.
 
 The github repository [doitian/rails-compound-input-demo](https://github.com/doitian/rails-compound-input-demo) contains demos for both methods.
 
+{{more}}
+
 composed_of
 -----------
 
