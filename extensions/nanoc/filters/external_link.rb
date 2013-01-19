@@ -4,7 +4,11 @@ module Nanoc::Filters
   class ExternalLink < ::Nanoc::Filter
     def run(content, options = nil)
       if content.is_a?(String)
-        doc = ::Nokogiri::HTML.fragment(content)
+        if content =~ /!DOCTYPE/
+          doc = ::Nokogiri::HTML(content)
+        else
+          doc = ::Nokogiri::HTML.fragment(content)
+        end
       else
         doc = content
       end

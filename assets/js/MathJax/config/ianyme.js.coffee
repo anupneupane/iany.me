@@ -11,6 +11,5 @@ MathJax.Hub.Config
     inlineMath: [ ['\\(','\\)'] ]
     displayMath: [ ['\\[','\\]'] ]
     skipTags: ["script","noscript","style","textarea","pre","header","nav"]
-    preview: [["i",{class: "icon-spin"}]]
 
 MathJax.Ajax.loadComplete("[MathJax]/config/ianyme.js")
