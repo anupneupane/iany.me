@@ -3,14 +3,17 @@ title: false
 comment: false
 page_layout: false
 ---
+
+<% if item[:prev_page] || item[:next_page] %>
 <ul class="pager">
-  <li class="previous<%= item[:prev_page] ? '' : ' disabled' %>">
+  <li class="previous<%= item[:prev_page] ? '' : ' hidden' %>">
     <%== link_to "&larr; Newer", item[:prev_page] || '#' %>
   </li>
-  <li class="next<%= item[:next_page] ? '' : ' disabled' %>">
+  <li class="next<%= item[:next_page] ? '' : ' hidden' %>">
     <%== link_to "Older &rarr;", item[:next_page] || '#' %>
   </li>
 </ul>
+<% end %>
 
 <% item[:page_items].each do |article| %>
   <article>
@@ -45,11 +48,13 @@ page_layout: false
   </article>
 <% end %>
 
+<% if item[:prev_page] || item[:next_page] %>
 <ul class="pager">
-  <li class="previous<%= item[:prev_page] ? '' : ' disabled' %>">
+  <li class="previous<%= item[:prev_page] ? '' : ' hidden' %>">
     <%== link_to "&larr; Newer", item[:prev_page] || '#' %>
   </li>
-  <li class="next<%= item[:next_page] ? '' : ' disabled' %>">
+  <li class="next<%= item[:next_page] ? '' : ' hidden' %>">
     <%== link_to "Older &rarr;", item[:next_page] || '#' %>
   </li>
 </ul>
+<% end %>
