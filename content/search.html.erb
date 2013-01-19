@@ -5,6 +5,9 @@ page_layout: false
 <% content_for :body_bottom do %>
 <script>
   (function() {
+    var search = $('#search');
+    search.html($(document.createElement('gcse:search')).html(search.html()));
+
     var cx = '006252023667590608831:yopsgewhz5y';
     var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
     gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
@@ -15,5 +18,5 @@ page_layout: false
 <% end %>
 
 <div id="search">
-  <gcse:search></gcse:search>
+  <div class="search-spinner"><i class="icon-spinner icon-spin icon-2x"></i></div>
 </div>
