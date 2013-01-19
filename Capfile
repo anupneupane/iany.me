@@ -29,7 +29,7 @@ namespace :deploy do
     run "rm -rf #{current_release}/MathJax && ln -nfs #{shared_path}/MathJax #{latest_release}/MathJax"
   end
   task :symlink_font_awesome do
-    run "ln -nfs #{shared_path}/Font-Awesome #{latest_release}/Font-Awesome"
+    run "rm -rf #{current_release}/Font-Awesome && ln -nfs #{shared_path}/Font-Awesome #{latest_release}/Font-Awesome"
   end
   task :compile do
     run "cd #{current_release} && NANOC_ENV=server bundle exec nanoc compile"
