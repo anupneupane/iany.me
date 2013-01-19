@@ -1,5 +1,5 @@
 ---
-updated_at: <2013-01-19 21:22:46>
+updated_at: <2013-01-19 21:47:51>
 created_at: <2013-01-19 18:06:16>
 title: Rails Compound Input
 tags: [rails]
@@ -103,7 +103,7 @@ The form view just needs set correct name:
 ```
 
 <div class="code-caption">
-<a class="code-filename" href="https://github.com/doitian/rails-compound-input-demo/blob/master/composed_of/app/views/events/_form.html.ER">events/_form.html.erb</a>
+<a class="code-filename" href="https://github.com/doitian/rails-compound-input-demo/blob/master/composed_of/app/views/events/_form.html.erb">events/_form.html.erb</a>
 </div>
 
 fields_for
@@ -192,7 +192,7 @@ The form view uses `fields_for` helper to nest fields of `compound_begining_time
 ```
 
 <div class="code-caption">
-<a class="code-filename" href="https://github.com/doitian/rails-compound-input-demo/blob/master/fields_for/app/views/events/_form.html.ER">events/_form.html.erb</a>
+<a class="code-filename" href="https://github.com/doitian/rails-compound-input-demo/blob/master/fields_for/app/views/events/_form.html.erb">events/_form.html.erb</a>
 </div>
 
 Reference
