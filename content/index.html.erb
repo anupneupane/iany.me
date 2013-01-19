@@ -39,10 +39,9 @@ page_layout: false
     </div>
 
     <footer>
+      <%== link_to '<i class="icon-comment"></i> Comment', article.path + '#comments', :rel => 'comments', :class => 'read-on pull-right' %>
       <% if item_more?(article) %>
-        <%== link_to 'Read on &rarr;', article.path + '#read-on', :rel => 'full-article', :class => 'read-on pull-right' %>
-      <% else %>
-        <%== link_to 'Comment &rarr;', article.path + '#comments', :rel => 'comments', :class => 'read-on pull-right' %>
+        <%== link_to '<i class="icon-hand-right"></i> Read on', article.path + '#read-on', :rel => 'full-article', :class => 'read-on pull-right' %>
       <% end %>
     </footer>
   </article>
