@@ -15,6 +15,19 @@ module Nanoc::Filters
           unless domain.end_with?(site.config[:base_url].split('://', 2).last)
             a['class'] = "#{a['class']} external"
             a << '<i class="icon-external-link"></i>'
+
+            case domain
+            when 'plus.google.com'
+              a['class'] += " icon icon-google-plus-sign"
+            when /twitter\.com$/
+              a['class'] += " icon icon-twitter-sign"
+            when /github\.com$/
+              a['class'] += " icon icon-github-sign"
+            when /facebook\.com$/
+              a['class'] += " icon icon-facebook-sign"
+            when /linkedin.com$/
+              a['class'] += " icon icon-linkedin-sign"
+            end
           end
         end
       end
