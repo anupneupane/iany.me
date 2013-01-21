@@ -7,3 +7,13 @@ ul,ol
     margin-left: 60px
   > .level-5
     margin-left: 80px
+
+  &.horizontal
+    @extend .unstyled
+    +clearfix
+    > li
+      float: left
+      padding: 4px
+
+  &.unstyled > li
+    margin-bottom: $baseLineHeight / 4
