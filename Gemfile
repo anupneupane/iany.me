@@ -15,3 +15,4 @@ gem 'pygments.rb'
 gem 'nokogiri'
 gem 'mini_magick'
 gem 'uglifier'
+gem 'ruby-oembed', :require => false

@@ -27,6 +27,7 @@ compile '*' do
       filter :erubis
     when 'md', 'markdown'
       filter :redcarpet, {
+        :renderer => OEmbedHtmlRenderer,
         :options => {
           :no_intra_emphasis => true,
           :tables => true,
