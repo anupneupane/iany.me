@@ -36,7 +36,14 @@ module Nanoc::Filters
             if params[:linenos] == 'table'
               highlighted = '<div class="highlighttable-container">' + highlighted + '</div>'
             end
-            node.parent.swap(highlighted)
+            node.parent.before(highlighted)
+            highlighted = node.parent.previous()
+            node.parent.remove
+            if params[:linenos] == 'table'
+              linenos = highlighted.at('.linenos')
+              highlighted['data-linenos'] = linenos.to_html(:encoding => 'UTF-8')
+              linenos.remove
+            end
           rescue MentosError
             # ignore
           end

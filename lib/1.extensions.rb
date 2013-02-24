@@ -1,3 +1,9 @@
+begin
+  require 'pry'
+rescue LoadError => e
+  # ignore
+end
+
 $: << File.expand_path('../../extensions', __FILE__)
 
 require 'nanoc/extensions'

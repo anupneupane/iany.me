@@ -9,6 +9,7 @@ class App
 
   start: ->
     @setupExternalLinkTooltips()
+    @showLinenos()
     @setupSearch()
     @setupMathJax() if @body.is('.with-mathjax')
     @loadGists()
@@ -36,7 +37,15 @@ class App
             ''
         link.attr('title', icon + (title || domain))
 
-      link.tooltip html: true
+      link.tooltip html: true if link.attr('title')
+
+  showLinenos: ->
+    $('.highlighttable-container').each ->
+      container = $(this)
+      linenos = container.attr('data-linenos')
+      console.log(linenos)
+      if linenos?
+        container.find('td.code').before(linenos)
 
   setupSearch: ->
     # if js is enabled, show search results in site
