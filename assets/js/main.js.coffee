@@ -1,10 +1,42 @@
 class App
+  EXTERNAL_ICONS =
+    github: 'icon-github-sign'
+    twitter: 'icon-twitter-sign'
+    facebook: 'icon-facebook-sign'
+    linkedin: 'icon-linkedin-sign'
+
   constructor: (@body) ->
 
   start: ->
+    @setupExternalLinkTooltips()
     @setupSearch()
     @setupMathJax() if @body.is('.with-mathjax')
     @loadGists()
+
+  setupExternalLinkTooltips: ->
+    $('.external').each ->
+      link = $(this)
+      title = link.attr('title')
+      link.attr('data-title', title)
+
+      domain = link.attr('data-domain')
+      unless domain?
+        match = link.attr('href').match(/^(?:https?|ftp):\/\/([^\/]+)/)
+        domain = match[1]
+
+      if domain?
+        icon = if domain == 'plus.google.com'
+          '<i class="icon icon-google-plus-sign"></i> '
+        else
+          parts = domain.split('.')[-2..]
+          iconClass = EXTERNAL_ICONS[parts[0]]
+          if parts[1] == 'com' && iconClass
+            "<i class=\"icon #{iconClass}\"></i> "
+          else
+            ''
+        link.attr('title', icon + (title || domain))
+
+      link.tooltip html: true
 
   setupSearch: ->
     # if js is enabled, show search results in site

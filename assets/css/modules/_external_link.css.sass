@@ -1,14 +1,7 @@
 a.external
   .icon-external-link
-    @extend sup
-    text-decoration: none
-    color: $grayLight
-  &.icon
-    width: auto
-    &:before
-      letter-spacing: 0.2em
-      color: $grayLight
-  &:hover
-    .icon-external-link, &.icon:before
-      color: $linkColorHover
-
+    font-size: $baseFontSize * 0.6
+    @include opacity(60)
+    letter-spacing: 0.2em
+.tooltip .icon
+  font-size: 1.3em
