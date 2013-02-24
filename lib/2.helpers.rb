@@ -17,6 +17,14 @@ module SiteHelpers
     end
   end
 
+  def brand_path
+    if item[:site] == 'blog'
+      '/'
+    else
+      '/' + item[:site]
+    end
+  end
+
   def body_class
     classes = []
 

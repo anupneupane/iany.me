@@ -34,7 +34,9 @@
               <span class="icon-bar"></span>
             </a>
 
-            <a class="brand" href="/"><i class="icon-home"></i>~iany/<strong><%= item[:site] %></strong></a>
+            <a class="brand" href="<%= brand_path %>">
+              <i class="icon-home"></i>~iany/<strong><%= item[:site] %></strong>
+            </a>
 
             <div class="nav-collapse collapse">
               <% if item[:sidebar] || item[:comment] %>
@@ -115,7 +117,7 @@
           </div>
 
           <% if item[:sidebar] %>
-            <% if item[:site] == 'wiki' || item[:menu] == 'wiki' %>
+            <% if item[:site] == 'wiki' %>
               <%== render 'partials/wiki_sidebar' %>
             <% else %>
               <%== render 'partials/blog_sidebar' %>
