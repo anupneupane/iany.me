@@ -115,7 +115,7 @@
           </div>
 
           <% if item[:sidebar] %>
-            <% if item[:site] == 'wiki' %>
+            <% if item[:site] == 'wiki' || item[:menu] == 'wiki' %>
               <%== render 'partials/wiki_sidebar' %>
             <% else %>
               <%== render 'partials/blog_sidebar' %>
