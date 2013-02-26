@@ -3,15 +3,11 @@ preprocess do
   Preprocessor.configure(site)
 end
 
-compile /\#|flymake\.rb/ do
-end
-route /\#|flymake\.rb/ do
-end
+compile(/\#|flymake\.rb/) {}
+route(/\#|flymake\.rb/) {}
 
-compile '/assets/*' do
-end
-compile '/wiki/year/*' do
-end
+compile('/assets/*') {}
+compile('/wiki/year/*') {}
 
 compile '*' do
   extensions = item[:split_extensions]

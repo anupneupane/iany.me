@@ -1,6 +1,6 @@
 source 'http://ruby.taobao.org'
 
-gem 'nanoc', '~>3.4.3'
+gem 'nanoc', '~>3.6.1'
 gem 'mime-types'
 gem 'sprockets'
 gem 'sprockets-sass'
@@ -18,6 +18,7 @@ gem 'ruby-oembed', :require => false
 
 group :development do
   gem 'pry'
-  gem 'fssm'
+  gem 'listen'
+  gem 'rb-inotify'
 end
 
