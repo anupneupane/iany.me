@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-01-23 19:19:52>
+updated_at: <2013-02-26 17:11:57>
 created_at: <2011-12-03 03:41:28>
 title: Bundler
 tags: ruby, gem
@@ -30,3 +30,12 @@ See <http://docs.rubygems.org/read/chapter/16>
 If a git repository contains multiple gemspec, the git can be added as a source:
 
     git 'git://github.com/rails/rails.git'
+
+## Unicorn Reload ##
+
+change to our `unicorn.conf.rb` that set the `BUNDLE_GEMFILE` variable explicitly in the `before_exec` block:
+
+    before_exec do |server|
+      ENV['BUNDLE_GEMFILE'] = "/u/apps/dash/current/Gemfile"
+      …
+    end

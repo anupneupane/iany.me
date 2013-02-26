@@ -19,6 +19,5 @@ gem 'ruby-oembed', :require => false
 group :development do
   gem 'pry'
   gem 'listen'
-  gem 'rb-inotify'
+  gem 'rb-inotify', '~> 0.9'
 end
-
