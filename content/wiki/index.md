@@ -1,5 +1,5 @@
 ---
-updated_at: <2013-03-12 21:45:18>
+updated_at: <2013-03-12 22:00:27>
 created_at: <2011-12-03 03:40:47>
 title: Home
 breadcrumbs_title: Wiki
@@ -27,9 +27,9 @@ Emacs
 Browser Extension Development
 -----------------------------
 
-- [[Safari]]
-- [[Chrome]]
-- [[Firefox]]
+- [[SafariExtension]]
+- [[ChromeExtension]]
+- [[FirefoxExtension]]
 
 Toolkit
 -------

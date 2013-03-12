@@ -1,27 +1,24 @@
 ---
-title: Safari
+title: Safari Extension
 created_at: <2013-02-26 17:49:19>
-updated_at: <2013-03-12 21:42:56>
+updated_at: <2013-03-12 23:15:41>
 tags: [browser, extension]
 ---
 
-Extension
----------
-
-### Sign Up as a Safari Developer ###
+## Sign Up as a Safari Developer ##
 
 -   Sign up [Safari Program](http://developer.apple.com/programs/safari/)
 -   Then go to the [Safari Extension Certificate Utility](http://developer.apple.com/certificates/safari/)
 
-### Extension Builder ###
+## Extension Builder ##
 
 Open Safari, go to the Advanced tab in Safari Preferences and check the box
 next to "Show Develop in the menu bar". The Develop menu should now appear,
 just select "Show Extension Builder".
 
-### JavaScript Inject ###
+## JavaScript Injection ##
 
-Add start scripts in extension builder.
+Add js files as **Start Scripts** in extension builder.
 
 The injected scripts cannot send AJAX requests to other domains.
 
@@ -32,9 +29,7 @@ The injected scripts cannot send AJAX requests to other domains.
 > then listening for messages from the background page, once it gets the
 > message(s) with the ajax results, it takes the appropriate action in the
 > page that's being viewed.
-> <small>[Cross origin AJAX call in Safari extension injected script - Stack Overflow][0]</small>
-
-[0]: http://stackoverflow.com/questions/8444324/cross-origin-ajax-call-in-safari-extension-injected-script
+> <small>[Cross origin AJAX call in Safari extension injected script - Stack Overflow][safari cors]</small>
 
 Example:
 
@@ -55,8 +50,8 @@ var getJSON(url) {
 getJSON('events.json');
 ```
 
-Add background page html file as Global Page in extension builder. Add
-background scripts in the background page.
+Add background page html file as Global Page in extension builder. Include
+following background script in the background page.
 
 ```javascript
 var onRequest = function(event) {
@@ -69,7 +64,54 @@ var onRequest = function(event) {
 safari.application.addEventListener("message", onRequest, false);
 ```
 
-References
-----------
+## IFrame Injection ##
+
+HTML files in extension can be inserted into page as `iframe`. The URL is:
+
+    safari.extension.baseURI + path
+
+The JavaScript code in iframe cannot access the page directly, must `dispatchMessage` to
+injected scripts. However the message sent from iframe are handled by
+background scripts, so background scripts must forward the message to injected
+scripts.
+
+Following example demonstrates how to close iframe in iframe itself.
+
+In iframe script:
+
+```javascript
+var close = function() {
+  safari.self.tab.dispatchMessage('closeNotification', {});
+};
+```
+
+Forward message in background script:
+
+```javascript
+var onMessage = function(event) {
+  if (event.name === 'closeNotification') {
+    event.target.page.dispatchMessage('closeNotification', event.message);
+  }
+};
+
+safari.application.addEventListener("message", onMessage, false);
+```
+
+Handle the message In injected script:
+
+```javascript
+var onMessage = function(event) {
+  if (event.name === 'closeNotification') {
+    $('#notification').hide();
+  }
+};
+
+safari.self.addEventListener('message', onMessage, false);
+```
+
+## References ##
 
 -   [How to Create a Safari Extension from Scratch](http://net.tutsplus.com/tutorials/other/how-to-create-a-safari-extension-from-scratch/)
+
+[safari cors]: http://stackoverflow.com/questions/8444324/cross-origin-ajax-call-in-safari-extension-injected-script
+
