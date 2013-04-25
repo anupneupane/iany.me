@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-12-19 01:33:52>
+updated_at: <2013-04-25 19:09:38>
 created_at: <2011-12-03 03:40:47>
 title: RSpec
 tags: [ruby, test]
@@ -25,6 +25,12 @@ Include `ActionView::Helpers` and mock on `self` [^1].
 
 Matchers
 --------
+
+### Built-in ###
+
+-   `=~` can be used to test Array equality disregarding ordering.
+
+### Extensions ###
 
 -   [shoulda-matchers](https://github.com/thoughtbot/shoulda-matchers)
 -   [rspec-html-matchers](https://github.com/kucaahbe/rspec-html-matchers)
