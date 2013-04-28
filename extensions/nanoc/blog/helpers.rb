@@ -56,6 +56,7 @@ module Nanoc
       DOWNCASE_TAGS = %w(tmux) unless defined?(::Nanoc::Blog::Helpers::DOWNCASE_TAGS)
 
       SPECIAL_TAGS = {
+        'latex' => 'LaTeX'
       } unless defined?(::Nanoc::Blog::Helpers::SPECIAL_TAGS)
 
       def render_tag(tag)
