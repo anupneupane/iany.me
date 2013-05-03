@@ -50,7 +50,7 @@ module Nanoc
           attributes[:tag] = tag
           attributes[:kind] = 'archives'
           if attributes[:title]
-            attributes[:title].gsub!(/:tag/, render_tag(tag.to_s))
+            attributes[:title] = attributes[:title].gsub(/:tag/, render_tag(tag.to_s))
           end
 
           @tags[tag] = ::Nanoc::Item.new(content,
@@ -74,7 +74,7 @@ module Nanoc
           attributes[:year] = year
           attributes[:kind] = 'archives'
           if attributes[:title]
-            attributes[:title].gsub!(/:year/, year.to_s)
+            attributes[:title] = attributes[:title].gsub(/:year/, year.to_s)
           end
 
           @calendar[year] = ::Nanoc::Item.new(content,
