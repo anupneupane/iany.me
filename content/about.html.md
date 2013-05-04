@@ -18,7 +18,8 @@ information retrieval, machine learning and data mining.
 I work at home after joining Intridea in 2011. Since then I focus on web
 application development, mainly using Ruby on Rails.
 
-In the most time, I live in Jiangsu. And sometimes I'll travel to other cities.
+In the most time, I live in Jiangsu. And sometimes I'll travel to other
+cities.
 
 Me, Elsewhere
 -------------
@@ -28,6 +29,12 @@ Me, Elsewhere
 - Twitter: [@doitian](http://twitter.com/doitian)
 - GitHub: [doitian](http://github.com/doitian)
 - Google Plus: [Ian Yang](https://plus.google.com/116043191747590131112/posts)
+
+My Completed Courses
+--------------------
+
+- [Coursera](https://www.coursera.org/user/i/bbafd1ce323b828803f265dba73d9968)
+- [c<>de school](http://www.codeschool.com/users/iany)
 
 Contact
 -------
