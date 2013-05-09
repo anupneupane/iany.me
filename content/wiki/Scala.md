@@ -1,5 +1,5 @@
 ---
-updated_at: <2013-05-03 19:47:26>
+updated_at: <2013-05-08 15:23:18>
 created_at: <2011-12-03 03:40:47>
 title: Scala
 tags: scala, java, programming
@@ -278,4 +278,30 @@ Create using method `scala.actors.Actor.actor`
 val actor = scala.actors.Actor.actor {
   ...
 }
+```
+
+## XML Literal
+
+Scala can contain XML without quoting or escaping
+
+```scala
+val book = <book><name>Programming in Scala</name></book>
+```
+
+Interpolate Scala code in XML using ={}=. The attributes interpolation should
+not be quoted.
+
+```scala
+val author = "Martin"
+val name = "Programming in Scala"
+val book = <book author={author}><name>{name}</name></book>
+```
+
+XML can be nested
+
+```scala
+val books = List("Programming in Scala", "Play for Scala")
+val booksXML = <books>
+  {for (book < books) yield <book>{book}</book>}
+</books>
 ```
