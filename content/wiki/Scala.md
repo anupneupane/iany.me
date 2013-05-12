@@ -1,5 +1,5 @@
 ---
-updated_at: <2013-05-08 15:23:18>
+updated_at: <2013-05-10 17:36:18>
 created_at: <2011-12-03 03:40:47>
 title: Scala
 tags: scala, java, programming
@@ -42,12 +42,6 @@ class Rational(n: Int, d: Int) {
 -   Pre-unary operator: `!~+-`, `!a => a.unary_!()`
 
 -   `a(0) => a.apply(0)`, `a(0) = 1 => a.update(0, 1)`
-
-### Implicit Conversion
-
-```scala
-implicit def intToRational(x: Int) = new Rational(x)
-```
 
 ## Function
 
@@ -93,6 +87,26 @@ implicit def intToRational(x: Int) = new Rational(x)
     
     byNameAssert(4 > 3)
     ```
+
+
+## Implicit
+
+Implicit conversion
+
+```scala
+implicit def intToRational(x: Int) = new Rational(x)
+```
+
+Implicit parameters. Last curried parameter can be supplied by compiler
+implicitly. There must be implicit =val= defined of the same type of the
+parameter in the scope.
+
+```scala
+implicit val PreferredPrompt = new PreferredPrompt("> ")
+def greet(name: String)(implicit prompt: PreferredPrompt) {
+  ...
+}
+```
 
 ## Inheritance
 

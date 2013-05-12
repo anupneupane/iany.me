@@ -1,5 +1,5 @@
 ---
-updated_at: <2012-01-23 22:41:00>
+updated_at: <2013-05-11 22:56:27>
 created_at: <2011-12-03 03:40:47>
 title: Ruby
 tags: ruby
@@ -30,3 +30,14 @@ If split regexp contains capture group, all groups are returned in sequence:
 ### break ###
 
     break statement #= statement; break
+
+### Strip invalid chars ###
+
+```ruby
+str.encode("UTF-16BE", :undef => :replace, :invalid => :replace, :replace => "")
+  .encode("UTF-8")
+  .gsub("\0".encode("UTF-8"), "")
+
+# 2.1 way
+str.scrub("")
+```
