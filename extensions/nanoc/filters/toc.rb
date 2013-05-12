@@ -17,6 +17,10 @@ module Nanoc
             level = header.name.sub(/^h/, '').to_i - 1
             order = header[:id].sub(/^toc_/, '').to_i
             headers.push(level: level, id: header[:id], text: header.text, order: order)
+          elsif header[:id].start_with?('sec-')
+            level = header.name.sub(/^h/, '').to_i - 1
+            order = header[:id].sub(/^sec-/, '').split('-').collect(&:to_i)
+            headers.push(level: level, id: header[:id], text: header.text, order: order)
           elsif header[:id].end_with?('footnotes')
             level = header.name.sub(/^h/, '').to_i - 1
             order = 9999

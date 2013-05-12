@@ -18,7 +18,7 @@ set :forward_agent, true
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['MathJax', 'Font-Awesome']
+set :shared_paths, ['MathJax', 'Font-Awesome', 'org-mode']
 
 # Optional settings:
 set :user, 'ian'
@@ -42,6 +42,7 @@ task :setup => :environment do
   queue! %[mkdir -p "#{deploy_to}/shared"]
   queue! %[git clone git://github.com/mathjax/MathJax.git "#{deploy_to}/shared/MathJax"]
   queue! %[git clone git://github.com/FortAwesome/Font-Awesome.git "#{deploy_to}/shared/Font-Awesome"]
+  queue! %[git clone git://orgmode.org/org-mode.git "#{deploy_to}/shared/org-mode"]
 end
 
 desc "Deploys the current version to the server."

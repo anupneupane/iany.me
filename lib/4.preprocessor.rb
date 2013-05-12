@@ -118,7 +118,7 @@ class Preprocessor
 
   def split_extension
     items.each do |item|
-      html_extensions = %w(erb md markdown hb hbs handlebars)
+      html_extensions = %w(erb md markdown hb hbs handlebars org)
 
       extensions = item[:extension].split('.')
       if html_extensions.include?(extensions.first)

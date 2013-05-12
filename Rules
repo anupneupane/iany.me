@@ -21,6 +21,11 @@ compile '*' do
       filter :configurable_handlebars
     when 'erb'
       filter :erubis
+    when 'org'
+      filter :emacs_org, :load_path => [File.expand_path("../org-mode/lisp", __FILE__)]
+      filter :nokogiri_build
+      filter :pygments, :linenos => 'table'
+      filter :nokogiri_write
     when 'md', 'markdown'
       filter :redcarpet, {
         :renderer => OEmbedHtmlRenderer,

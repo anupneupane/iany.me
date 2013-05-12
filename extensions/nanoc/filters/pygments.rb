@@ -20,6 +20,10 @@ end
 
 module Nanoc::Filters
   class Pygments < ::Nanoc::Filter
+    ORG_SRC_MAP = {
+      'js' => 'javascript'
+    }
+
     def run(content, params = {})
       if content.is_a?(String)
         doc = Nokogiri::HTML.fragment(content)
@@ -27,8 +31,18 @@ module Nanoc::Filters
         doc = content
       end
 
-      doc.search("pre>code").each do |node|
+      doc.search("pre>code, pre.src").each do |node|
         lang = node.attr('class')
+        org_src = false
+        if lang && lang.split.include?('src')
+          org_src = true
+          lang = (lang.split - ['src']).first
+          if lang
+            lang = lang.sub(/^src-/, '') if lang
+            lang = ORG_SRC_MAP.fetch(lang, lang)
+          end
+        end
+
         if lang && !lang.strip.empty? && lang != 'mathjax'
           s = node.inner_html || "[++where is the code?++]"
           begin
@@ -36,9 +50,10 @@ module Nanoc::Filters
             if params[:linenos] == 'table'
               highlighted = '<div class="highlighttable-container">' + highlighted + '</div>'
             end
-            node.parent.before(highlighted)
-            highlighted = node.parent.previous()
-            node.parent.remove
+            container = org_src ? node : node.parent
+            container.before(highlighted)
+            highlighted = container.previous()
+            container.remove
             if params[:linenos] == 'table'
               linenos = highlighted.at('.linenos')
               highlighted['data-linenos'] = linenos.to_html(:encoding => 'UTF-8')

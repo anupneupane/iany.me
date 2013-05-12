@@ -1,0 +1,392 @@
+---
+title: MongoDB
+updated_at: <2013-05-13 00:44:18>
+created_at: <2013-05-12 23:20:49>
+tags: [database, nosql]
+toc: true
+---
+
+#+options: H:2
+
+* CRUD Samples
+** Create
+
+#+BEGIN_SRC js
+db.users.insert(doc)
+db.users.save(doc) // insert or update
+#+END_SRC
+
+** Read
+
+#+BEGIN_SRC js
+db.users.find()
+db.users.find().limit(20)
+db.users.find({username: "ian"})
+db.users.findOne({username: "ian"})
+db.users.find({username: "ian"}).explain()
+#+END_SRC
+
+** Update
+
+#+BEGIN_SRC js
+  db.users.update({username: "ian"}, {password: "x"});
+  // multi update
+  // update(selector, obj, upsert, multi)
+  db.users.update({country: "CN"}, {language: "Chinese"}, false, true);
+#+END_SRC
+
+** Delete
+
+#+BEGIN_SRC js
+  db.users.remove()               // truncate collection
+  db.users.remove(query)
+  db.users.drop()                 // drop documents and indices
+#+END_SRC
+
+* Query
+** Selector
+
+- equal: plain object
+- regexp: plain object with =RegExp= as key, or
+
+  #+BEGIN_SRC js
+    {$regex: "best|worst", $options: "i"}
+  #+END_SRC
+
+- operators: =$lt=, ..., =$in=, =$all=, =$nin=, =$ne=, =$exists=, =$not=,
+  =$or=, =$and=.
+
+  *TIPS*: =$nin= requires collection scan
+
+- Match sub document, use path concatenated with dots.
+- Match the whole sub document
+  - compare byte-to-byte
+  - document keys should be sorted
+- Match array by position ={'addresses.0.state': 'NY'}=. Or any position: =addresses.$=.
+- Match any sub-document attribute in array:  ={'addresses.state': 'NY'}=.
+- Match attributes in the same sub document in an array:
+
+  #+BEGIN_SRC js
+    db.users.find({addresses: {$elemMatch: {name: 'home', state: 'NY'}}});
+  #+END_SRC
+- Array =$size= operator
+- Javascript =$where=:
+
+  #+BEGIN_SRC js
+    db.reviews.find({$where: "function() { return this.helpful_votes > 3; }"}});
+    db.reviews.find({$where: "this.helpful_votes > 3"}});
+  #+END_SRC
+
+- Misc: =$mod= modulo, =$type= BSON type id
+
+** Projections
+
+- ={username:1}= selects field, ={username:0}= unselects field.
+
+- Array slice. Slice won't prevent other fields from being returned.
+
+  #+BEGIN_SRC js
+    {reviews: {$slice: 12}}         // first 12
+    {reviews: {$slice: -5}}         // last 5
+    {reviews: {$slice: [30, 10]}}   // 30-39
+  #+END_SRC
+
+- Sorting: 1 ASC, -1 DESC, =$natural= sorts by insert order
+
+** Skip and limit
+
+Large =skip= requires linear scan, use =$gt= instead.
+
+* Update
+
+#+BEGIN_SRC js
+  db.users.update(query, obj, upsert, multi)
+#+END_SRC
+
+- =obj= can is a document or set of operators
+- =multi= update all matched documents
+- =upsert= update or insert. If no matched document found, a new document if
+  inserted by merging =query= and =obj=.
+
+** Operators
+
+- =$set=, =$unset=. In array, =$unset= only nullifies the element.
+- =$push=, =$pushAll=, =$addToSet=, =$pullAll=, =$pull=, =$pop=.
+
+  - Add many to set
+    #+BEGIN_SRC js
+      {$addToSet: {tags: {$each: ['tools', 'dirt']}}}
+    #+END_SRC
+
+  - unshift: ={$pop: {tags: -1}}=
+
+- =$inc=
+- =<array>.$= acts as placeholder to update only the first matched element in
+  the array.
+
+** findAndModify
+
+#+BEGIN_SRC js
+  db.orders.findAndModify(options)
+#+END_SRC
+
+Options:
+
+- =query=: selector
+- =update=: update operation
+- =new=: By default =findAndModify= returns the document as it appears prior
+  to the update. To return the modified document, specify option ={new:
+  true}=.
+- =remove=: removes the object
+- =sort=
+- =fields=: projection
+- =upsert=: update or insert
+
+** Isolated
+
+Lock until all done. =$isolated= does *not* provide "all-or-nothing" atomicity.
+
+#+BEGIN_SRC js
+db.reviews.remove({user_id: "xx"}, {$isolated: true});
+db.reviews.update({$isolated: true}, {$set: {rating: 0}}, false, true);
+#+END_SRC
+
+* Index and Query Optimization
+
+** Index Admin
+
+#+BEGIN_SRC js
+  db.users.ensureIndex({username: 1})
+  db.users.ensureIndex({username: 1}, {unique: true})
+  db.users.getIndexSpecs()
+  db.users.dropIndex("zip")
+
+  db.system.indexes.find()
+  db.runCommand({deleteIndexes: "users", "index": "zip"})
+
+  // check index progress
+  db.currentOp()
+#+END_SRC
+
+- 1 ascending, -1 descending
+- =unique= 
+- =dropDups= drop existing document with the duplicated keys
+- =sparse= for key does not in every documents. It can save index space, and
+  allow nulls in unique index.
+- Index on array is multikey index.
+- =background= index in background
+
+MongoDB uses one index per query.
+
+Remove single index if it is included in compound index, unless the compound
+index is significantly larger, such as containing multkey attribute.
+
+Place the index can scope search most first. For example: if a key is often
+queried by value, it should come before a key which is often queried by range.
+
+** In Practice
+
+- Offline indexing: take a replica node offline, build index, make it master
+  after it catches up master.
+- Backups: =mongodump= and =mongorestore= does not backup index, but only
+  index declarations only.
+- =db.collection.reIndex()= to optimize indexes.
+- Identify slow queries in log and add index. Use server option =--slowms= or
+  enable profiling and check collection =system.profile=.
+
+  #+BEGIN_SRC js
+    db.setProfilingLevel(2) // verbose
+    db.setProfilingLevel(1) // slow queries
+    db.setProfilingLevel(1, 50) // slow queries > 50ms
+    db.setProfilingLevel(0) // none
+  #+END_SRC
+
+- Use =explain= to inspect query
+
+Analyze slow queries:
+
+- =n= number of documents requested
+- =nscanned= number of objects be scanned to search matching documents
+- =scanAndOrder= true if no index is available for sorting
+
+MongoDB tries the best to choose optimal index. Use =hint= to force using a
+particular index.
+
+#+BEGIN_SRC js
+db.values.find(query).hint({close: 1})
+#+END_SRC
+
+* Admin
+
+Stats
+
+#+BEGIN_SRC js
+show dbs
+show collections
+db.stats()
+db.users.stats()
+#+END_SRC
+
+System collections
+
+- =db.system.namespaces= all namespaces
+- =db.system.indexes=
+
+* Tuning
+
+** Server options
+
+- =--nssize= namespace file size
+- =--noprealloc= and =--smallfiles= to control data file size
+- =--slowms= defines threshold of slow queries
+
+** Stats
+
+- db.stats indexSize < RAM
+** Capped collections
+
+When total size of all objects reaches its maximum size, subsequent inserts
+will overwrite the least-recently-inserted documents in the collection.
+
+#+BEGIN_SRC js
+db.createCollection("users.actions", {capped:true, size: 1024})
+#+END_SRC
+
+Capped collections does not index =_id=. To get documents in reverse order,
+use =$natural= operator
+
+#+BEGIN_SRC 
+db.user.actions.find().sort({"$natural", -1})
+#+END_SRC
+
+You can't delete individual documents from a capped collection; nor can you
+perform any update that will increase the size of a document.
+** Tips
+
+- Pre-allocate space for documents to avoid document reallocation. MongoDB
+  also auto adjusts "paddingFactor" (collection stats).
+
+* Data Types
+
+- type operator =$type=
+- Int and Long must be specified explicitly using JavaScript shell
+
+  #+BEGIN_SRC js
+    db.numbers.save({n: NumberInt(10)})
+  #+END_SRC
+
+- BSON datetime
+  - =Date= in JavaScript is indexed from 0
+  - Ruby driver must use =Time= object in UTC.
+
+* Aggregation
+
+** Map Reduce
+
+group
+
+#+BEGIN_SRC js
+  results = db.reviews.group({
+    key:      {user_id: true},
+    initial:  {reviews: 0, votes: 0.0},
+    reduce:   function(doc, aggregator) {
+      aggregator.reviews += 1;
+      aggregator.votes   += doc.votes;
+    }
+    finalize: function(doc) {
+      doc.average_votes = doc.votes / doc.reviews;
+    }
+  });
+#+END_SRC
+
+other options:
+
+- =keyf=: gives a function to return key
+- =cond=: Query filter
+
+=mapReduce(map, reduce, optionsOrOutString)=
+
+- =map=: =emit(key, doc)=
+- =reduce=: accepts =(key, docs)=, returns =doc=
+- options
+  - =out=: result output, can be a collection name, or inline. To merge or
+    aggregate result into collection, use object which key is =merge= or
+    =reduce=.
+  - =query=: Filter documents before map reduce
+  - scope: bind this to functions
+
+** Aggregation Methods
+
+- max, min: sort and limit trick
+- =distinct=: Return unique values from specified field.
+* Replication
+
+** Replica Set
+
+Connect to one non-arbiter server
+
+#+BEGIN_SRC js
+rs.initialize()
+
+rs.add("server:port")
+rs.add("arete-server:port", {arbiterOnly: true})
+
+db.isMaster()
+db.getReplicationInfo()
+rs.status()
+#+END_SRC
+
+Start servers:
+
+#+BEGIN_SRC sh
+  mongod --replSet myapp
+  mongod --replSet myapp --oplogSize 1024
+#+END_SRC
+
+** Driver
+
+- Connect to replica set using multiple =host:port= in URL
+
+  #+BEGIN_EXAMPLE
+    mongodb://example.com:12345,example.com:12346/app
+  #+END_EXAMPLE
+
+- Write concern, set =safe= to true or:
+
+  - =w= number of servers that the latest write should be replicated to. Can
+    be set to "majority". Of a key defined in [[http://docs.mongodb.org/manual/tutorial/configure-replica-set-tag-sets/][settings.getLastErrorModes]] of
+    replica config.
+  - =wtimeout= write timeout
+  - =j= force write be synced to journal on disk
+
+ - Connect to secondary for read only:
+
+  #+BEGIN_SRC ruby
+    Mongo::ReplSetConnection.new(['arete', 40000], ['arete', 40001], :read => :secondary)
+  #+END_SRC
+
+* Sharding
+
+- Start shards replica sets with =--shardsvr --replSet replname=
+- Start config servers with =--configsvr=
+- Start =mongos= router: =mongos --configdb host:port,host:port=
+- Configure =mongos=. Connect to =mongos= server:
+
+  #+BEGIN_SRC js
+    sh.addShard("replname/host:port,host:port")
+    ...
+    
+    db.getSiblingDB("config").shards.find()
+    
+    // or
+    user admin
+    db.runCommand({listshards: 1})
+  #+END_SRC
+
+- Configure sharding:
+
+  #+BEGIN_SRC js
+    db.command('shardcollection', 'dbname.users', {
+      key: { "_id": 1, username: 1 }
+    })
+  #+END_SRC

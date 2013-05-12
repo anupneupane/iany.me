@@ -10,6 +10,7 @@ module Nanoc::Filters
   autoload 'Wikilink', 'nanoc/filters/wikilink'
   autoload 'TOC', 'nanoc/filters/toc'
   autoload 'ExternalLink', 'nanoc/filters/external_link'
+  autoload 'EmacsOrg', 'nanoc/filters/emacs_org'
 
   Nanoc::Filter.register '::Nanoc::Filters::ConfigurableHandlebars', :configurable_handlebars
   Nanoc::Filter.register '::Nanoc::Filters::Nokogiri::Build', :nokogiri_build
@@ -21,6 +22,7 @@ module Nanoc::Filters
   Nanoc::Filter.register '::Nanoc::Filters::Wikilink', :wikilink
   Nanoc::Filter.register '::Nanoc::Filters::TOC', :toc
   Nanoc::Filter.register '::Nanoc::Filters::ExternalLink', :external_link
+  Nanoc::Filter.register '::Nanoc::Filters::EmacsOrg', :emacs_org
 end
 
 module Nanoc::DataSources
@@ -32,5 +34,4 @@ end
 require 'nanoc/preprocessors/pagination'
 require 'nanoc/sprockets'
 require 'nanoc/blog'
-
 
