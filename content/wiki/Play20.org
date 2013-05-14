@@ -1,0 +1,490 @@
+---
+title: Play Framework 2.0
+updated_at: <2013-05-15 02:27:41>
+created_at: <2013-05-15 02:26:55>
+tags: [web, mvc, scala, java, playframework]
+toc: true
+---
+
+* Database
+
+Disable built-in =anorm=:
+
+Remove =anorm= and =jdbc= in dependencies.
+
+Add configurations:
+
+#+BEGIN_SRC conf
+dbplugin = disabled
+evolutionplugin = disabled
+ehcacheplugin = disabled
+#+END_SRC
+
+* Console
+
+Start app in console:
+
+#+BEGIN_SRC scala
+  new play.core.StaticApplication(new java.io.File("."))
+#+END_SRC
+
+* Test
+
+Start app in test:
+
+#+BEGIN_SRC scala
+  "foobar" in new WithApplication {
+    ...
+  }
+#+END_SRC
+
+* Configuration
+
+#+BEGIN_SRC scala
+  play.api.Play.current.configuration.getString("db.dirver")
+  
+  // Return None instead of throwing exception when app is not started
+  play.api.Play.maybeApplication.map(_.configuration.getString("db.driver"))
+#+END_SRC
+* Action
+   :LOGBOOK:
+   :END:
+
+An request handler is an action constructed by =play.api.mvc.Action= companion object.
+
+#+BEGIN_SRC scala
+  val echo = Action {
+    Ok("Hello, world")
+  }
+  
+  val index = Action { implicit request =>
+    NotFound
+  }
+  
+  def hello(name: String) = Action {
+    Ok("Hello " + name)
+  }
+#+END_SRC
+
+** Manipulating Results
+
+Set a different content type
+
+#+BEGIN_SRC scala
+Ok(<h1>Hello World!</h1>).as("text/html")
+Ok(<h1>Hello World!</h1>).as(HTML)
+#+END_SRC
+
+Append headers:
+
+#+BEGIN_SRC scala
+Ok("Hello world!").withHeaders(
+  ETAG -> "xx"
+)
+#+END_SRC
+
+Cookies
+
+#+BEGIN_SRC scala
+  Ok("Hello World!").withCookies(
+    Cookie("theme", "blue")
+  )
+  Ok("Hello World!").discardingCookies("theme")
+#+END_SRC
+
+Implicit charset:
+
+#+BEGIN_SRC scala
+  def HTML(implicit codec: Codec) = {
+    "text/html; charset=" + codec.charset
+  }
+  
+  object Application extends Controller {
+  
+    implicit val myCustomCharset = Codec.javaSupported("iso-8859-1")
+  
+    def index = Action {
+      Ok(<h1>Hello World!</h1>).as(HTML)
+    }
+  }
+#+END_SRC
+
+** Session and Flash scopes
+
+Read session value:
+
+#+BEGIN_SRC scala
+  request.session.get("connected").map { user =>
+    Ok("Hello " + user)
+  }.getOrElse {
+    Unauthorized("Oops, you are not connected")
+  }
+  
+  // Or just session if request is implicit parameter.
+#+END_SRC
+
+Set session
+
+#+BEGIN_SRC scala
+  Ok("Welcome!").withSession(
+    "connected" -> "user@gmail.com"
+  )
+  
+  // append to existing session
+  Ok("Welcome!").withSession(
+    session + ("connected" -> "user@gmail.com")
+  )
+  
+  // remove a value
+  Ok("Welcome!").withSession(
+    session - "theme"
+  )
+  
+  // discard the whole session
+  Ok("Welcome!").withNewSession
+#+END_SRC
+
+Flash
+
+#+BEGIN_SRC scala
+  flash.get("success")
+  
+  Redirect("/home").flashing("success" -> "Item was created")
+#+END_SRC
+
+Import flash in view
+
+#+BEGIN_SRC scala
+  @()(implicit flash: Flash)
+#+END_SRC
+
+** Body Parser
+
+
+A parser is of type =Iteratee[Array[Byte],Either[Result,A]]=, which builds
+object of type =A= for input stream as bytes chunk.
+
+Default body parser builds object of type =AnyContent=:
+
+- "text/plain": =String=
+- "application/json": =JsValue=
+- "text/xml": =NodeSeq=
+- "application/form-url-encoded": =Map[String, Seq[String]]=
+- "multipart/form-data": =MultipartFormData[TemporaryFile]=
+-  any other content type: =RawBuffer=
+
+Body parser can be specified as first curried parameter to =Action=.
+
+#+BEGIN_SRC scala
+def save = Action(parse.text) { request => ... }
+#+END_SRC
+
+Parser selector with =parse.using=:
+
+#+BEGIN_SRC scala
+parse.using { if (foo) parserA else parserB }
+#+END_SRC
+
+Text parser max length can be configured in configuration =parsers.text.maxLength= or optional parameter:
+
+#+BEGIN_SRC scala
+parse.text(maxLength=1024*10)
+#+END_SRC
+
+Or maxLength factory method
+
+#+BEGIN_SRC 
+Action(maxLength(1024*10, parser = parse.text)) { ... }
+#+END_SRC
+
+** Composition
+
+Play [[http://www.playframework.com/documentation/2.1.1/ScalaActionsComposition][Composition]] plays the role of before, after, around filters in Ruby on
+Rails. While [[http://www.playframework.com/documentation/2.1.1/ScalaHttpFilters][Filter]] is similar to Ruby on Rails middleware.
+
+A play composition wraps a function or another action and return a new action.
+
+** Content negotiation
+
+*** Language
+
+Get language header using =play.api.mvc.RequestHeader#acceptLanguages=. Play
+also setup implicit =play.api.i18n.Lang= value for actions.
+
+*** Content
+
+Get content header using =play.api.mvc.RequestHeader#acceptedTypes= method.
+
+Because content header may be media ranges such as =text/*=, use render helper to use it:
+
+#+BEGIN_SRC scala
+  render {
+    case Accepts.Html() => Ok(view.html.list(items))
+    case Accepts.Json() => Ok(Json.toJson(items))
+  }
+#+END_SRC
+
+Extractor can be created using =play.api.mvc.Accepting=
+
+#+BEGIN_SRC scala
+  val AcceptsMp3 = Accepting("audio/mp3")
+  render {
+    case AcceptsMp3() => ...
+  }
+#+END_SRC
+
+* Routes
+
+Route map URL pattern to Action.
+
+#+BEGIN_SRC scala
+GET /clients controllers.Clients.list(page: Int ?= 1)
+GET /clients/:id controllers.Clients.show(id: Long)
+GET /files/:name controllers.Files.download(name)
+#+END_SRC
+
+Play creates reverse controller with the same name under =routes= package:
+
+#+BEGIN_SRC scala
+routes.Clients.list(10)
+routes.Clients.show(1)
+routes.Files.download("/images/avatar.png")
+#+END_SRC
+
+Prefix controller action with =@= to setup dynamic controller instance:
+
+#+BEGIN_SRC scala
+GET /clients @controllers.Client.list(page: Int ?= 1)
+#+END_SRC
+
+
+Override =getControllerInstance= in =Global= object
+
+#+BEGIN_SRC scala
+  object Global extends GlobalSettings {
+    override def getControllerInstance[A](clazz: Class[A]) = {
+      claszz.getInstance();
+    }
+  }
+#+END_SRC
+
+Why: stub controller instance in test:
+
+#+BEGIN_SRC scala
+  running(FakeApplication(withGlobal = Some(MyTestGlobal))) {
+    ...
+  }
+#+END_SRC
+* Async Result
+
+=Async= wraps =Future[Result]= as =AsyncResult=.
+
+- =play.api.libs.concurrent.Promise.timeout=
+- =scala.concurrent.Future { compute() }=
+
+Set content length to avoid loading all content into memory to calculate it.
+
+#+BEGIN_SRC scala
+  SimpleResult(
+    header = ResponseHeader(200, Map(CONTENT_LENGTH -> 12))),
+    body = Enumerator("Hello, World")
+  )
+#+END_SRC
+
+Serving file:
+
+#+BEGIN_SRC scala
+Ok.sendFile(new java.io.File(path))
+#+END_SRC
+
+Chunked response
+
+#+BEGIN_SRC scala
+  ChunkedResult(
+    header = ResponseHeader(200),
+    chunks = Enumerator.fromStream(data)
+  )
+  
+  // or
+  Ok.stream(Enumerator.fromStream(data))
+#+END_SRC
+
+Serve chunked response for Comet:  =play.api.libs.Comet=
+
+** WebSockets
+
+#+BEGIN_SRC scala
+  def index = WebSocket.using[String] { request =>
+    // Log events to the console
+    val in = Iteratee.foreach[String](println).mapDone { _ =>
+      println("Disconnected")
+    }
+  
+    // Send a single 'Hello!' message
+    val out = Enumerator("Hello!")
+  
+    (in, out)
+  }
+#+END_SRC
+
+* View
+
+** Template
+
+Embed scala code starting with =@=. 
+
+- Escape =@@=
+- Play auto detects end of scala code, use =()=, ={}= for complex code.
+- =Application/index.scala.html= is converted to =views.html.Application.index= class.
+- Declare the parameter of the generated =render= method on the class:
+
+  #+BEGIN_SRC scala
+  @{name: String, todos: List[String]}(implicit lang: Lang).
+  #+END_SRC
+
+- =definining(value: T)(func: T => String)=
+- =@Html(content)=
+- Helper methods:
+
+  #+BEGIN_SRC scala
+    @display(book: models.Book) = {
+      html
+    }
+    @title(book: models.Book) = @{
+      scala.code
+    }
+    
+  #+END_SRC
+
+  Name starting with =implicit= is declared as implicit
+
+** Form
+
+Import =play.api.data._= and =play.api.data.Forms._=.
+
+tuple
+
+#+BEGIN_SRC scala
+  val loginForm = Form(
+    tuple(
+      "email" -> text,
+      "password" -> text
+    )
+  )
+#+END_SRC
+
+- =loginForm.bind(data: Map[String, String]): (String, String)=
+- =loginForm.bindFromRequest=
+
+mapping
+
+#+BEGIN_SRC scala
+  case class User(name: String, age: Int)
+  
+  val userForm = Form(
+    mapping(
+      "name" -> text,
+      "age" -> number
+    )(User.apply)(User.unapply)
+  )
+#+END_SRC
+
+constraints (=import play.api.data.validation.Constraints._=)
+
+- =text.verifying(nonEmpty)= or =nonEmptyText=
+- =number.verifying(min(0), max(100))=, or =number(min=0, max=100)=
+
+Custom validation
+
+#+BEGIN_SRC scala
+  val loginForm = Form(
+    tuple(
+      "email" -> email,
+      "password" -> text
+    ) verifying("Invalid user name or password", fields => fields match {
+        case (e, p) => User.authenticate(e,p).isDefined
+    })
+  )
+#+END_SRC
+
+Handling binding failure
+
+#+BEGIN_SRC scala
+  loginForm.bindFromRequest.fold(
+    formWithErrors => // binding failure, you retrieve the form containing errors,
+      BadRequest(views.html.login(formWithErrors)),
+    value => // binding success, you get the actual value
+      Redirect(routes.HomeController.home).flashing("message" -> "Welcome!" + value.firstName)
+  )
+#+END_SRC
+
+Fill form by deconstructing:
+
+#+BEGIN_SRC scala
+val filledForm = userForm.fill(User("Bob", 18))
+#+END_SRC
+
+Nesting
+
+#+BEGIN_SRC scala
+val userForm = Form(
+  mapping(
+    "name" -> text,
+    "address" -> mapping(
+        "street" -> text,
+        "city" -> text
+    )(Address.apply)(Address.unapply)
+  )(User.apply, User.unapply)
+)
+#+END_SRC
+
+Array: =list(email)=
+
+Optional: =optional(email)=
+
+Fixed value: =ignore(1234)=
+
+** Form Helper
+
+#+BEGIN_SRC scala
+  @(myForm: Form[User])
+  
+  @helper.form(action = routes.Application.submit, 'id -> "myForm") {
+    @helper.inputText(myForm("username"), , 'id -> "username", 'size -> 30)
+  
+    @helper.input(myForm("username")) { (id, name, value, args) =>
+      <input type="date" name="@name" id="@id" @toHtmlArgs(args)>
+    }
+  
+    @helper.inputPassword(myForm("password"))
+  
+    @repeat(myForm("emails"), min = 1) { emailField =>
+      @inputText(emailField)
+    }
+  }
+  
+#+END_SRC 
+
+Bootstrap =FieldConstructor=: =@import helper.twitterBootstrap._=
+
+* Anorm
+
+- Build using =SQL=. Place holder: =SQL("select {name}").on("foo")=, or =SQL("select {name}").on("name" -> "foo")=
+- =execute= returns success status
+- =executeUpdate= returns number of rows affected
+- =executeInsert= returns optional auto generated primary key.
+
+* Global object
+
+#+BEGIN_SRC scala
+import play.api._
+
+object Global extends GlobalSettings {
+}
+#+END_SRC
+
+- =onStart(app: Application)=
+- =onStop(app: Application)=
+- =onError(request: RequestHeader, ex: Throwable)=
+- Router not found: =onHandlerNotFound(request: RequestHeader)=
+- Router binding error: =onBadRequest(request: RequestHeader, error: String)=
