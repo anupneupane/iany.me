@@ -19,6 +19,7 @@ module Nanoc::Filters
 
         with_tmpfile do |infile|
           infile.write(str)
+          infile.flush
 
           with_tmpfile do |outfile|
             org_export_to_file(infile.path, outfile.path)
@@ -32,17 +33,15 @@ module Nanoc::Filters
       private
       ELISP = <<-LISP
         (progn
-          ;; Disable htmlize
           (defun org-html-fontify-code (code lang)
-            (org-html-encode-plain-text code))
-
+            (when code (org-html-encode-plain-text code)))
           (org-export-to-file 'html %s nil nil t '(:with-toc nil :section-numbers nil)))
       LISP
       def org_export_to_file(infile, outfile)
         emacs_batch(
           "-l", "ox-publish", "-l", "ox-html",
           "--file", infile,
-          "--eval", sprintf(ELISP, outfile.inspect)
+          "--eval", sprintf(ELISP, outfile.inspect).each_line.collect(&:strip).join(' ')
         )
       end
 
