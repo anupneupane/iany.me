@@ -1,5 +1,5 @@
 ---
-updated_at: <2013-05-10 17:36:18>
+updated_at: <2013-05-16 03:55:48>
 created_at: <2011-12-03 03:40:47>
 title: Scala
 tags: scala, java, programming
@@ -319,3 +319,64 @@ val booksXML = <books>
   {for (book < books) yield <book>{book}</book>}
 </books>
 ```
+
+## Collection
+
+Ruby: Scala
+
+- `each_cons`: `sliding`
+- `each_slice`: `grouped`
+- `reduce`: `foldLeft` `foldRight` `reduceLeft` `reduceRight`.
+- `collect`: `map` (do not check `PartialFunction`), `collect`
+- `find`: `find`
+- `find_all`: `filter`, `filterNot`, `withFilter`
+- `zip`: `zip`, `zipAll`, tuple `zipped`
+- `each`: `foreach`
+- `uniq`: `distinct`
+- `|`: `union`
+- `&`: `intersect`
+
+By default only `Stream` transformers are lazy. To force other collection
+transformers lazy, get a `view` from the collection. Get back wrapped
+collection from view using `force`.
+
+- Duplicate iterator: `val (it1, it2) = it.duplicate`
+- Buffered iterator: `it.buffered`, next element is available through
+  `it.head`.
+- Conversions: `import collection.JavaConvertions._`
+
+## Async ##
+
+```scala
+object MyActor extends scala.actors.Actor {
+  def act() {
+    ...
+  }
+}
+
+val actor = scala.actors.Actor.actor {
+}
+```
+
+Send message: `actor ! message`
+
+Receive message: `receive(func: PartialFunction[A, E])`
+
+To reuse current thread to run actor: `react(func:
+PartialFunction[A, Nothing])`
+
+Message handler in `react` must arrange actor remaining works, such as calling
+`act` again, or wrap the `react` in `loop`.
+
+```scala
+def act() {
+  loop {
+    react {
+      ...
+    }
+  }
+}
+```
+
+Get actor of current thread: `Actor.current`.
+

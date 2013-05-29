@@ -1,0 +1,100 @@
+---
+title: d3js
+updated_at: <2013-05-29 13:09:17>
+created_at: <2013-05-12 23:20:49>
+tags: ["data visiualization", javascript]
+toc: true
+---
+#+options: H:2
+
+* Selector
+
+- =select= select one
+- =selectAll=
+
+* Manipulating
+
+- =append= append el
+- =attr= set attributes
+- =classed(class, add)= Add/remove class
+- =style= CSS
+- =each(func)= run code on each selection.
+
+** Transition
+
+- =transition=
+  - Chained transitions are ran in sequence
+- =duration=
+- =ease=
+  - cubic-in-out
+  - linear
+  - circle
+  - elastic
+  - bounce
+- =each("start")=, =each("end")= animation
+
+* Binding Data
+
+Use =selection.data()= to bind data to DOM elements.
+
+- =enter()= select new elements
+- update without =enter()=
+- =exit()= select deleted elements
+- =selection.data(data, keyFunc)=
+
+* Scale
+
+Type of scales
+
+- =linear=
+- =sqrt=
+- =log=
+- =quantize= Linear scale with discrete range
+- =quaintly= Discrete domain to linear range
+- =ordinal= to non-quantitative values
+- =category10=, =category20=, =category20b=, =category20c= to colors
+- =d3.time.scale= time ticks scale
+
+Methods
+
+- =range=
+- =domain=
+- =rangeRound=
+- =clamp=
+- =nice= expand both ends to the nearest round value
+
+* Layout
+
+Transform data to ease rendering various charts.
+
+- =d3.layout.pie()=
+- =d3.layout.histgram(0=)
+
+* Axes
+
+Axis is created using =d3.svg.axis()=.
+
+Methods
+
+- =scale= accepts a scale object
+- =orient= top, bottom, left, right
+
+* Helpers
+
+- =d3.format(".1%")= returns a format method.
+- =max=, =min=, =extent=
+
+* SVG
+
+** Styles
+
+- =shape-rendering: crispEdges;= prettify line
+- =g= axes =transform= 
+- =clickPath=, attribute =click-path=, e.g. (=url(#id)=).
+- =pointer-events= ignore mouse events
+
+** Paths
+
+- =d3.svg.arc()=
+- =d3.svg.line()= use =x(func)= and =y(func)= to setup transformation from
+  data. =func= accept datum as argument.
