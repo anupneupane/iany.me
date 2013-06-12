@@ -1,0 +1,486 @@
+---
+title: Android
+updated_at: <2013-06-12 21:10:28>
+created_at: <2013-05-12 23:20:49>
+tags: [android, mobile]
+toc: true
+---
+#+options: H:2
+
+* Development Environment
+
+** Installation
+
+- Download SDK
+- Launch SDK manager =android sdk= to install targets and platform/build tools.
+- Create Android Virtual Device: =android create avd= in command line or =android avd= through GUI.
+
+** New Project
+
+- Create new project =android create project=
+- Build and install =ant debug install=
+- Release =ant release=
+
+** Debug 
+
+- Start emulator: =emulator @name=
+- Start main activity =adb shell am start -n package.name/.MyActivity=
+- Find the process ID through =adb shell ps= and =adb jdwp=. It is usually the last =jdwp=.
+- Forward the port to local =adb forward tcp:8000 jdwp:PORT= where =PORT= is the one found in previous step.
+- Attach the forward local port: =jdb -attach localhost:8000=
+
+* Manifest
+
+** manigest tag
+
+- =versionCode= internal version as incremental integer.
+- =versionName= displayed version
+- =installLocation=: =preferExternal= and =auto=. Default is internal.
+
+
+** requiments
+
+- uses-sdk
+
+  #+BEGIN_SRC xml
+    <uses-sdk android:minSdkVersion="6"
+              android:maxSdkVersion="17"
+              android:targetSdkVersion="15"/>
+  #+END_SRC
+
+- uses-configuration: User input devices requirements. Useful for games.
+- uses-features: hardware features
+- supports-screens
+- supports-Gil-texture
+- uses-library
+- uses-permission
+- permission: create permissions
+
+** application
+
+- =icon=
+- =logo=
+- =theme=
+- =name=
+- =activity=
+  #+BEGIN_SRC xml
+    <activity android:name=".MyActivity" android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+  #+END_SRC
+- =service=
+- =provider=
+- =receiver=
+
+** test
+
+- instrumentation: instrument test classes
+* Application
+
+Application object (singleton) remains instantiated. It is registered in manifest, as =android:name= on application node.
+
+#+BEGIN_SRC java
+  import android.app.Application;
+  import android.content.res.Configuration;
+  
+  public class MyApplication extends Application {
+  
+    private static MyApplication singleton;
+  
+    // Returns the application instance
+    public static MyApplication getInstance() {
+      return singleton;
+    }
+  
+    @Override
+    public final void onCreate() {
+      super.onCreate();
+      singleton = this;
+    }
+  }
+#+END_SRC
+
+Application object events handler
+
+- =onCreate=
+- =onLowMemory=
+- =onTrimMemory=
+- =onConfigurationChanged=
+
+* Activity
+
+** Definition
+
+Activities inherit from =android.app.Activity=, and should be registered in manifest.
+
+- =android:name= class name
+- =android:label= display label
+- =intent-filter= Intents this activity supports.
+  - An Activity is available from the application launcher only if it supports
+    action =android.intent.action.MAIN= and category =android.intent.category.LAUNCHER=.
+
+** Resource
+
+*** Values
+
+string
+
+#+BEGIN_SRC xml
+<string name="stop_message"><b>Stop</b><string>
+<plurals name="unicornCount">
+  <item quantity="one">One unicorn</item>
+  <item quantity="other">%d unicorns</item>
+</plurals>
+#+END_SRC
+
+String resource can be used in =String.format=.
+
+=android.text.Html.fromHtml= accepts escaped HTML entities.
+
+#+BEGIN_SRC java
+  // android.content.res.Resources
+  Resources resources = getResources();
+  String unicornStr = resources.getQuantityString(
+    R.plurals.unicornCount, unicornCount, unicornCount);
+#+END_SRC
+
+color
+
+- =#RGB=
+- =#RRGGBB=
+- =#ARGB=
+- =#AARRGGBB=
+
+dimension (dimen)
+
+- px (screen pixels)
+- in (physical inches)
+- pt (physical points)
+- mm (physical millimeters)
+- dp (density-independent pixels)
+- sp (scale-independent pixels)
+
+styles
+
+#+BEGIN_SRC xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <resources>
+    <style name="base_text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#111</item>
+    </style>
+  </resources>
+  
+  <?xml version="1.0" encoding="utf-8"?>
+  <resources>
+    <style name="small_text" parent="base_text">
+      <item name="android:textSize">8sp</item>
+    </style>
+  </resources>
+#+END_SRC
+
+*** Other
+
+- drawables =res/drawable=, =res/drawable-xx=
+- layout =res/layout=
+  - =setContentView= in =Activity#onCreate=
+  - =Inflator#inflate= in =Fragment#onCreateView=
+- animations =res/animator=
+  - =objectAnimator=
+  - =set= view animation
+  - =animation-list= frame by frame animation
+- menus =res/menu=
+  - =MenuInflator#inflate= usually within =onCreateOptionsMenu=
+
+*** Reference Resource
+
+=@[packagename:]resourcetype/resourceidentifier=
+
+System resources: =android.R=, =@android:string/httpErrorBadUrl=
+
+Use styles in current theme: =?android:textColor=
+
+*** Resource Directory Structure
+
+Alternative resources values using paralle directory structure. A hyphen is used to separate qualifiers.
+
+- Mobile country code and network code (=mcc\d\d\d=, =mnc\d\d=)
+- Language and region (=en=, =en-rUS=).
+- Smallest screen width (=sw\d+dp=)
+- Available screen width (=w\d+dp=)
+- Available screen height (=h\d+dp=)
+- Screen size (=small=, =medium=, =large=, =xlarge=)
+- Screen aspect ratio (=long=, =notlong=) 
+- Screen orientation (=port=, =land=, =square=)
+- Dock mode (=car=, =desk=)
+- Night mode (=night=, =notnight=)
+- Screen pixel density (=ldpi=, =mdpi=, =hdpi=, =xhdpi=, =tvdpi=)
+- Touchscreen type (=notouch=, =stylus=, =finger=)
+- Keyboard Availability (=keysexposed=, =keyshidden=, =keyssoft=)
+- Keyboard input type (=nokeys=, =qwerty=, =12key=)
+- Navigation key availability (=navexposed=, =navhidden=)
+- UI navigation type (=nonav=, =dpad=, =trackball=, =wheel=)
+- Platform version (=v\d+=)
+
+*** Config Changes Event
+
+Register events to handle manually in =activity= node in manifest. Then
+override =Activity#onConfigurationChanged=.
+
+#+BEGIN_SRC xml
+  <activity 
+    android:name=".MyActivity"
+    android:label="@string/app_name"
+    android:configChanges="screenSize|orientation|keyboardHidden">
+    <intent-filter >
+      <action android:name="android.intent.action.MAIN" />
+      <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+  </activity>
+#+END_SRC
+
+- =mcc=, =mnc=
+- =locale=
+- =keyboardHidden=, =keyboard=
+- =fontScale=
+- =uiMode= car mode, day or night mode
+- =orientation=
+- =screenLayout=, =screenSize=, =smallestScreenSize=
+
+** States
+
+*** Process States
+
+- Active
+  - foreground
+  - Broadcast receivers executing =onReceive=
+  - Services executing =onStart=, =onCreate=, =onDestroy=.
+  - Running services that have been flagged to run in the foreground
+- Visible: e.g., partially obsecured by a non-full-screen activity.
+- Started Service
+- Background
+- Empty: retained processes where Android still maintains the cache to improve
+  the start-up time.
+
+*** Activity States
+
+- Active: at the top of the stack
+- Paused: visible but will not have focus
+- Stopped: not visible
+- Inactive: killed or closed
+
+*** Activity Events
+
+- =onCreate=
+- =onRestoreInstanceState=
+- =onStart=
+- =onResume=
+- =onSaveInstanceState=
+- =onPause= -> =onResume=
+- =onStop= -> =onRestart= -> =onStart=
+- =onDestroy= -> =onCreate=
+
+Life cycles
+
+- Active: =onResume= to =onPause=
+- Visible: =onStart= to =onStop=
+
+*** Sub classes
+
+- =MapActivity=: Encapsulates resource handling to support a =MapView=
+- =ListActivity=: Wrapper class for =ListView=
+- =ExpandableListActivity=: for =ExpandableListView=
+
+* UI and Fragments
+
+** Classes
+
+- =View= base class for all visual interface elements
+- =ViewGroup= compound controls which contains child views.
+- =Fragment= reusable UI component
+- =Activity= controller for view
+
+** Layouts
+
+Layout managers are extensions of =ViewGroup=
+
+- =FrameLayout=: all stacked. Position can be changed by setting =gravity=.
+- =LinearLayout=: align child views vertically or horizontally. =weight=
+  attribute controls the relative size of each child view.
+- =RelativeLayout=: Places child views by define relative positions to other
+  child views and screen boundaries.
+- =GridLayout=
+
+=merge= adds children to parent layout, for example, when the layout is =include=.
+
+=ViewStub= inflates a layout only when it is set to visible.
+
+#+BEGIN_SRC java
+  // Find the stub
+  View stub = findViewById(R.id. download_progress_panel_stub);
+  // Make it visible, causing it to inflate the child layout
+  stub.setVisibility(View.VISIBLE);
+  
+  // Find the root node of the inflated stub layout
+  View downloadProgressPanel = findViewById(R.id.download_progress_panel);
+#+END_SRC
+
+#+BEGIN_SRC xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <FrameLayout "xmlns:android=http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ListView
+      android:id="@+id/myListView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+    />
+    <ViewStub
+      android:id="@+id/download_progress_panel_stub"
+  
+      android:layout="@layout/progress_overlay_panel"
+      android:inflatedId="@+id/download_progress_panel"
+  
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+    />
+  </FrameLayout>
+#+END_SRC
+
+** Parameters
+
+- =layout:height=, =layout:width=
+  - =MATCH_PARENT= (old name =FILL_PARENT=): expand to fill parent
+  - =WRAP_CONTENT=: minimal size to hold content
+
+** Find View
+
+#+BEGIN_SRC java
+TextView myTextView = (TextView)findViewById(R.id.myTextView);
+#+END_SRC
+
+** Fragment Life Cycle
+
+- =onAttach=
+- =onCreate=
+- =onCreateView=
+- =onActivityCreated=
+- =onStart=
+- =onResume=
+- =onPause=
+- =onStop=
+- =onDestroyView= -> =onCreateView=
+- =onDestroy=
+- =onDetach= -> =onAttach=
+
+** Fragment Manager
+
+*** Bind Fragments in XML
+
+#+BEGIN_SRC xml
+  <fragment android:name="com.paad.weatherstation.MyListFragment"
+            android:id="@+id/my_list_fragment"
+            android:layout_width="match_parent" 
+            android:layout_height="match_parent" 
+            android:layout_weight="1"
+            />
+#+END_SRC 
+
+*** Fragment Transaction
+
+#+BEGIN_SRC xml
+  <FrameLayout
+      android:id="@+id/details_container"
+      android:layout_width="match_parent" 
+      android:layout_height="match_parent" 
+      android:layout_weight="3"
+      />
+#+END_SRC
+
+#+BEGIN_SRC java
+  FragmentManager fm = getFragmentManager();
+  FragmentTransaction t = fm.beginTransaction();
+  t.add(R.id.ui_container, new MyListFragment());
+  Fragment fragment = fm.findFragmentById(R.id.details_fragment);
+  t.remove(fragment);
+  t.replace(R.id.details_fragment,
+            new DetailFragment(selected_index));
+  t.commit();
+#+END_SRC
+
+Find Fragment by Tag
+
+#+BEGIN_SRC java
+  MyFragment myFragment =
+    (MyFragment)fragmentManager.findFragmentByTag(MY_FRAGMENT_TAG);
+#+END_SRC
+
+Remove a fragment container in a given layout, mark its =visibility= to =gone=.
+
+#+BEGIN_SRC xml
+  <FrameLayout android:visibility="gone" />
+#+END_SRC
+
+*** Back Stack
+
+Add fragments to Back Stack
+
+#+BEGIN_SRC java
+String tag = null;
+t.addToBackStack(tag);
+t.commit();
+#+END_SRC
+
+The removed fragments in the transaction are paused, and restarted when user
+presses back button.
+
+*** Animation
+
+#+BEGIN_SRC java
+  t.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+  t.setCustomAnimations(R.animator.slide_in_left,
+                        R.animator.slide_out_right);
+#+END_SRC
+
+*** Background Fragments
+
+Add and retrieve fragments by tag
+
+#+BEGIN_SRC java
+  t.add(myFragment, MY_FRAGMENT_TAG);
+  MyFragment myFragment =
+    (MyFragment)fragmentManager.findFragmentByTag(MY_FRAGMENT_TAG);
+#+END_SRC
+** Create new View
+
+- Override constructors and event handlers, especially =onDraw=.
+- Inflate view itself
+
+  #+BEGIN_SRC java
+    String infService = Context.LAYOUT_INFLATER_SERVICE;
+    LayoutInflater li;
+    li = (LayoutInflater)getContext().getSystemService(infService);
+    li.inflate(R.layout.clearable_edit_text, this, true);
+  #+END_SRC
+
+- Extend =View= for custom view, extend =SurfaceView= rapid update and OpenGL
+  support.
+
+* Intents
+
+** Intent Constructor
+
+- From context and =Activity= class
+- From action and an optional URI
+- =Linkify= makes links in =TextView= clickable
+
+** Broadcast
+
+- =sendBroadCast=
+- extends =BroadcastReceiver=
+- =registerReceiver=, =unregisterReceiver=
+- =intent-filter= in manifest
