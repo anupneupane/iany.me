@@ -5,11 +5,12 @@ module Nanoc::Filters
     TRY_EMACS = %w(/Applications/Emacs.app/Contents/MacOS/Emacs ~/bin/emacs /usr/local/bin/emacs /usr/bin/emacs)
     DEFAULT_OPTIONS = {
       :emacs => TRY_EMACS.find { |e| File.executable?(e) } || 'emacs',
-      :load_path => []
+      :load_path => [],
+      :format => 'html'
     }
 
-    def run(content, parems={})
-      options = DEFAULT_OPTIONS.merge(parems)
+    def run(content, params={})
+      options = DEFAULT_OPTIONS.merge(params)
       Export.new(options).org_export_as_string(content)
     end
 
@@ -35,13 +36,15 @@ module Nanoc::Filters
         (progn
           (defun org-html-fontify-code (code lang)
             (when code (org-html-encode-plain-text code)))
-          (org-export-to-file 'html %s nil nil t '(:with-toc nil :section-numbers nil)))
+          (defadvice org-html-format-latex (after encode-html activate)
+            (setq ad-return-value (org-html-encode-plain-text ad-return-value)))
+          (org-export-to-file '%s %s nil nil t '(:with-toc nil :section-numbers nil)))
       LISP
       def org_export_to_file(infile, outfile)
         emacs_batch(
           "-l", "ox-publish", "-l", "ox-html",
           "--file", infile,
-          "--eval", sprintf(ELISP, outfile.inspect).each_line.collect(&:strip).join(' ')
+          "--eval", sprintf(ELISP, options[:format], outfile.inspect).each_line.collect(&:strip).join(' ')
         )
       end
 

@@ -1,0 +1,876 @@
+---
+title: Probabilistic Graphical Models
+updated_at: <2013-06-14 22:42:30>
+created_at: <2013-05-12 23:20:49>
+tags: [probability, statistics, "machine learning"]
+mathjax: true
+toc: true
+---
+#+TITLE: Probabilistic Graphic Models
+#+DATE: <2013-04-20 Sat>
+#+OPTIONS: tex:t H:2 latex:t
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS:
+#+LATEX_HEADER: \usepackage{savesym}
+#+LATEX_HEADER: \savesymbol{iiint}
+#+LATEX_HEADER: \savesymbol{iint}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \newcommand{\Argmax}[1]{\underset{#1}{\operatorname{argmax}}}
+#+LATEX_HEADER: \newcommand{\Max}[1]{\underset{#1}{\operatorname{max}}}
+#+LATEX_HEADER: \newcommand{\MAP}{\operatorname{MAP}}
+#+STARTUP: overview
+
+#+BEGIN_HTML
+<p class="hidden">
+\[
+  \renewcommand{\Argmax}[1]{\underset{#1}{\operatorname{argmax}}}
+  \renewcommand{\Max}[1]{\underset{#1}{\operatorname{max}}}
+  \renewcommand{\MAP}{\operatorname{MAP}}
+\]
+</p>
+#+END_HTML
+
+* Bayesian Network
+
+** Definition
+
+A Bayesian network is
+
+- A directed acyclic graph (DAG) G whose nodes represents the random variables $X_i,\ldots,X_n$
+- For each node $X_i$ a CPD $P(X_i|\operatorname{Par}_G(X_i))$ exists
+
+The BN represents a joint distribution via the chain rule for Bayesian Networks:
+
+  \[
+    P(X_i,\ldots,X_n) = \textstyle{\prod_{i}{P(X_i|\operatorname{Par}_G(X_i))}}
+  \]
+
+$P$ **factorize** $G$ if it has a distribution above.
+
+** Flow of Probabilistic Influence
+
+V-structure: $X \leftarrow W \rightarrow Y$
+
+$X_i - X_{i+1} - \ldots - X_n$ is active trail if there is no v-structures.
+
+$X_i - X_{i+1} - \ldots - X_n$ is active trail given $Z$ if
+
+-  for any v-structure $X_{i-1} \leftarrow X_i \rightarrow X{i+i}$, we have $X_i$ or any of its descendants are in $Z$.
+-  no other $X_i$ is in $Z$.
+
+* Conditional Independent
+
+** D-separation
+
+$X$ and $Y$ are d-separated in $G$ given $Z$ if there is no active trail in $G$ between $X$ and $Y$ given $Z$.
+
+\[ \operatorname{d-sep}_G(X,Y|Z) \]
+
+-   Any node is d-separated from its non-descendants given its parents.
+
+    If node $Y$ is not descendants of $X$, then $X$ is either connected
+    through v-structures, or $Y$'s parents. Trails containing the v-structures
+    are not active because they are not observed. Trails though parents are
+    also not active because the non v-structure node is observed.
+
+    If $P$ factorizes over $G$, then in $P$, any variable is independent of
+    its non-descendants given its parents.
+
+** Factorization and Independence
+
+If P factorizes over G, and $\operatorname{d-sep}_G(X,Y|Z)$ then P satisfied $P(X \perp Y|Z)$
+
+** I-map
+
+$I(G)$ is a set containing all dependencies derived from d-separations.
+
+  \[ I(G) = \{ (X \perp Y | Z) : \operatorname{d-sep}_G(X,Y|Z) \} \]
+
+If $P$ satisfies $I(G)$ (dependencies derived from d-separations of G is a
+subset of dependencies in $P$) , we say that G is an **I-map** (independency
+map) of $P$.
+
+** Factorization
+
+-   If $P$ factorizes $G$, $G$ is an i-map of $P$.
+-   If $G$ is an i-map of $P$, $P$ factorizes $G$.
+
+    
+* Template Models
+
+** 2TBN
+
+2-time-slice Bayesian Network
+
+-   A transition model (2TBN) over $X_1,\ldots,X_n$ is specified as a BN
+    fragment that:
+
+    - The node includes $X_1',\ldots,X_n$ and a subset of $X_1,\ldots,X_n$.
+    - Only the nodes $X_1',\ldots,X_n$ have parents and CPD
+
+-   The 2TBN defines a conditional distribution
+
+    \[ P(X'|X) = \prod_{i=1}^n(X_i'|\operatorname{Par}_{X_i'}) \]
+
+** Markov and Time invariance
+
+Markov: Independ on old states given last state.
+
+  \[ (X^{(t+1)} \perp X^{(0:t-1)} | X^{(t)}) \]
+
+  \[ P(X^{(0:T)}) = P(X^{(0)}) \prod_{t=0}^{T-1}P(X^{(t+1)} | X^{(t)}) \]
+
+Time invariance: Independ on slice length
+
+  \[ P(X^{(t+1)}|X^{(t)}) = P(X'|X) \]
+
+** Dynamic BN
+
+2TBN and $\operatorname{BN}^{(0)}$ over $X_1^{(0)},\ldots,X_n^{(0)}$.
+
+
+** Plate Models
+
+For a template variable $A(U_i,\ldots,U_k)$
+
+- Template parents $B_i(\overline{U}_i),\dots,B_m(\overline{U}_m)$, where
+  $\overline{U}_i \subseteq U_1,\ldots,U_k$.
+  - no indices in parents that are not in child
+- $\operatorname{CPD}(A | B_1,\ldots,B_m)$
+
+
+* Structured CPD
+
+** Context-specific Independence
+
+Given $C = c$ that
+
+  \[ P \models (X \perp_c Y | Z, c) \]
+
+** Noisy OR
+
+Introduce intermediate variables $Z_i$ for $X_i$
+
+  \[
+    P(Z_{i}=1 | X_{i}) = \left\{ \begin{array}{lcl}
+      0 & \textrm{when} & X_i = 0 \\
+      \lambda_{i} & \textrm{when} & X_i = 0
+    \end{array} \right.
+  \]
+
+Thus
+
+  \[
+    P(Y=0|X_i,\ldots,X_k) = (1-\lambda_0)\prod_{i:X_i=1}(1-\lambda_i)
+  \]
+
+** Sigmoid CPD
+
+  \[ Z = w_0 + \sum_{i=1}^kw_iX_i \]
+  
+  \[ P(y^1|X_i,\ldots,X_k) = \operatorname{sigmoid}(Z) \]
+  
+  \[ \operatorname{sigmoid}(z) = \frac{e^z}{1+e^z} \]
+
+** Continuous Variables
+
+*** Linear Gaussian
+
+  \[ Y \sim \mathcal{N}(w_0 + \sum_{i=1}^kw_iX_i, \sigma^2) \]
+
+*** Conditional Linear Gaussian
+
+  \[
+    Y \sim \mathcal{N}(w_{\alpha 0} + \sum_{i=1}^kw_{\alpha i}X_i, \sigma_\alpha^2) \quad \textrm{when $A = \alpha$}
+  \]
+
+* Markov Network Fundamental
+
+** Pairwise Markov Network
+
+A pairwise Markov network is an underacted graph whose nodes are
+$X_i,\ldots,X_n$, and each each $X_i - X_j$ is associated with a factor (potential) $\phi_{ij}(X_i-X_j)$
+
+** General Gibbs Network
+
+\[ \Phi = \{ \phi_1(D_1), \ldots, \phi_k(D_i) \} \]
+
+\[ \widetilde{P}_\Phi(X_i,\ldots,X_n) = \prod_{i=1}^k\phi_i(D_i) \]
+
+$P$ factorizes $H$ if there exists
+
+\[ \Phi = \{ \phi_1(D_1), \ldots, \phi_k(D_i) \} \]
+
+s.t.
+
+-  $P = P_\Phi$
+-  H is a inducted network of $\Phi$
+
+A trail $X_i,\ldots,X_k$ is active give $Z$ if no $X_i$ is in $Z$.
+
+** Conditional Random Fields
+
+  \[ \Phi = \{ \phi_1(D_1), \ldots, \phi_k(D_i) \} \]
+  
+  \[ \widetilde{P}_\Phi(X, Y) = \prod_{i=1}^k\phi_i(D_i) \]
+  
+  \[ Z_\Phi(X) = \sum_Y{\widetilde{P}_\Phi(X, Y)} \]
+  
+  \[ P_\Phi(Y|X) = \frac{1}{Z_\Phi(X)}{\widetilde{P}_\Phi(X, Y)} \]
+
+** Independencies in Markov Network
+
+$X$, $Y$ are separated given $Z$ if there is no active trail given $Z$.
+
+  \[ I(H) = \{ (X \perp Y | Z) : \operatorname{sep}_H(X,Y|Z) \} \]
+
+If $P$ satisfies $I(H)$ we say that H is an I-map of P.
+
+If $P$ is positive ($\forall P > 0$), $P$ factorize over $H$ if H is an I-map of $P$.
+
+** I-maps and perfect map
+
+$H$ is perfect map of $P$ if $I(H) = I(P)$.
+
+Two graphs $G_1$ and $G_2$ over $X_1,\ldots,X_n$ are I-equivalent if $I(G_1) = I(G_2)$.
+
+** Log-Linear Models
+
+  \[ \widetilde{P} = exp \{ \sum w_if_i(D_i) \} \]
+
+* Knowledge Engineering
+
+** Distinctions
+
+- Template based vs specific
+
+  Template based: small number of variable types
+
+- Directed vs underacted
+- Generative vs Discriminative
+
+  Discriminative models directly model $P(Y|X)$ and avoid dealing joint
+  distribution. Generative models handle missing data or partially labeled data
+  well.
+
+** Variable Types
+
+- Target
+- Observed
+- Latent
+
+
+* Inference Overview
+
+** Conditional Probability Queries
+
+Given evidence $E = e$, and a subset of variables $Y$, compute $P(Y | E = e)$
+
+*** NP-hard
+
+- Given a PGM $P_\Phi$, a variable $X$ and a value $x \in
+  \operatorname{Val}(X)$, compute $P_\Phi(X = x)$, or even decide if
+  $P_\Phi(X=x) > 0$.
+- Let $\epsilon < 0.5$. Given a PGM $P_\Phi$, a variable X and a value
+  $x \in \operatorname{Val}(X)$, and observation $e \in \operatorname{Val}(E)$, find a
+  number $p$ that has $|P_\Phi(X=x|E=e) -p| < \epsilon$.
+
+*** Sum-Product
+
+Compute $P(Y | E = e)$: sum over $W = \{X_1,\ldots,X_n\} - Y - E$
+
+  \[ P(Y | E=e) = \frac{P(Y,E=e)}{P(E=e)} \]
+  
+  \[ \begin{array}{ll}
+    P(Y,E=e) &= \sum_{W}P(Y, W, E=e) \\
+             &= \sum_{W}\frac{1}{z}\prod_k\phi_k(D_k, E=e) \\
+             &\propto \sum_{W}\prod_k\phi_k'(D_k') \\
+  \end{array} \]
+  
+$\phi'(D)$ is reduced factor that removing all that $E \neq e$.
+
+*** Algorithms
+
+- Variable elimination (dynamic programming)
+- Message passing over graph
+  - Belief propagation
+  - Variational approximations
+- Random sampling instantiations
+  - Markov chain Monte Carlo (MCMC)
+  - Importance sampling
+
+** MAP Inference
+
+Maximum a Posteriori
+
+- Evidence: $E = e$
+- Query: all other variables $Y$ ($Y = \{X_i,\ldots,X_n\} - E$
+- Task: Compute $\MAP(Y|E=e) = \Argmax{y}P(Y=y|E=e)$
+
+*** NP-Hard
+
+- Given a PGM $P_\Phi$, find a joint assignment $x$ with highest probability $P_\Phi(x)$.
+- Given a PGM $P_\Phi$, and a probability $p$, decide if there is an assignment
+  $x$ such that $P_\Phi(x) > p$.
+
+
+*** Max-Product
+
+Compute $P(Y | E = e)$: max over $Y$
+
+  \[ P(Y | E=e) = \frac{P(Y, E=e)}{P(E=e)} \propto P(Y, E=e) \]
+  
+  \[ P(Y, E=e) \propto \prod_k\phi_k'(D_k') \]
+  
+  \[ \Argmax{Y}P(Y | E=e) = \Argmax{Y}\prod_k\phi_k'(D_k') \]
+
+*** Algorithm
+
+- Variable elimination (optimization)
+- Message passing over a graph
+  - Max-product belief propagation
+- Using methods for integer programming
+- For some networks: graph-cut methods
+- Combinatorial search
+
+** Inference: Variable Elimination
+
+Move factor does not depends on operator scope before that operator:
+
+  \[ \sum_A\sum_B\sum_C\phi_1(AB)\phi_2(BC) = \sum_A\sum_B\phi_i(AB)\sum_C\phi_2(BC) \]
+
+*** Complexity
+
+-  $m$ number of factors
+-  $n$ number of variables
+-  $m^* \leqslant m + n$ total number of factors
+-  $N= \operatorname{max}(N_k)$ size of the largest (generated) factor
+-  Linear in $N$ and $m^*$
+
+*** Graph Perspective
+
+
+-  Moralize: Connect parents of v-structure.
+-  Elimination: Remove node from graph, Connect variables (filled edge) in
+   scope of the generated factor.
+
+The induced graph $I_{_\Phi,\alpha}$ over factors $\Phi$ and ordering $\alpha$.
+
+- Undirected graph
+- $X_i$ and $X_j$ are connected if they appeared in the same factor in a run of
+  the VE algorithm using $\alpha$ as the ordering.
+
+Cliques (maximal fully connected subgraph) in the Induced Graph: Every factor
+produced during VE is a clique in the induced graph.
+
+Every (maximal) clique in the induced graph is a factor produced during VE.
+
+The width of an induced graph is the number of nodes in the largest clique in
+the graph minus 1.
+
+*** Finding Orderings
+
+For a graph $H$, determining whether there exists an elimination ordering $\alpha$
+for $H$ with induced width $\leqslant$ K is NP-complete.
+
+-  Greedy search: eliminate node with smallest cost
+   -  min-neighbors
+   -  min-weight: weight (number of values) of factor formed
+   -  min-fill: number of new fill edges
+   -  weighted min-fill: total weight of new fill edges (edge weight = product
+      of weights of the two nodes)
+
+The induced graph is triangulated (no loops of length > 0 without a bridge).
+
+* Belief Propagation
+
+** Cluster Graphs
+
+Undirected graph such that
+
+- nodes are clusters $C_i \subseteq \{X_i,\ldots,X_n\}$
+- edge between $C_i$ and $C_j$ associated with sepset $S_{i,j} \subseteq C_i \cap C_j$
+
+Given set of factors $\Phi$, we assign each $\phi_k$ to one and only one cluster
+$C_{\alpha(k)}$, s.t., $\operatorname{Scope}[\phi_k] \subseteq C_{\alpha(k)}$ (Family Preservation). 
+
+  \[ \psi_i = \prod_{k:\alpha(k)=i}\phi_k \]
+
+Properties:
+
+For each pair of clusters $C_i,C_j$ and variable $X \in C_i \cap C_j$ there
+exists a unique path between $C_i$ and $C_j$ for which all clusters and
+sepsets contain X. (RIP: Running Intersection Property)
+
+Belief propagation does poorly where there are strong correlations (self propagation feedback).
+
+Equivalently: For any X, the set of clusters and sepsets containing X form a tree.
+
+** Bethe Clsuter Graph
+
+- For each $\phi_k \in \Phi$, a factor cluster $C_k = Scope[\phi_k]$
+- For each $X_i$ a singleton cluster $\{X_i\}$
+- Edge $C_k - X_i$ if $X_i \in C_k$
+
+** Message Passing
+
+  \[ \delta_{i\rightarrow j}(S_{i,j}) = \sum_{C_i - S_{i,j}}\psi_i \times \prod_{k \in (\mathcal{N}_i - \{j\})}\delta_{k\rightarrow i}\]
+
+- $\mathcal{N}_i$ neighbors of cluster $i$.
+
+** Algorithm
+
+- Assign each factor $\phi_k \in \Phi$ to a cluster $C_{\alpha(k)}$.
+- Construct initial potentials $\psi_i(C_i) = \displaystyle\prod_{k:\alpha(k)=i}\phi_k$
+- Initialize all messages to be 1
+- Repeat
+  - Select edge $(i,j)$ and pass message
+- Compute belief $\beta_i(C_i) = \psi_i \times \displaystyle\prod_{k \in \mathcal{N}_i}\delta_{k \rightarrow i}$
+
+** Properties of Message Passing
+
+- A cluster graph is *calibrated* if every pair of adjacent clusters $C_i,C_j$ agree on their sepset $S_{i,j}$
+- Convergence deduces Calibration
+
+  \[
+  \sum_{C_i-S_{i,j}}\beta_i(C_i) = \sum_{C_j-S_{i,j}}\beta_j(C_j)
+  \]
+  
+  \[
+  \mu_{i,j}(S_{i,j}) = \delta_{i \rightarrow j}\delta_{j \rightarrow i} = \sum_{C_j - S_{i,j}}\beta_j(C_j)
+  \]
+
+$\mu_{i,j}$ is sepset belief.
+
+** Clique Tree Algorithm
+
+*IMPORTANT*
+
+A tree which is also Cluster Graph.
+
+Normalized beliefs of clique tree is the marginals of the distribution. While
+loopy BP beliefs are approximate marginals of the distribution.
+
+Renormalization on messages are not affect (approximate) marginals.
+
+Computation: choose a root and passing messages from leaves to root, then root to leaves.
+
+A clique tree can be constructed by simulating variable elimination.
+
+*** Properties
+
+Belief of cluster is sum product of all factors with variables not in the
+cluster marginalized out.
+
+If X is eliminated when we pass the message $C_i \rightarrow C_j$ then X does
+not appear in the $C_j$ side of the tree.
+
+Chains forward-backward algorithm.
+
+*** Convergence
+
+- Once $C_i$ receives a final messages from all neighbors except
+  $C_j$, then $\delta_{i\rightarrow j}$ is also final.
+- Messages from leaves are immediately final.
+- Can pass messages from leaves inward
+- In right order, only need to pass $2(K-1)$ messages.
+
+*** Answering Queries
+
+- Sum out irrelevant variables from any clique containing those variables
+- Introducing evidence $Z=z$ and querying $X$:
+
+  - Multiply clique that contains X and Z with indicator function $\mathbf{1}(Z=z)$
+  - Sum out irrelevant variables and renormalize
+
+- If X and Z does not share a clique with Z
+
+  - Multiple indicator function into some clique containing Z
+  - Propagate along the path to the clique containing X
+
+*** Independence
+
+For an edge $(i,j)$ in $T$, let:
+
+- $W_{<(i,j)}$ all variables that appear only on $C_i$ side
+- $W_{<(j,i)}$ all variables that appear only on $C_j$ side
+- Variables on both sides are in the supset $S_{i,j}$
+
+Theorem: $T$ satisfied RIP if and only if for every $(i,j)$
+
+  \[
+  P_\Phi \models (W_{<(i,j)} \perp W_{<(j,i)} | S_{i,j})
+  \]
+
+Each supset needs to seperate graph into two conditionally independent parts.
+
+*** Clique Tree and Variable Elimination
+
+Variable Elements induces a clique tree:
+
+-  Every factory is a cluster
+-  Add a edge when for each elimination computation.
+
+** Belief in Practice
+
+- Convergence is a local property. Some converges soon, some never.
+- Synchronous BP converges considerably worse than asynchronous
+- Messages passing orders makes a different to extent and rate of convergence. 
+
+*** Message Scheduling
+
+- Tree reparameterization (TRP)
+  - Pick a tree and pass messages to calibrate.
+- Residual belief propagation (RBP)
+  - Pass messages between two clusters whose beliefs over the sepset disagree the most.
+
+*** Smoothing messages
+
+\[ \delta = \lambda\delta_{\operatorname{new}} + (1-\lambda)\delta_{\operatorname{old}} \]
+
+* MAP Estimate
+
+Product to Summation in log space. Avoid numeric overflow.
+
+Max marginals: eliminate variable and leave max value.
+
+Factor sum: sum factors by common variables.
+
+In exact message passing, beliefs at clique are max-marginals.
+
+Finding a MAP assignment:
+-  Max value is unique in each clique, pick all assignment with max value
+-  If not unique:
+   - Slightly perturb parameters to make MAP unique
+   - Use traceback procedure that incrementally builds a MAP assignment, one
+     variable at a time (when variable is eliminated).
+
+** Tractable MAP
+
+- Correspondence association
+- Associative Potential
+- Cardinality Factors
+- Sparse Pattern Factors
+- Convexity Factors
+
+** Dual Decomposition
+
+  \begin{equation*}
+    \begin{array}{rl}
+      \operatorname{MAP}(\theta) &= \Max{x}\displaystyle\left(\sum_{i=1}^n\theta_i(x_i) + \sum_F\theta_F(\boldsymbol{x}_F)\right) \\
+      &= \Max{x}\displaystyle\left(\sum_{i=1}^n(\theta_i(x_i) + \sum_{F:i \in F}\lambda_{Fi}(x_i)) +
+                                 \sum_F(\theta_F(\boldsymbol{x}_F) - \sum_{i \in F}\lambda_{Fi}(x_i))\right) \\
+  
+      L(\lambda) &= \displaystyle\sum_{i=1}^n\Max{x_i}\left(\theta_i(x_i) + \sum_{F:i \in F}\lambda_{Fi}(x_i)\right) +
+                   \sum_{F}\Max{\boldsymbol{x}_F}\left(\theta_F(\boldsymbol{x}_F) - \sum_{i \in F}\lambda_{Fi}(x_i)\right)
+    \end{array}
+  \end{equation*}
+
+** Dual Decomposition Algorithm
+
+  \[ \bar\theta_i^{\boldsymbol{\lambda}} = \theta_i(x_i) + \sum_{F:i\in F}\lambda_{Fi}(x_i)\]
+  \[ \bar\theta_F^{\boldsymbol{\lambda}} = \theta_F(\boldsymbol{x}_F) + \sum_{i\in F}\lambda_{Fi}(x_i)\]
+
+- Initialize all $\lambda$'s to be 0
+- Repeat for $t=1,2,\ldots$
+  - Locally optimize all slaves $x_i^*$, $x_F^*$.
+  - Find all pairs $x_i^* \neq x_{Fi}^*$
+    \[ \lambda_{Fi}(x_i^*) := \lambda_{Fi}(X_i^*) - \alpha_t \]
+    \[ \lambda_{Fi}(x_{Fi}^*) := \lambda_{Fi}(X_{Fi}^*) + \alpha_t \]
+
+Convergence conditions:
+
+- $\sum_t\alpha_t = \infty$
+- $\sum_t\alpha_t^2 < \infty$
+
+At convergence, the shared solution is guaranteed MAP assignment if all slaves agree.
+
+Otherwise, need to solve the decoding problem to construct a joint assignment.
+* Sampling Methods
+** Simple Sampling
+
+Empirical expectation:
+
+  \[ E_P[f] \approx \frac{1}{M}\sum_{m=1}^{M}f(x[m]) \]
+
+Given $P(X=1) = p$, estimate $p$.
+
+Hoeffding Bound
+
+  \[
+    P_\mathcal{D}(T_\mathcal{D} \notin [p - \epsilon, p + \epsilon]) \leq 2e^{-2M\epsilon^2}
+  \]
+
+Chernoff Bound
+
+  \[
+    P_\mathcal{D}(T_\mathcal{D} \notin [p(1 - \epsilon), p(1 + \epsilon)]) \leq e^{-2Mp\epsilon^2/3}
+  \]
+
+** Markov Chain Monte Carlo
+
+A Markov chain defines a probabilistic transition model $T(x \rightarrow x')$ over states x:
+
+- for all $x$: $\sum_{x'}T(x \rightarrow x') = 1$
+
+  \[ P^{(t+1)}(X^{(t+1)} = x') = \sum_xP^{(t)}(X^{(t)} = x)T(x \rightarrow x') \]
+
+Stationary Distribution: repeat and get the limit distribution
+
+  \[ P^{(t)}(x') \approx P^{(t+1)}(x') = \sum_xP^{(t)}(x)T(x \rightarrow x') \]
+  
+  \[ \pi(x') = \sum_x\pi(x)T(x \rightarrow x') \]
+
+Regular Markov Chains
+
+- A Markov chain is *regular* if there exists $k$, s.t., for every $x, x'$,
+  the probability of getting from $x$ to $x'$ in exactly $k$ steps is $> 0$.
+- Theorem: A regular Markov chain converges to a unique stationary
+  distribution regardless of start state.
+  
+  Sufficient conditions:
+  - Every two states are connected with path of probability $> 0$.
+  - For every state, there is a self-transition
+
+Using Markov Chain
+
+- Goal: Compute $P(x \in S)$
+- Construct a Markov Chain $T$ whose unique stationary distribution is $P$
+- Sample $x^{(0)}$ from some $P^{(0)}$
+- For $t = 0,1,2,\ldots$
+  - Generate $x^{t+1}$ from $T(x^(t) \rightarrow x')$
+- Start collection samples only after the chain has run long enough to "mix".
+- When mixed?
+  - Compare chain statistics in different windows
+  - and across different runs initialized differently
+
+Using Samples:
+
+- Nearby samples are correlated!
+- The faster a chain mixes, the less correlated the samples.
+
+
+** Gibbs Sampling
+
+- Target distribution $P_\Phi(X_1,\ldots,X_n)$
+- Markov chain state space is all assignments $\boldsymbol{x}$.
+- Transition model given $\boldsymbol{x}$:
+  - For $i = 1,\ldots,n$, sample $x_i \sim P_\Phi(X_i|\boldsymbol{x}_{-i})$
+    - sample variables in any orders
+    - keep new assignment when sample next variable
+  - Set $\boldsymbol{x}'=\boldsymbol{x}$
+
+Computation
+
+  \[
+    P_\Phi(X_i|\boldsymbol{x}_{-i}) = \displaystyle\frac{\tilde{P}(X_i,\boldsymbol{x}_{-i})}{\tilde{P}(\boldsymbol{x}_{-i})}
+  \]
+
+- numerator: multiply all factors
+- denominator: summarize numerator by $X_i$.
+- cancel out factors not containing $X_i$
+- since denominator is just normalizer, can skip the computation
+
+  \[
+  P_\Phi(X_i|\boldsymbol{x}_{-i}) \propto \prod_{j:X_i\in \operatorname{Scope}[C_j]}\phi_j(X_i,\boldsymbol{x}_{j,-i})
+  \]
+
+Gibbs network is regular if all factors are positive. However, mixing can still be very slow.
+
+** Metropolis Hastings Algorithm
+
+Reversible Chains
+
+Detailed balance:
+
+\[ \pi(x)T(x \rightarrow x') = \pi(x')T(x' \rightarrow x) \]
+
+Theorem: If detailed balance holds, and $T$ is regular, then $T$ has a unique
+stationary distribution $\pi$.
+
+*** Metropolis Hastings Chain
+
+- Proposal distribution $Q(x \rightarrow x')$
+- Acceptance probability: $A(x \rightarrow x')$
+- At each state $x$, sample $x'$ from $Q(x \rightarrow x')$
+- Accept proposal with probability $A(x \rightarrow x')$
+  - If proposal accepted, move to $x'$
+  - otherwise stay at $x$
+
+\[ \begin{array}{rl}
+T(x \rightarrow x') &= Q(x \rightarrow x')A(x \rightarrow x') \mbox{ if } x' \neq x \\
+T(x \rightarrow x)  &= Q(x \rightarrow x) + \sum_{x' \neq x}Q(x \rightarrow x')(1 - A(x \rightarrow x'))
+\end{array} \]
+
+\[
+\mathcal{A}(x \rightarrow x') = \min\left[1, \frac{\pi(x')Q(x' \rightarrow x)}{\pi(x)Q(x \rightarrow x')}\right]
+\]
+
+- $Q$ must be reversible
+
+  - $Q(x \rightarrow x') > 0 \Rightarrow Q(x' \rightarrow x) > 0$
+
+- $Q$ should try to spread out, to improve mixing
+
+
+* Inference Summary
+
+- Connectivity Structure: message passing x
+- Strength of influence: 
+- Opposing influences
+- Multiple peaks in likelihood: decent gradient x
+
+* Decision Theory
+
+A simple decision making situation $\mathcal{D}$
+
+- A set of possible actions $\operatorname{Val}(A) = {a^1,\ldots,a^k}$
+- A set of states $\operatorname{Val}(X) = {x^1,\ldots,x^N}$
+- A distribution $P(X | A)$
+- A utility function $U(X, A)$
+
+\[ \operatorname{EU}[\mathcal{D}[a]] = \sum_xP(X|a)U(x,a) \]
+
+\[ a^* = \Argmax{a}\operatorname{EU}[\mathcal{D}[a]] \]
+
+\[ \operatorname{EU}[\mathcal{D}[\delta_A]] = \sum_{x,a}P_{\delta_A}(x,a)U(x,a) \]
+
+\[ \operatorname{MEU}(\mathcal{D}) = \Argmax{\delta_A}\operatorname{EU}[\mathcal{D}[\delta_A]] \]
+
+Let $Z = \operatorname{Pa}_A$, $W = X - Z$
+
+\[ \begin{array}{ll}
+\operatorname{EU}[\mathcal{D}[\delta_A]] &= \displaystyle\sum_{x,a}P_{\delta_A}(x, a)U(x, a) \\
+&= \displaystyle\sum_{Z,A}\delta_A(A|Z)\sum_W\left(U(\operatorname{Pa}_U)\prod_iP(X_i|\operatorname{Pa}_{X_i})\right) \\
+&= \displaystyle\sum_{Z,A}\delta_A(A|Z)\mu(A,Z)
+\end{array} \]
+
+For any assignment $z$, 
+
+\[ \delta_A^*(a | z) = \left\{ \begin{array}{ll}
+    1 & a = \Argmax{A}\mu(A, z) \\
+    0 & \mbox{otherwise.}
+  \end{array} \right. \]
+
+** Value of Perfect Information
+
+- $\operatorname{VPI}(A|X)$ is the value of observing $X$ before choosing an action at $A$.
+- $\mathcal{D}$ original influence diagram
+- $\mathcal{D}_{X \rightarrow A}$ influence diagram with edge $X \rightarrow A$
+
+  \[ \operatorname{VPI}(A | X) := \operatorname{MEU}(\mathcal{D}_{X \rightarrow A}) - \operatorname{MEU}(\mathcal{D}) \]
+
+Theorem:
+
+- $\operatorname{VPI}(A|X) \geqq 0$
+
+* Learning
+
+Tasks
+
+- General queries on new instance
+- Specific predication task on new instances
+- Knowledge discovery of $\mathcal{M}^*$
+
+Overfitting
+
+- Parameter Overfitting: regularization
+- Structure Overfitting: Bound or penalize model complexity
+
+* Parameters learning
+
+** Bayesian Network
+
+- If parameters are disjoint, parameters can be optimized by decompose the factors.
+- CPD can be further decomposed by context specific independent.
+- Dirichlet distribution.
+
+** Markov Network
+
+- Cannot be decomposed
+- Gradient Ascent
+- Regularization: L1, L2
+  - L2: Gaussian
+  - L1: sparse solution, Laplacian
+* Structure Learning
+
+** Likelihood Structure Score
+
+\[ \operatorname{score}_L(\mathcal{G} : \mathcal{D}) = \ell((\hat{\theta}, \mathcal{G}) : \mathcal{D}) \]
+
+Only need to compare sum of mutual information between nodes and their parents.
+
+Maximized in fully connected network.
+
+Avoiding Overfitting
+
+- Restrict hypothesis space
+- Penalize complexity
+
+** BIC Score and Asymptotic Consistency
+
+\[ \operatorname{score}_{BIC}(\mathcal{G} : \mathcal{D}) = \ell((\hat{\theta}, \mathcal{G}) : \mathcal{D}) - \frac{\log{M}}{2}\operatorname{Dim}[\mathcal{G}] \]
+
+-  BIC: Bayesian Information Criteria
+
+When $M \rightarrow \infty$
+
+- Asymptotically spurious edges will be penalized
+- Required edges will be added due to linear growth of likelihood compared to
+  logarithmic growth of model complexity.
+
+** Bayesian Score
+
+  \[ P(\mathcal{G}|\mathcal{D}) = \frac{P(\mathcal{D}|\mathcal{G})P(\mathcal{G})}{P(\mathcal{D})} \]
+  
+  \[
+    \operatorname{score}_B(\mathcal{G} : \mathcal{D}) =
+      \log P(\mathcal{D} | \mathcal{G}) + \log P(\mathcal{G})
+  \]
+
+** Learning Tree Structured Networks
+
+- Construct undirected graph.
+- $w(i, j) = \max[\operatorname{score}(X_j | X_i) - \operatorname{score}(X_j), 0]$
+
+* General Tree Structured Learning
+
+** Greedy Hill Climbing
+
+- Start with a give network
+- At each iteration
+  - Consider score for all possible changes
+  - Apply change that most improves the score
+- Stop when no modification improves score
+
+Improvement:
+
+- Random Restarts: when get stuck, take some number of random steps and then start climbing again
+- Tabu list
+  - keep a list of K steps most recently taken
+  - Search cannot reverse any of these steps
+
+
+
+* Learning with Incomplete Data
+
+- $X = \{X_i,\ldots,X_n\}$ are random variables
+- $O = \{O_i,\ldots,O_n\}$ are observableity variables
+- $Y = \{Y_i,\ldots,Y_n\}$ new random variables
+  - $Val(Y_i) = Val(X_i) \cup \{?\}$
+  - $Val(Y_i) = ? \mbox{ if } O_i = O^0$
+
+** EM
+
+- E-step (Expectation): Complete the data using current parameters.
+  - For each data case $d[m]$ and each family $X,U$ compute $P(X,U|d[m],\theta^t)$
+  - Compute the expected sufficient statistics for each $x,u$: 
+    $\bar{M}_{\theta^t}[x,u] = \sum_{m=1}^MP(x,u|d[m],\theta^t)$
+- M-step (Maximization): Estimate parameters relative to data completion.
+  - Treat the expected sufficient statistics (ESS) as if real
+  - Use MLE w.r.t. to the ESS
+
+- Initialization
+  - Random restarts
+  - From prior knowledge
+  - From the output of a simpler algorithm
