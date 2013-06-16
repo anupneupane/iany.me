@@ -1,6 +1,6 @@
 ---
 title: Probabilistic Graphical Models
-updated_at: <2013-06-14 22:42:30>
+updated_at: <2013-06-16 05:09:41>
 created_at: <2013-05-12 23:20:49>
 tags: [probability, statistics, "machine learning"]
 mathjax: true
@@ -49,13 +49,13 @@ $P$ **factorize** $G$ if it has a distribution above.
 
 ** Flow of Probabilistic Influence
 
-V-structure: $X \leftarrow W \rightarrow Y$
+V-structure: $X \rightarrow W \leftarrow Y$
 
 $X_i - X_{i+1} - \ldots - X_n$ is active trail if there is no v-structures.
 
 $X_i - X_{i+1} - \ldots - X_n$ is active trail given $Z$ if
 
--  for any v-structure $X_{i-1} \leftarrow X_i \rightarrow X{i+i}$, we have $X_i$ or any of its descendants are in $Z$.
+-  for any v-structure $X_{i-1} \rightarrow X_i \leftarrow X{i+i}$, we have $X_i$ or any of its descendants are in $Z$.
 -  no other $X_i$ is in $Z$.
 
 * Conditional Independent
@@ -105,8 +105,8 @@ map) of $P$.
 -   A transition model (2TBN) over $X_1,\ldots,X_n$ is specified as a BN
     fragment that:
 
-    - The node includes $X_1',\ldots,X_n$ and a subset of $X_1,\ldots,X_n$.
-    - Only the nodes $X_1',\ldots,X_n$ have parents and CPD
+    - The node includes $X_1',\ldots,X_n'$ and a subset of $X_1,\ldots,X_n$.
+    - Only the nodes $X_1',\ldots,X_n'$ have parents and CPD
 
 -   The 2TBN defines a conditional distribution
 
@@ -154,7 +154,7 @@ Introduce intermediate variables $Z_i$ for $X_i$
   \[
     P(Z_{i}=1 | X_{i}) = \left\{ \begin{array}{lcl}
       0 & \textrm{when} & X_i = 0 \\
-      \lambda_{i} & \textrm{when} & X_i = 0
+      \lambda_{i} & \textrm{when} & X_i = 1
     \end{array} \right.
   \]
 
