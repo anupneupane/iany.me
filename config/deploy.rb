@@ -18,7 +18,7 @@ set :forward_agent, true
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['MathJax', 'Font-Awesome', 'org-mode', 'content/gallery']
+set :shared_paths, ['MathJax', 'Font-Awesome', 'org-mode', 'gallery']
 
 # Optional settings:
 set :user, 'ian'
@@ -45,11 +45,22 @@ task :setup => :environment do
   queue! %[git clone git://orgmode.org/org-mode.git "#{deploy_to}/shared/org-mode"]
 end
 
+namespace :deploy do
+  # Copy gallery directory to content directory
+  task :copy_gallery do
+    queue %{
+      echo "-----> Copying gallery directory"
+      cp -r "#{deploy_to}/#{shared_path}/gallery" ./content
+    }
+  end
+end
+
 desc "Deploys the current version to the server."
 task :deploy => :environment do
   deploy do
     invoke :'git:clone_no_recursive'
     invoke :'deploy:link_shared_paths'
+    invoke :'deploy:copy_gallery'
     invoke :'bundle:install'
     queue! echo_cmd(%[NANOC_ENV=server bundle exec nanoc compile])
     queue! echo_cmd(%[NANOC_ENV=server bundle exec nanoc gzip])
