@@ -69,7 +69,7 @@ module HandlebarsHelpers
         image = site.item_of[identifier]
       else
         attributes[:alt] ||= name.gsub(/[-_ ]+/, ' ')
-        image = site.item_of[(site.handlebars.item.identifier + name).chomp('/') + '/']
+        image = site.item_of['/gallery' + (site.handlebars.item.identifier + name).chomp('/') + '/']
       end
 
       attributes[:width] ||= image[:width]
