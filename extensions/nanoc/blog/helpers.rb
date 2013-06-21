@@ -52,7 +52,7 @@ module Nanoc
         [summary, !!more]
       end
 
-      UPCASE_TAGS = %w(css html rvm) unless defined?(::Nanoc::Blog::Helpers::UPCASE_TAGS)
+      UPCASE_TAGS = %w(css html rvm svg) unless defined?(::Nanoc::Blog::Helpers::UPCASE_TAGS)
       DOWNCASE_TAGS = %w(tmux) unless defined?(::Nanoc::Blog::Helpers::DOWNCASE_TAGS)
 
       SPECIAL_TAGS = {
