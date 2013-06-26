@@ -43,7 +43,6 @@ class App
     $('.highlighttable-container').each ->
       container = $(this)
       linenos = container.attr('data-linenos')
-      console.log(linenos)
       if linenos?
         container.find('td.code').before(linenos)
 
