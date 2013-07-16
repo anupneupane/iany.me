@@ -1,5 +1,5 @@
 ---
-updated_at: <2013-07-16 10:20:49>
+updated_at: <2013-07-16 10:29:27>
 created_at: <2013-07-16 10:02:55>
 title: Active Record uniq, count and distinct 
 tags: [rails]
@@ -19,20 +19,22 @@ For example, user has many activities, and I want to get all users having a
 specific type of activities:
 
 ```ruby
-users = User.joins(:activities).where(activities: { activity_type: 'purchase'})
+users = User.joins(:activities).where(
+  activities: { activity_type: 'purchase'}
+)
 ```
 
 Because a user may have multiple activities with the same type, the result
 above may contain duplicate users. Method `uniq` can be used here to remove
 the duplicates:
 
-```ruby
+```
 users = users.uniq
 ```
 
 But `users.uniq.count` generates SQL like below:
 
-```sql
+```
 SELECT DISTINCT COUNT(*) ...
 ```
 
@@ -42,7 +44,7 @@ count, which has only one row. So `DISTINCT` has no effect here.
 On the other hand, `users.count(distinct: true)` generates SQL
 below, which removes duplicates first, then count the result.
 
-```sql
+```
 SELECT COUNT(DISTINCT users.id) ...
 ```
 

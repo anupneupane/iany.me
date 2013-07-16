@@ -72,6 +72,7 @@ article {
     }
     pre {
       padding: 0.5em;
+      margin-top: 0;
       margin-bottom: 0;
       border-width: 0;
       background: transparent;
@@ -87,6 +88,7 @@ article {
 
 .highlighttable-container {
   overflow-x: auto;
+  margin-top: $baseLineHeight - 6px;
   margin-bottom: $baseLineHeight;
   border: 1px solid #ccc;
   border: 1px solid rgba(0,0,0,.15);
