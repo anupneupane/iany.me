@@ -64,11 +64,15 @@ class App
   gistsStylesheets = {}
 
   appendGistStylesheets: (json) ->
-    if json.stylesheet && !gistsStylesheets[json.stylesheet]
-      found = $(document.head).find('link[rel=stylesheet]').filter(-> @href == json.stylesheet)
+    return unless json.stylesheet
+    stylesheet = json.stylesheet
+    if stylesheet[0] == '/'
+      stylesheet = 'https://gist.github.com' + stylesheet
+    if !gistsStylesheets[stylesheet]
+      found = $(document.head).find('link[rel=stylesheet]').filter(-> @href == stylesheet)
       if found.length == 0
-        $(document.head).append '<link rel="stylesheet" href="' + json.stylesheet + '" />'
-        gistsStylesheets[json.stylesheet] = true
+        $(document.head).append '<link rel="stylesheet" href="' + stylesheet + '" />'
+        gistsStylesheets[stylesheet] = true
 
   loadGists: ->
     app = @
