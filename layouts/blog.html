@@ -3,7 +3,7 @@
     <hr/>
     <div class="article-meta">
       <i class="icon-calendar"></i>
-      <span><%= item[:created_at].strftime('%b %e, %Y') %></span>
+      <span class="article-time"><%== link_to item[:created_at].strftime('%b %e, %Y'), item %></span>
 
       <% unless item[:tags].empty? %>
         <span class="muted">·</span>
@@ -13,7 +13,11 @@
         <% end %>
       <% end %>
     </div>
-    <h1><%= item[:title] %></h1>
+    <% if item[:url] %>
+      <h1><%== link_to item[:title], item[:url] %></h1>
+    <% else %>
+      <h1><%= item[:title] %></h1>
+    <% end %>
   </header>
 
   <div class="article-content">

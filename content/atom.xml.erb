@@ -18,7 +18,7 @@
   <% site.blog.articles.first(config[:atom_limit]).each do |item| %>
   <entry>
     <id><%= config[:base_url] %><%= item.path %></id>
-    <link type="text/html" rel="alternate" href="<%= config[:base_url] %><%= item.path %>" />
+    <link type="text/html" rel="alternate" href="<%= item[:url] || (config[:base_url] + item.path) %>" />
     <title><%= item[:title] %></title>
     <published><%= item[:created_at].to_iso8601_time %></published>
     <updated><%= (item[:updated_at] || item.mtime).to_iso8601_time %></updated>
