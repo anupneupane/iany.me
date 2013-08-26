@@ -4,7 +4,7 @@ comment: false
 page_layout: false
 ---
 
-<% if item[:prev_page] || item[:next_page] %>
+<% if item[:prev_page] %>
 <ul class="pager">
   <li class="previous<%= item[:prev_page] ? '' : ' hidden' %>">
     <%== link_to "&larr; Newer", item[:prev_page] || '#' %>
