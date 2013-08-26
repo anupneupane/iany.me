@@ -1,7 +1,7 @@
 ---
 updated_at: <2013-07-16 10:29:27>
 created_at: <2013-07-16 10:02:55>
-title: Active Record uniq, count and distinct 
+title: ActiveRecord uniq, count and distinct
 tags: [rails]
 tmpl: hb
 ---
