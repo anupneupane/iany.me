@@ -2,25 +2,19 @@
 //==================================================
 
 h1
-  font-size: 2.5 * $baseFontSize
-  margin-bottom: 1.5 * $baseLineHeight
+  font-size: 2.5 * $font-size-base
+  margin-bottom: 1.5 * $line-height-computed
 
 .center
   display: table
 
-.rss > span
-  display: none
-@media (max-width: 979px)
-  .rss > span
-    display: inline
-
 .icon-go-top
-  border-top: 1px solid $textColor
+  border-top: 1px solid $text-color
 
 blockquote p
   font-size: 18px
   font-weight: normal
-  color: lighten($textColor, 20%)
+  color: lighten($text-color, 20%)
 
 kbd
   background-color: #dddddd
@@ -33,9 +27,9 @@ kbd
   border-bottom-color: #ccc
   border-right-color: #ccc
   padding: 1px 4px
-  font-family: $sansFontFamily
+  font-family: $font-family-sans-serif
 
 pre
   padding: 0.5em
-  margin-top: $baseLineHeight - 6px
-  margin-bottom: $baseLineHeight
+  margin-top: $line-height-computed - 6px
+  margin-bottom: $line-height-computed

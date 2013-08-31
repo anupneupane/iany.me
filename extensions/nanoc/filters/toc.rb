@@ -6,7 +6,7 @@ module Nanoc
       def run(content, params = {})
         params = {
           :article_selector => '#main article',
-          :append_to => '#toc section'
+          :append_to => '.toc-body'
         }.merge(params)
 
         doc = ::Nokogiri::HTML(content)
@@ -36,9 +36,9 @@ module Nanoc
           inner_html += %Q[<li class="toc-level-1"><a href="#comments">Comments</a></li>]
         end
 
-        html = ['<ol>', inner_html, '</ol>'].join("\n")
-
-        doc.search(params[:append_to]).first << html
+        doc.search(params[:append_to]).each do |dom|
+          dom << inner_html
+        end
 
         doc.to_html :encoding => 'UTF-8'
       end

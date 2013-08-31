@@ -1,60 +1,41 @@
 // Layout
 // ==================================================
 
-#header
-  .brand > i
+.rss > span
+  display: none
+
+#header .navbar-brand
+  margin-left: -35px
+  height: 50px
+
+.navbar-brand
+  > i
     margin-right: 3px
     visibility: hidden
-  .brand:hover > i
+  &:hover > i
     visibility: visible
+.navbar-form
+  margin-right: -25px
+
+.breadcrumb
+  margin-top: 20px
 
 #body
-  padding: 40px 0
-
-#main, #comments
-  max-width: 40em
-  margin-left: auto
-  margin-right: auto
-
-#toc
-  padding-top: 20px
+  padding-bottom: 20px
 
 #sidebar
   padding-top: 20px
 
 #footer
-  padding: 2 * $baseLineHeight 0
-
-.navbar-fixed-top
-  margin-bottom: 0
+  padding: 2 * $line-height-computed 0 $line-height-computed
 
 .pager
   padding: 0 20px
 
-.breadcrumb
-  margin: 20px 20px 24px
-
-@media (max-width: 979px)
-  #sidebar, #toc
-    margin-left: 0
-    width: 4 * $gridColumnWidth768 + 3 * $gridGutterWidth768
-  #toc
-    margin-right: 20px
-
-@media (max-width: 767px)
-  #body, #footer
-    margin-left: -20px
-    margin-right: -20px
-  #body
-    padding: 20px 0
+@media (max-width: $screen-sm)
+  .rss > span
+    display: inline
+  .navbar-form
+    margin-right: -10px
   .breadcrumb
     margin-top: 0
-  #footer
-    padding-left: 20px
-    padding-right: 20px
-  #sidebar, #toc
-    float: none
-    width: auto
-    padding: 0 20px
-  #toc
-    margin-right: 0

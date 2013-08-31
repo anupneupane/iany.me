@@ -1,7 +1,8 @@
-<aside id="sidebar" class="offset1 span3">
-  <div id="sidebar-toggle"></div>
-  <section class="box sidebar-widget">
-    <h3 class="box-title">Recent Changes</h3>
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Changes</h3>
+  </div>
+  <div class="panel-body">
     <ol>
       <% site.blog(:wiki).articles[0...10].each do |article| %>
         <li>
@@ -10,10 +11,14 @@
         </li>
       <% end %>
     </ol>
-  </section>
+  </div>
+</section>
 
-  <section class="box sidebar-widget">
-    <h3 class="box-title">Wiki Tags</h3>
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Wiki Tags</h3>
+  </div>
+  <div class="panel-body">
     <ol>
       <% site.blog(:wiki).tags.sort_by { |k,v| -v[:page_items].count }.first(10).each do |tag, page| %>
         <li><a href="<%= page.path %>"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</a></li>
@@ -23,5 +28,5 @@
     <footer>
       <a href="/wiki/tags/">See all tags &raquo;</a>
     </footer>
-  </section>
-</aside>
+  </div>
+</section>

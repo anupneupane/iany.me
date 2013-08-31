@@ -1,7 +1,7 @@
 <% if item[:breadcrumbs] && !item[:breadcrumbs].empty? %>
   <ul class="breadcrumb">
     <% item[:breadcrumbs].each do |e| %>
-      <li><%== link_to e.first, e.last %><span class="divider">/</span></li>
+      <li><%== link_to e.first, e.last %></li>
     <% end %>
     <li class="active"><a href="#main">&#182;</a></li>
   </ul>
