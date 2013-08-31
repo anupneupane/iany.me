@@ -1,5 +1,5 @@
 ---
-updated_at: <2013-06-21 13:11:00>
+updated_at: <2013-09-01 01:55:25>
 created_at: <2013-06-16 15:34:30>
 title: Responsive SVG
 tags: [svg]
@@ -84,13 +84,11 @@ fixed height `50px`, and is half width of the whole page.
 </div>
 ```
 
-<figure>
-  <div class="row">
-    <div style="width:50%;height:50px;">
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-        <circle cx="50" cy="50" r="50" fill="blue">
-      </svg>
-    </div>
+<figure class="thumbnail">
+  <div style="width:50%;height:50px;">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <circle cx="50" cy="50" r="50" fill="blue">
+    </svg>
   </div>
   <figcaption>Fixed With, Horizontal scalable</figcaption>
 </figure>

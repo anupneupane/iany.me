@@ -1,6 +1,6 @@
 ---
 created_at: <2012-03-30>
-updated_at: <2012-12-12 22:12:51>
+updated_at: <2013-09-01 02:01:07>
 title: Use Popup isearch For Yasnippet Prompt
 tags: [emacs]
 tmpl: hb
@@ -15,12 +15,12 @@ by its author. It has better look and feel than all the built-in
 `yas/prompt-functions`. Also it is easy to customize, and its isearch mode is
 very efficient, the items are filtered on-the-fly when typing.
 
-{{#thumbnails "row-fluid"}}
-  {{#thumbnail "span6"}}
+{{#thumbnails "row"}}
+  {{#thumbnail "col-sm-6"}}
     {{image "choises"}}
     <figcaption>Choises</figcaption>
   {{/thumbnail}}
-  {{#thumbnail "span6"}}
+  {{#thumbnail "col-sm-6"}}
     {{image "filter_by_keyword"}}
     <figcaption>Popup isearch by typing "f"</figcaption>
   {{/thumbnail}}

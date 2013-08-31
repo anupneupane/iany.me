@@ -26,7 +26,7 @@ module HandlebarsHelpers
       html_class = ''
     end
 
-    ul = content_tag :ul, callback.call, :class => 'thumbnails'
+    ul = content_tag :div, callback.call, :class => 'thumbnails'
     html = content_tag :figure, ul, :class => html_class
 
     Handlebars::SafeString.new(html)
@@ -40,7 +40,7 @@ module HandlebarsHelpers
     end
 
     div = content_tag :div, callback.call, :class => 'thumbnail'
-    html = content_tag :li, div, :class => html_class
+    html = content_tag :div, div, :class => html_class
 
     Handlebars::SafeString.new(html)
   end
