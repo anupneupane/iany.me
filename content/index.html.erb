@@ -27,7 +27,7 @@ page_layout: false
           <span class="muted">·</span>
           <i class="icon-tags"></i>
           <% article.tags.each do |tag| %>
-            <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label' %>
+            <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label label-default' %>
           <% end %>
         <% end %>
       </div>

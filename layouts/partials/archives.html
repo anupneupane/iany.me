@@ -26,7 +26,7 @@
       </td>
       <td class="article-tags">
         <% article.tags.each do |tag| %>
-          <%== link_to render_tag(tag), blog.tags[tag].path, :class => 'label' %>
+          <%== link_to render_tag(tag), blog.tags[tag].path, :class => 'label label-default' %>
         <% end %>
       </td>
     </tr>
