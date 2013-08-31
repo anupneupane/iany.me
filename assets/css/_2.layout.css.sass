@@ -6,7 +6,6 @@
 
 #header .navbar-brand
   margin-left: -35px
-  height: 50px
 
 .navbar-brand
   > i
@@ -17,25 +16,23 @@
 .navbar-form
   margin-right: -25px
 
-.breadcrumb
-  margin-top: 20px
-
 #body
-  padding-bottom: 20px
+  padding-bottom: $line-height-computed
 
 #sidebar
-  padding-top: 20px
+  padding-top: $line-height-computed
+
+.breadcrumb
+  margin: $line-height-computed 0 0
 
 #footer
   padding: 2 * $line-height-computed 0 $line-height-computed
 
-.pager
-  padding: 0 20px
+#disqus_thread
+  margin: $line-height-computed 0
 
 @media (max-width: $screen-sm)
   .rss > span
     display: inline
   .navbar-form
     margin-right: -10px
-  .breadcrumb
-    margin-top: 0
