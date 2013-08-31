@@ -51,7 +51,7 @@ class App
 
   setupSearch: ->
     # if js is enabled, show search results in site
-    $('.navbar-search').attr('action', '/search/')
+    $('.navbar-form').attr('action', '/search/')
 
   setupMathJax: ->
     $('code.mathjax').each ->
