@@ -88,8 +88,8 @@ article {
 
 .highlighttable-container {
   overflow-x: auto;
-  margin-top: $baseLineHeight - 6px;
-  margin-bottom: $baseLineHeight;
+  margin-top: $line-height-computed - 6px;
+  margin-bottom: $line-height-computed;
   border: 1px solid #ccc;
   border: 1px solid rgba(0,0,0,.15);
   background: #F8F8FF;
