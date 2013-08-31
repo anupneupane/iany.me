@@ -15,22 +15,22 @@ article
   padding: 20px
   > header
     > .article-meta
-      font-size: 0.9 * $baseFontSize
+      font-size: 0.9 * $font-size-base
       > .muted
         padding: 0 10px
       > .label
         font-weight: normal
     > h1
-      padding-top: 0.35 * $baseLineHeight
+      padding-top: 0.35 * $line-height-computed
   > .article-content
-    margin-bottom: $baseLineHeight
+    margin-bottom: $line-height-computed
     hr#read-on
       margin: 4px 0 10px
       border-style: dashed
     h2
-      margin-top: $baseLineHeight
-      margin-bottom: $baseLineHeight / 2
-      border-bottom: 1px solid lighten($navbarBorder, 5%)
+      margin-top: $line-height-computed
+      margin-bottom: $line-height-computed / 2
+      border-bottom: 1px solid lighten($navbar-default-border, 5%)
     h5, h6
       font-style: italic
 
@@ -38,39 +38,40 @@ article
     +clearfix
     .read-on
       padding: 8px
-      @include border-radius(5px)
+      border-radius: 5px
       &:hover
         text-decoration: none
-        background-color: $grayLighter
+        background-color: $gray-lighter
 
   table
     @extend .table
     @extend .table-hover
 
-    border-color: $tableBorder
+    border-color: $table-border-color
     border-style: solid
     border-width: 0 0 2px
 
     td, th
       border-top-width: 0
     thead
-      border-color: $tableBorder
+      border-color: $table-border-color
       border-style: solid
       border-width: 2px 0 1px
 
 article > header
-  border-top: 2px solid $navbarBorder
+  border-top: 2px solid $navbar-default-border
   > hr
     width: 16px
-    border-top: 4px solid $navbarBorder
+    border-top: 4px solid $navbar-default-border
+    margin-left: 0
     margin-top: 0
     margin-bottom: 4px
 
 .article-table-archives
   tbody
     .article-year, .article-date
-      color: $grayLight
-      font-size: $baseFontSize * 0.9
+      color: $gray-light
+      font-size: $font-size-base * 0.9
       text-transform: uppercase
       &.hide-text
         +hide-text
@@ -78,4 +79,3 @@ article > header
     max-width: 200px
     > .label
       font-weight: normal
-
