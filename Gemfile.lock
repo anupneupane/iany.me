@@ -1,8 +1,14 @@
+GIT
+  remote: git://github.com/thomas-mcdonald/bootstrap-sass.git
+  revision: 82f1b343ffc0069bf99d2a3d4f0190bc87ba89ed
+  branch: 3
+  specs:
+    bootstrap-sass (3.0.0.0)
+      sass (~> 3.2)
+
 GEM
   remote: http://ruby.taobao.org/
   specs:
-    bootstrap-sass (2.3.0.1)
-      sass (~> 3.2)
     coderay (1.0.8)
     coffee-script (2.2.0)
       coffee-script-source
@@ -66,7 +72,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootstrap-sass
+  bootstrap-sass!
   coffee-script
   erubis
   handlebars

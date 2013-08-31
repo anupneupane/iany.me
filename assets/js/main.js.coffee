@@ -28,9 +28,12 @@ class App
       if domain?
         icon = if domain == 'plus.google.com'
           '<i class="icon icon-google-plus-sign"></i> '
+        else if domain in ['slides.iany.me', 'www.slideshare.net', 'speakerdeck.com', 'slid.es']
+          '<i class="icon icon-youtube-play"></i> '
         else
           parts = domain.split('.')[-2..]
           iconClass = EXTERNAL_ICONS[parts[0]]
+          
           if parts[1] == 'com' && iconClass
             "<i class=\"icon #{iconClass}\"></i> "
           else
