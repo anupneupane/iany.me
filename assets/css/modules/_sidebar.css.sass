@@ -1,11 +1,19 @@
-.sidebar-widget.box
-  > ol
-    color: lighten($textColor, 25%)
-  > ol a
-    color: $textColor
-  &:hover > ol a
-    color: $linkColor
-  > footer
-    text-align: right
-    @extend small
-    padding-bottom: 3px
+#sidebar
+  .panel-body
+    padding-bottom: 0
+    > ol
+      @extend .list-unstyled
+      color: lighten($text-color, 25%)
+      > li
+        padding: 4px 0
+        margin-bottom: 6px
+        border-bottom: 1px solid $gray-lighter
+        border-top: 1px solid lighten($gray-lighter, 8%)
+    > ol a
+      color: $text-color
+    &:hover > ol a
+      color: $link-color
+    > footer
+      text-align: right
+      @extend small
+      padding-bottom: 3px
