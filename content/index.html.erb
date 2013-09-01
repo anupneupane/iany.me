@@ -42,7 +42,7 @@ page_layout: false
       </h1>
     </header>
 
-    <div class="article-content" itemprop="articleBody">
+    <div class="article-content" itemprop="<%== (article[:url] || item_more?(article)) ? 'about' : 'articleBody' %>">
       <p><%== item_summary(article) %></p>
     </div>
 
