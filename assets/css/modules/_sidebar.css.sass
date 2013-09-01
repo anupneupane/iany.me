@@ -1,4 +1,5 @@
 #sidebar
+  position: relative
   .panel-body
     padding-bottom: 0
     > ol
@@ -16,3 +17,46 @@
       text-align: right
       @extend small
       padding-bottom: 3px
+
+#sidebar-toggle
+  border-left: 1px solid transparent
+  position: absolute
+  top: - $line-height-computed
+  bottom: - $line-height-computed
+  width: $grid-gutter-width
+  right: - $grid-gutter-width / 2
+  cursor: pointer
+  z-index: 1044
+
+  a
+    display: block
+    position: absolute
+    padding: 0 3px
+    left: -1px
+    top: 0
+    font-size: 1.2em
+    color: darken($navbar-default-border, 5%)
+    text-decoration: none
+    border-bottom-right-radius: 0.3em
+    border: 1px solid transparent
+    background-color: white
+  i:before
+    font-family: FontAwesome
+    font-weight: normal
+    font-style: normal
+    text-decoration: inherit
+    -webkit-font-smoothing: antialiased
+    content: "\f101"
+  &:hover
+    border-left: 1px solid $navbar-default-border
+    @include gradient-horizontal(rgba(224, 224, 224, 0.25), rgba(224, 224, 224, 0), 0%, 50%)
+    a
+      border-right-color: $navbar-default-border
+      border-bottom-color: $navbar-default-border
+.without-sidebar
+  #sidebar-toggle
+    a
+      background: transparent
+      border-width: 0
+    i:before
+      content: "\f100"

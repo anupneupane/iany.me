@@ -8,6 +8,7 @@ class App
   constructor: (@body) ->
 
   start: ->
+    @setupSidebarToggle()
     @setupExternalLinkTooltips()
     @showLinenos()
     @setupSearch()
@@ -92,6 +93,21 @@ class App
         success: (json) ->
           $(json.div).replaceAll(el).trigger('gistloaded', json)
           app.appendGistStylesheets(json)
+
+  toggleSidebar: ->
+    if @body.hasClass('with-sidebar')
+      $.cookie('without-sidebar', '1')
+      @body.removeClass('with-sidebar').addClass('without-sidebar')
+    else
+      $.removeCookie('without-sidebar')
+      @body.removeClass('without-sidebar').addClass('with-sidebar')
+
+  setupSidebarToggle: ->
+    $('#sidebar-toggle').click (e) =>
+      e.preventDefault()
+      @toggleSidebar()
+    if $.cookie('without-sidebar')
+      @toggleSidebar()
 
 $ ->
   $('html').removeClass('no-js').addClass('has-js')

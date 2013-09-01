@@ -36,3 +36,20 @@
     display: inline
   .navbar-form
     margin-right: -10px
+
+.without-sidebar
+  #main-container, #sidebar
+    float: none
+    width: 100%
+@media (min-width: $screen-md)
+  .without-sidebar
+    #main-container, #sidebar
+      width: percentage((9 / $grid-columns))
+    #sidebar
+      margin-left: 0
+@media (min-width: $screen-lg)
+  .without-sidebar
+    #main-container, #sidebar
+      width: percentage((8 / $grid-columns))
+    #sidebar
+      margin-left: percentage((1 / $grid-columns))

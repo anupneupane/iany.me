@@ -118,11 +118,16 @@
                 </div>
               </aside>
             <% end %>
+
+            <% if item[:sidebar] %>
+              <div id="sidebar-toggle" class="hidden-xs">
+                <a href="#sidebar"><i></i></a>
+              </div>
+            <% end %>
           </div>
 
           <% if item[:sidebar] %>
-            <aside id="sidebar" class="col-md-offset-1 col-md-3 col-sm-offset-0 col-sm-4">
-              <div id="sidebar-toggle"></div>
+            <aside id="sidebar" class="collapse in col-md-offset-1 col-md-3 col-sm-offset-0 col-sm-4">
               <% if item[:toc] %>
                 <section class="panel panel-default">
                   <div class="panel-heading">

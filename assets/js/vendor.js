@@ -1,4 +1,5 @@
 //= require vendor/jquery-1.8.0.min
+//= require vendor/jquery.cookie
 //= require vendor/plugins
 
 //#= require bootstrap/affix
