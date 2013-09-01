@@ -1,26 +1,34 @@
-<article>
+<article itemscope itemtype="http://schema.org/Article">
   <header>
     <hr/>
     <div class="article-meta">
+      <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <meta itemprop="name" content="Ian Yang" />
+      </span>
+
       <i class="icon-calendar"></i>
-      <span class="article-time"><%== link_to item[:created_at].strftime('%b %e, %Y'), item %></span>
+      <span itemprop="datePublished" content="<%== item[:created_at].strftime('%Y-%m-%d') %>" class="article-time">
+        <%== link_to item[:created_at].strftime('%b %e, %Y'), item %>
+      </span>
 
       <% unless item[:tags].empty? %>
         <span class="muted">·</span>
         <i class="icon-tags"></i>
-        <% item[:tags].each do |tag| %>
-          <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label label-default' %>
-        <% end %>
+        <span itemprop="keywords">
+          <% item[:tags].each do |tag| %>
+            <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label label-default' %>
+          <% end %>
+        </span>
       <% end %>
     </div>
-    <% if item[:url] %>
-      <h1><%== link_to item[:title], item[:url] %></h1>
-    <% else %>
-      <h1><%= item[:title] %></h1>
-    <% end %>
+    <h1>
+      <a itemprop="url" href="<%== item[:url] || item.path %>">
+        <span itemprop="name"><%= item[:title] %></span>
+      </a>
+    </h1>
   </header>
 
-  <div class="article-content">
+  <div class="article-content" itemprop="articleBody">
     <%== yield %>
   </div>
 

@@ -16,29 +16,33 @@ page_layout: false
 <% end %>
 
 <% item[:page_items].each do |article| %>
-  <article>
+  <article itemscope itemtype="http://schema.org/Article">
     <header>
       <hr/>
       <div class="article-meta">
         <i class="icon-calendar"></i>
-        <span class="article-time"><%== link_to article.date.strftime('%b %e, %Y'), article %></span>
+        <span  itemprop="datePublished" content="<%== article.date.strftime('%Y-%m-%d') %>" class="article-time">
+          <%== link_to article.date.strftime('%b %e, %Y'), article %>
+        </span>
 
         <% unless article.tags.empty? %>
           <span class="muted">·</span>
           <i class="icon-tags"></i>
-          <% article.tags.each do |tag| %>
-            <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label label-default' %>
-          <% end %>
+          <span itemprop="keywords">
+            <% article.tags.each do |tag| %>
+              <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label label-default' %>
+            <% end %>
+          </span>
         <% end %>
       </div>
-      <% if article[:url] %>
-        <h1><%== link_to article.title, article[:url] %></h1>
-      <% else %>
-        <h1><%== link_to article.title, article %></h1>
-      <% end %>
+      <h1>
+        <a itemprop="url" href="<%== article[:url] || article.path %>">
+          <span itemprop="name"><%= article.title %></span>
+        </a>
+      </h1>
     </header>
 
-    <div class="article-content">
+    <div class="article-content" itemprop="articleBody">
       <p><%== item_summary(article) %></p>
     </div>
 

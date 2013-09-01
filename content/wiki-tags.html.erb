@@ -10,6 +10,10 @@ breadcrumbs: ["/wiki/"]
 
 <ul>
   <% site.blog(:wiki).tags.sort_by(&:first).each do |tag, page| %>
-    <li><a href="<%= page.path %>"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</a></li>
+    <li itemscope itemtype="http://schema.org/Article">
+      <a itemprop="url" href="<%= page.path %>">
+        <span itemprop="name"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</name>
+      </a>
+    </li>
   <% end %>
 </ul>

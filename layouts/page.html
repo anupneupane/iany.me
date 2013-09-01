@@ -1,20 +1,30 @@
-<article>
+<article itemscope itemtype="http://schema.org/Article">
   <header>
     <hr/>
+    <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ian Yang" />
+    </span>
+    
     <% unless item[:tags].empty? %>
       <div class="article-meta">
         <i class="icon-tags"></i>
-        <% item[:tags].each do |tag| %>
-          <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label label-default' %>
-        <% end %>
+        <span itemprop="keywords">
+          <% item[:tags].each do |tag| %>
+            <%== link_to render_tag(tag), site.blog.tags[tag].path, :class => 'label label-default' %>
+          <% end %>
+        </span>
       </div>
     <% end %>
     <% unless item[:title].nil? || item[:title].empty? %>
-      <h1><%== item[:title] %></h1>
+      <h1>
+        <a itemprop="url" href="<%== item[:url] || item.path %>">
+          <span itemprop="name"><%= item[:title] %></span>
+        </a>
+      </h1>
     <% end %>
   </header>
 
-  <div class="article-content">
+  <div class="article-content" itemprop="articleBody">
     <%== yield %>
   </div>
 

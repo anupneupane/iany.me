@@ -7,7 +7,13 @@ priority: 1
 
 <ul>
   <% site.blog.calendar.each do |year, page| %>
-    <li><a href="<%= page.path %>"><%= year %> (<%= page[:page_items].size %>)</a></li>
+    <li itemscope itemtype="http://schema.org/Article">
+      <a itemprop="url" href="<%= page.path %>">
+        <span itemprop="name">
+          <%= year %> (<%= page[:page_items].size %>)
+        </span>
+      </a>
+    </li>
   <% end %>
 </ul>
 
@@ -15,7 +21,13 @@ priority: 1
 
 <ul>
   <% site.blog.tags.sort_by(&:first).each do |tag, page| %>
-    <li><a href="<%= page.path %>"><%= render_tag(tag) %> (<%= page[:page_items].size %>)</a></li>
+    <li itemscope itemtype="http://schema.org/Article">
+      <a itemprop="url" href="<%= page.path %>">
+        <span itemprop="name">
+          <%= render_tag(tag) %> (<%= page[:page_items].size %>)
+        </span>
+      </a>
+    </li>
   <% end %>
 </ul>
 

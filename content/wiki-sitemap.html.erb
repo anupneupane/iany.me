@@ -10,6 +10,10 @@ breadcrumbs: ["/wiki/"]
 
 <ul>
   <% site.blog(:wiki).articles.sort_by(&:identifier).each do |page| %>
-    <li class="level-<%= page.identifier.split('/').size - 2 %>"><a href="<%= page.path %>"><%= page[:title] %></a></li>
+    <li class="level-<%= page.identifier.split('/').size - 2 %>" itemscope itemtype="http://schema.org/Article">
+      <a itemprop="url" href="<%= page.path %>">
+        <span itemprop="name"><%= page[:title] %></span>
+      </a>
+    </li>
   <% end %>
 </ul>
