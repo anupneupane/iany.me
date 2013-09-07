@@ -4,7 +4,34 @@ require 'gist_manager'
 module HandlebarsHelpers
   module_function
 
-  def gist(this, gist, file, object = {}, &block)
+  def info(this, title = nil, callback = nil)
+    callout this, 'info', title, callback
+  end
+  def warning(this, title = nil, callback = nil)
+    callout this, 'warning', title, callback
+  end
+  def danger(this, title = nil, callback = nil)
+    callout this, 'danger', title, callback
+  end
+
+  def callout(this, type = 'default', title = nil, callback = nil)
+    if type.is_a?(V8::Function)
+      callback = type
+      type = nil
+    elsif title.is_a?(V8::Function)
+      callback = title
+      title = nil
+    end
+
+    content = []
+    content << content_tag(:h4, h(title)) if title
+    content << redcarpet.render(callback.call)
+
+    html = content_tag :div, content.join("\n"), :class => "callout callout-#{type}"
+    Handlebars::SafeString.new(html)
+  end
+
+  def gist(this, gist, file, object = {})
     attributes = v8_object_to_hash(object['hash'] || {})
     Handlebars::SafeString.new(GistManager.gist(gist, file, attributes))
   end
@@ -87,8 +114,8 @@ module HandlebarsHelpers
 
     html = <<-HTML
 <div class="code-caption">
-  <span class="code-filename">#{file}</span>
-  <span class="code-meta">#{description}</span>
+  <span class="code-filename">#{h file}</span>
+  <span class="code-meta">#{h description}</span>
 </div>
     HTML
 
@@ -112,6 +139,18 @@ module HandlebarsHelpers
       end
     end
     hash
+  end
+
+  def redcarpet
+    return @redcarpet if @redcarpet
+    renderer = OEmbedHtmlRenderer.new(with_toc_data: false)
+    options = {
+      :no_intra_emphasis => true,
+      :tables => true,
+      :fenced_code_blocks => true,
+      :autolink => true
+    }
+    ::Redcarpet::Markdown.new(renderer, options)
   end
 
   class << self
